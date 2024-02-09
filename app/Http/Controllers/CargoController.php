@@ -12,25 +12,30 @@ use DB;
 
 class CargoController extends Controller
 {
-    public function index()
+    public function indexAfter()
     {
         $empresas = Empresa::query()
                             ->byCliente()
                             ->pluck('nombre_comercial','id');
-        $tree = null;
-        return view('cargos.index', compact('empresas','tree'));
+        if(count($empresas) == 1 && Auth::user()->id != 1){
+            return redirect()->route('cargos.index',['empresa_id' => Auth::user()->empresa_id]);
+        }
+        return view('cargos.indexAfter', compact('empresas'));
     }
-    
-    public function search(Request $request)
+
+    public function index($empresa_id)
     {
-        $empresas = Empresa::where('cliente_id',Auth::user()->cliente_id)->pluck('nombre_comercial','id');
-        $cargos = Cargo::where('empresa_id',$request->empresa_id)->get();
+        $empresa = Empresa::find($empresa_id);
+        $empresas = Empresa::query()
+                            ->byCliente()
+                            ->pluck('nombre_comercial','id');
+        $cargos = Cargo::where('empresa_id',$empresa_id)->get();
         if(count($cargos) > 0){
             $tree = $this->buildTree($cargos);
         }else{
-            return redirect()->route('cargos.index')->with('info_message', 'La empresa seleccionada no tiene cargos agregados por favor comunicarse con la unidad de sistemas.');
+            return redirect()->route('cargos.index',['empresa_id' => $empresa_id])->with('info_message', 'La empresa seleccionada no tiene cargos agregados por favor comunicarse con la unidad de sistemas.');
         }
-        return view('cargos.index', compact('empresas','cargos','tree'));
+        return view('cargos.index', compact('empresa','empresas','cargos','tree'));
     }
 
     protected function buildTree($nodes)
@@ -114,9 +119,9 @@ class CargoController extends Controller
                 'tipo' => $request->tipo,
                 'estado' => '1'
                 ]);
-            return redirect()->route('cargos.search', ['empresa_id' => $request->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Se agregó un cargo en la empresa seleccionada.');
+            return redirect()->route('cargos.index', ['empresa_id' => $request->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Se agregó un cargo en la empresa seleccionada.');
         } catch (ValidationException $e) {
-            return redirect()->route('cargos.create')
+            return redirect()->route('cargos.create',$cargo->id)
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }
@@ -148,9 +153,9 @@ class CargoController extends Controller
                 'alias' => $request->alias,
                 'tipo' => $request->tipo
                 ]);
-            return redirect()->route('cargos.search', ['empresa_id' => $request->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Se modifico el cargo seleccionado.');
+            return redirect()->route('cargos.index', ['empresa_id' => $request->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Se modifico el cargo seleccionado.');
         } catch (ValidationException $e) {
-            return redirect()->route('cargos.editar')
+            return redirect()->route('cargos.editar',$cargo->id)
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }
@@ -162,7 +167,7 @@ class CargoController extends Controller
         $cargo->update([
             'estado' => '1'
             ]);
-        return redirect()->route('cargos.search', ['empresa_id' => $cargo->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Cargo Habilitado...');
+        return redirect()->route('cargos.index', ['empresa_id' => $cargo->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Cargo Habilitado...');
     }
 
     public function deshabilitar($cargo_id)
@@ -170,11 +175,11 @@ class CargoController extends Controller
         $cargo = Cargo::find($cargo_id);
         $user = User::select('id')->where('empresa_id',$cargo->empresa_id)->where('cargo_id',$cargo->id)->where('estado','1')->first();
         if($user != null){
-            return redirect()->route('cargos.search', ['empresa_id' => $cargo->empresa_id,'nodeId' => $cargo->id])->with('error_message', 'Imposible realizar la accion. Existe un usuario con el cargo seleccionado...');
+            return redirect()->route('cargos.index', ['empresa_id' => $cargo->empresa_id,'nodeId' => $cargo->id])->with('error_message', 'Imposible realizar la accion. Existe un usuario con el cargo seleccionado...');
         }
         $cargo->update([
             'estado' => '2'
             ]);
-        return redirect()->route('cargos.search', ['empresa_id' => $cargo->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Cargo Deshabilitado...');
+        return redirect()->route('cargos.index', ['empresa_id' => $cargo->empresa_id,'nodeId' => $cargo->id])->with('success_message', 'Cargo Deshabilitado...');
     }
 }

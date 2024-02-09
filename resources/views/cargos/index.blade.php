@@ -23,14 +23,14 @@
                 <div class="card-header header">
                     <div class="row">
                         <div class="col-md-8">
-                            <b>CARGOS</b>
+                            <b>{{ $empresa->nombre_comercial }} - CARGOS</b>
                         </div>
                         <div class="col-md-4 empresa-id-select-container">
-                            <form action="{{ route('cargos.search') }}" method="get" id="form_estructura_cargos">
-                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm" onchange="cargosByEmpresa(this);">
+                            <form action="#" method="get" id="form_estructura">
+                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm">
                                     <option value="">-</option>
                                     @foreach ($empresas as $index => $value)
-                                        <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                                        <option value="{{ $index }}" @if(isset($empresa_id) ? $empresa_id : request('empresa_id') == $index) selected @endif >{{ $value }}</option>
                                     @endforeach
                                 </select>
                             </form>
@@ -106,11 +106,18 @@
             });
         });
 
-        function cargosByEmpresa(datos){
+        $('#empresa_id').change(function() {
+            var id = $(this).val();
+            cargosByEmpresa(id);
+        });
+
+        function cargosByEmpresa(id){
             $(".btn").hide();
             $(".empresa-id-select-container").hide();
             $(".spinner-btn").show();
-            $("#form_estructura_cargos").submit();
+            var url = "{{ route('cargos.index',[':id']) }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
 
         $(function () {
@@ -169,9 +176,9 @@
                         $("#btn_modificar_dependiente").hide();
                     }
                     if(json.tipo === '1'){
-                        $('#tipo').text('CONTRATO');
+                        $('#tipo').text('POR SERVICIO');
                     }else{
-                        $('#tipo').text('PLANILLA');
+                        $('#tipo').text('PLANILLA DE SUELDO');
                     }
                 },
                 error: function(xhr){

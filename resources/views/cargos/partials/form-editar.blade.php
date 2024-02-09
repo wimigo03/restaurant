@@ -6,7 +6,7 @@
     </div>
     <div class="col-md-5 pl-1 font-verdana-bg">
         <label for="empresa_id" class="d-inline">Empresa</label>
-        <input type="hidden" name="empresa_id" value="{{ $cargo->empresa_id }}">
+        <input type="hidden" name="empresa_id" value="{{ $cargo->empresa_id }}" id="empresa_id">
         <input type="text" value="{{ $cargo->empresa->nombre_comercial }}" class="form-control font-verdana-bg" disabled>
     </div>
 </div>

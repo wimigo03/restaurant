@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Empresa;
 use Auth;
 
 class LoginController extends Controller
@@ -23,15 +24,39 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            if ($user->estado == 1) {
-                return redirect()->intended('/dashboard');
-            } else {
+            $dominio = $this->dominio($user);
+            if($dominio){
+                if ($user->estado == 1) {
+                    return redirect()->intended('/dashboard');
+                } else {
+                    Auth::logout();
+                    return redirect()->route('login')->with(['danger_message' => 'Usuario No Autorizado']);
+                }
+            }else{
                 Auth::logout();
-                return redirect()->route('login')->with(['danger_message' => 'Usuario no autorizado']);
+                return redirect()->route('login')->with(['danger_message' => 'Dominio No Autorizado']);
             }
         }
 
         return redirect()->route('login')->with(['danger_message' => 'Credenciales inválidas']);
+    }
+
+    public function dominio($user){
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $url = explode("/", $url);
+        if($url[2] == 'localhost:8000'){
+            return true;
+        }
+        if($user->id != 1){
+            $empresa = Empresa::find($user->empresa_id);
+            if($empresa != null){
+                if($url[2] == $empresa->dominio){
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
     }
 
     public function logout()

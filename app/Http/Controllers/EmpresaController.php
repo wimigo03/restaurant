@@ -83,7 +83,7 @@ class EmpresaController extends Controller
                 'email' => null,
                 'descripcion' => $request->nombre_comercial,
                 'alias' => 'GRAL',
-                'tipo' => '1',
+                'tipo' => '2',
                 'estado' => '1'
             ]);
             

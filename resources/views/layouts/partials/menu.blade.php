@@ -30,7 +30,7 @@
         @endcan
         @can('cargos.index')
             <li>
-                <a href="{{ route('cargos.index') }}">
+                <a href="{{ route('cargos.indexAfter') }}">
                     <i class="fa-solid fa-diagram-project fa-fw mr-1"></i>&nbsp;Cargos
                 </a>
             </li>
