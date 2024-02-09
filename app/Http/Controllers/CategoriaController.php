@@ -17,7 +17,7 @@ class CategoriaController extends Controller
                             ->byCliente()
                             ->pluck('nombre_comercial','id');
         if(count($empresas) == 1 && Auth::user()->id != 1){
-            return redirect()->route('categorias.index',Auth::user()->empresa_id);
+            return redirect()->route('categorias.index',['empresa_id' => Auth::user()->empresa_id, 'status_platos' => '[]', 'status_insumos' => '[]']);
         }
         return view('categorias.indexAfter', compact('empresas'));
     }

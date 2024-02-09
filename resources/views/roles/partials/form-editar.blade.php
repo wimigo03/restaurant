@@ -15,16 +15,6 @@
 <form action="#" method="post" id="form">
     @csrf
     <input type="hidden" name="role_id" value="{{ $role->id }}">
-    {{--@foreach ($permissions as $datos)
-        <div class="form-group row">
-            <div class="col-md-4 pr-1 font-verdana">
-                <label for="permissions_id" class="d-inline">
-                    <input type="checkbox" name="permission[]" value="{{ $datos->id }}"  {{ $role->hasPermissionTo($datos->id) ? 'checked' : '' }} class="mr-1">
-                    {{ $datos->name }}
-                </label>
-            </div>
-        </div>
-    @endforeach--}}
     <div style="height:600px;overflow-y: scroll;">
         @for ($i = 0; $i < count($permisosOrdenados); $i++)
             <div class="form-group row font-verdana-bg">

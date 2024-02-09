@@ -54,6 +54,10 @@ class Producto extends Model
         return $this->belongsTo(Empresa::class,'empresa_id','id');
     }
 
+    public function categoria_m(){
+        return $this->belongsTo(Categoria::class,'categoria_master_id','id');
+    }
+
     public function categoria(){
         return $this->belongsTo(Categoria::class,'categoria_id','id');
     }
@@ -81,6 +85,17 @@ class Producto extends Model
     public function scopeByEmpresa($query, $empresa_id){
         if($empresa_id)  
             return $query->where('empresa_id', $empresa_id);
+    }
+
+    public function scopeByTipoPrecio($query, $tipo_precio_id){
+        if ($tipo_precio_id != '[]') {
+                return $query
+                    ->whereIn('id', function ($subquery) use($tipo_precio_id) {
+                        $subquery->select('producto_id')
+                            ->from('precio_ventas')
+                            ->where('tipo_precio_id',$tipo_precio_id);
+                    });
+        }
     }
 
     public function scopeByProducto($query, $producto_id){

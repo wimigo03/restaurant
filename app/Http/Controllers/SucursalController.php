@@ -11,24 +11,26 @@ class SucursalController extends Controller
 {
     public function indexAfter()
     {
+        $empresas_info = Empresa::where('cliente_id',Auth::user()->cliente_id)->get();
         $empresas = Empresa::query()
                             ->byCliente()
                             ->pluck('nombre_comercial','id');
         if(count($empresas) == 1 && Auth::user()->id != 1){
             return redirect()->route('sucursal.index',Auth::user()->empresa_id);
         }
-        return view('sucursal.indexAfter', compact('empresas'));
+        return view('sucursal.indexAfter', compact('empresas_info','empresas'));
     }
 
     public function index($empresa_id)
     {
+        $empresas_info = Empresa::where('cliente_id',Auth::user()->cliente_id)->get();
         $empresa = Empresa::find($empresa_id);
         $estados = Sucursal::ESTADOS;
         $sucursales = Sucursal::query()
                                 ->byEmpresa($empresa_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('sucursal.index', compact('empresa','estados','sucursales'));
+        return view('sucursal.index', compact('empresas_info','empresa','estados','sucursales'));
     }
 
     public function search(Request $request)
@@ -73,7 +75,7 @@ class SucursalController extends Controller
                 'estado' => '1'
             ]);
 
-            return redirect()->route('sucursal.search',['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó una sucursal en la empresa seleccionada.');
+            return redirect()->route('sucursal.index',['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó una sucursal en la empresa seleccionada.');
         } catch (ValidationException $e) {
             return redirect()->route('sucursal.create',$request->empresa_id)
                 ->withErrors($e->validator->errors())

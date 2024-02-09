@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-md-4 empresa-id-select-container">
                             <form action="#" method="get" id="form_estructura">
-                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm">
+                                <select name="empresa_id" id="empresa_id" class="form-control">
                                     <option value="">-</option>
                                     @foreach ($empresas as $index => $value)
                                         <option value="{{ $index }}" @if(isset($empresa_id) ? $empresa_id : request('empresa_id') == $index) selected @endif >{{ $value }}</option>
@@ -27,6 +27,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-12 text-center">
+                <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-pi-resto">
             </div>
         </div>
     </div>

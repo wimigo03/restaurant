@@ -5,6 +5,7 @@
                 <tr class="font-verdana">
                     <td class="text-left p-1"><b>COD.</b></td>
                     <td class="text-left p-1"><b>NOMBRE COMERCIAL</b></td>
+                    <td class="text-left p-1"><b>ALIAS</b></td>
                     <td class="text-left p-1"><b>URL_LOGO</b></td>
                     <td class="text-left p-1"><b>DIRECCION</b></td>
                     <td class="text-left p-1"><b>TELEFONO</b></td>
@@ -18,16 +19,17 @@
                     <tr class="font-verdana">
                         <td class="text-left p-1">{{ $datos->id }}</td>
                         <td class="text-left p-1">{{ $datos->nombre_comercial }}</td>
+                        <td class="text-left p-1">{{ $datos->alias }}</td>
                         <td class="text-left p-1">
-                            <a href="{{ asset('/uploads/empresas/' . $datos->id . '/img/' . $datos->url_logo) }}" target="_blank">
-                                {{ '/uploads/empresas/' . $datos->id . '/img/' . $datos->url_logo }}
+                            <a href="{{ asset($datos->url_logo) }}" target="_blank">
+                                {{ $datos->url_logo }}
                             </a>
                         </td>
                         <td class="text-left p-1">{{ $datos->direccion }}</td>
                         <td class="text-left p-1">{{ $datos->telefono }}</td>
                         <td class="text-left p-1">
-                            <a href="{{ asset('/uploads/empresas/' . $datos->id . '/img/' . $datos->url_cover) }}" target="_blank">
-                                {{ '/uploads/empresas/' . $datos->id . '/img/' . $datos->url_cover }}
+                            <a href="{{ asset($datos->url_cover) }}" target="_blank">
+                                {{ $datos->url_cover }}
                             </a>
                         </td>
                         <td class="text-center p-1">{{ $datos->status }}</td>

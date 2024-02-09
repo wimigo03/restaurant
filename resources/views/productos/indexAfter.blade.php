@@ -4,18 +4,6 @@
     #empresa_id + .select2-container .select2-selection__rendered {
         font-size: 12px;
     }
-    .mesa {
-        width: 50px;
-        height: 50px;
-        background-color: #a0a0a0;
-        margin: 10px;
-    }
-    .plano {
-        width: 100%;
-        height: 400px;
-        border: 2px dashed #000;
-        /*position: relative;*/
-    }
 </style>
 @section('content')
 <div class="row justify-content-center">
@@ -38,10 +26,6 @@
                             </form>
                         </div>
                     </div>
-                    <div id="mesa1" class="mesa" draggable="true"></div>
-                    <div id="mesa2" class="mesa" draggable="true"></div>
-                    <!-- Agrega más mesas según sea necesario -->
-                    <div id="plano" class="plano" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
                 </div>
             </div>
         </div>
@@ -52,35 +36,6 @@
     @parent
     @include('layouts.notificaciones')
     <script>
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        function drop(event) {
-            event.preventDefault();
-            var mesaId = event.dataTransfer.getData("text");
-            var mesa = document.getElementById(mesaId);
-
-            var offsetX = event.clientX - mesa.clientWidth / 2;
-            var offsetY = event.clientY - mesa.clientHeight / 2;
-
-            mesa.style.position = "absolute";
-            mesa.style.left = offsetX + "px";
-            mesa.style.top = offsetY + "px";
-
-            // Aquí puedes almacenar la posición de la mesa en tu sistema
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            var mesas = document.querySelectorAll(".mesa");
-
-            mesas.forEach(function (mesa) {
-                mesa.addEventListener("dragstart", function (event) {
-                    event.dataTransfer.setData("text", event.target.id);
-                });
-            });
-        });
-
         $(document).ready(function() {
             if($("#empresa_id >option:selected").val() != ''){
                 var id = $("#empresa_id >option:selected").val();

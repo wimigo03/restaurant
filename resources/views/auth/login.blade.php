@@ -63,6 +63,7 @@
                 </div>
         </form>
     </div>
+    <script src="{{ asset('js/dashboard/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/dashboard/bootstrap.min.js') }}"></script>
 </body>
 </html>

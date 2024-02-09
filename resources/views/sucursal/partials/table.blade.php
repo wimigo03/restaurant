@@ -27,15 +27,27 @@
                                 {{ $datos->status }}
                             </span>
                         </td>
-                        @can('sucursal.modificar')
-                            <td class="text-center p-1">
+                        <td class="text-center p-1">
+                            @can('sucursal.modificar')
                                 <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                    <a href="{{ route('sucursal.editar',$datos->id) }}" class="text-primary">
-                                        <i class="fas fa-lg fa-edit"></i>
+                                    <a href="{{ route('sucursal.editar',$datos->id) }}" class="badge-with-padding badge badge-secondary text-white">
+                                        <i class="fas fa-edit fa-fw"></i>
                                     </a>
                                 </span>
-                            </td>
-                        @endcan
+                                <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a Zonas" style="cursor: pointer;">
+                                    <a href="{{ route('zonas.index',$datos->id) }}" class="badge-with-padding badge badge-primary">
+                                        <i class="fas fa-laptop-house fa-fw"></i>
+                                    </a>
+                                </span>
+                            @endcan
+                            @can('mesas.setting')
+                                <span class="tts:right tts-slideIn tts-custom" aria-label="Configurar Mesas" style="cursor: pointer;">
+                                    <a href="{{ route('mesas.setting',$datos->id) }}" class="badge-with-padding badge badge-warning">
+                                        <i class="fa-solid fa-gear fa-fw"></i>
+                                    </a>
+                                </span>
+                            @endcan
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -12,12 +12,12 @@
             <div class="col-md-12">
                 <div class="card-header header">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-8">
                             <i class="fa-solid fa-scale-balanced text-warning"></i> <b>UNIDADES</b>
                         </div>
                         <div class="col-md-4 empresa-id-select-container">
                             <form action="#" method="get" id="form_estructura">
-                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm">
+                                <select name="empresa_id" id="empresa_id" class="form-control">
                                     <option value="">-</option>
                                     @foreach ($empresas as $index => $value)
                                         <option value="{{ $index }}" @if(isset($empresa_id) ? $empresa_id : request('empresa_id') == $index) selected @endif >{{ $value }}</option>
@@ -38,7 +38,9 @@
     <script>
         $(document).ready(function() {
             $('#empresa_id').select2({
-                placeholder: "--Empresa--"
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
+                width: '100%'
             });
         });
 

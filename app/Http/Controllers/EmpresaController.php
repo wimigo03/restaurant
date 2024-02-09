@@ -8,7 +8,11 @@ use App\Models\Cliente;
 use App\Models\Cargo;
 use App\Models\User;
 use App\Models\Personal;
+use App\Models\PersonalLaboral;
 use App\Models\Categoria;
+use App\Models\Horario;
+use App\Models\HorarioDetalle;
+use App\Models\PlanCuenta;
 use Auth;
 
 class EmpresaController extends Controller
@@ -46,6 +50,9 @@ class EmpresaController extends Controller
             'alias' => 'required|size:3'
         ]);
         try{
+            ini_set('memory_limit','-1');
+            ini_set('max_execution_time','-1');
+
             $logo = isset($request->logo) ? 'logo.'.pathinfo($request->logo->getClientOriginalName(), PATHINFO_EXTENSION) : null;
             $cover = isset($request->cover) ? 'cover.'.pathinfo($request->cover->getClientOriginalName(), PATHINFO_EXTENSION) : null;
             $empresa = Empresa::create([
@@ -58,6 +65,12 @@ class EmpresaController extends Controller
                 'url_cover' => $cover,
                 'estado' => '1'
                 ]);
+
+            $empresa_logo = Empresa::find($empresa->id);
+            $empresa_logo = ([
+                'url_logo' => 'uploads/empresas/' . $empresa->id . '/logos/' . $logo,
+                'url_cover' => 'uploads/empresas/' . $empresa->id . '/logos/' . $cover
+            ]);
 
             $cargo = Cargo::create([
                 'empresa_id' => $empresa->id,
@@ -93,27 +106,59 @@ class EmpresaController extends Controller
                 'estado' => '1'
             ]);
 
-            $categoria = Categoria::create([
+            $gestion = substr(date('Y'), 2, 4);
+            $nro_contrato = count(PersonalLaboral::where('empresa_id',$empresa->id)->get()) + 1;
+            $nro_contrato = str_pad($nro_contrato, 3, '0', STR_PAD_LEFT);
+            $codigo_ingreso = $empresa->alias . '-' . $gestion . '-' . $nro_contrato;
+
+            $personal_laboral = PersonalLaboral::create([
+                'personal_id' => $personal->id,
+                'user_id' => $user->id,
+                'cargo_id' => $cargo->id,
                 'empresa_id' => $empresa->id,
                 'cliente_id' => $request->cliente_id,
-                'plan_cuenta_id'=> null,
-                'nombre' => 'PRINCIPALES',
-                'detalle' => null,
-                'codigo' => '1',
-                'nivel' => '0',
-                'parent_id' => null,
-                'tipo' => '1',
+                'horario_id' => NULL,
+                'codigo_ingreso' => $codigo_ingreso,
+                'biometrico_id' => NULL,
+                'tipo_contrato' => NULL,
+                'fecha_contrato_fijo' => NULL,
+                'profesion_ocupacion' => NULL,
+                'banco' => NULL,
+                'nro_cuenta' => NULL,
                 'estado' => '1'
             ]);
 
-            $logo = isset($request->logo) ? $request->logo->move(public_path('uploads/empresas/' . $empresa->id . '/img/'), $logo) : null;
-            $cover = isset($request->cover) ? $request->cover->move(public_path('uploads/empresas/' . $empresa->id . '/img/'), $cover) : null;
+            $cuentas = PlanCuenta::CUENTAS;
+            $cont = 1;
+            while($cont <= count($cuentas)){
+                $plan_de_cuenta = PlanCuenta::create([
+                    'empresa_id' => $empresa->id,
+                    'cliente_id' => $request->cliente_id,
+                    'moneda_id' => 2,
+                    'nombre' => $cuentas[$cont],
+                    'codigo' => $cont,
+                    'nivel' => '0',
+                    'parent_id' => null,
+                    'auxiliar' => '0',
+                    'cheque' => '0',
+                    'detalle' => '0',
+                    'estado' => '1'
+                ]);
+
+                $cont++;
+            }
+
+            $logo = isset($request->logo) ? $request->logo->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $logo) : null;
+            $cover = isset($request->cover) ? $request->cover->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $cover) : null;
 
             return redirect()->route('empresas.index',$request->cliente_id)->with('success_message', 'Se agregó una empresa correctamente.');
         } catch (ValidationException $e) {
             return redirect()->route('empresas.create',$request->cliente_id)
                 ->withErrors($e->validator->errors())
                 ->withInput();
+        }finally{
+            ini_restore('memory_limit');
+            ini_restore('max_execution_time');
         }
     }
 

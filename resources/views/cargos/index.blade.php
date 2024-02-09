@@ -2,10 +2,10 @@
 @extends('layouts.dashboard')
 <style>
     #treeview {
-        min-height: 300px;            
+        min-height: 200px;            
     }
     #contenido {
-        min-height: 300px;
+        min-height: 200px;
     }
     #treeview li a {
         font-size: 12px;
@@ -18,26 +18,30 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-12">
-        <div class="card card-custom">
-            <div class="card-header font-verdana-bg bg-gradient-warning text-white">
-                <div class="row">
-                    <div class="col-md-8">
-                        <b>CARGOS</b>
-                    </div>
-                    <div class="col-md-4 empresa-id-select-container">
-                        <form action="{{ route('cargos.search') }}" method="get" id="form_estructura_cargos">
-                            <select name="empresa_id" id="empresa_id" class="form-control form-control-sm" onchange="cargosByEmpresa(this);">
-                                <option value="">-</option>
-                                @foreach ($empresas as $index => $value)
-                                    <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
-                                @endforeach
-                            </select>
-                        </form>
+        <div class="form-group row">
+            <div class="col-md-12">
+                <div class="card-header header">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <b>CARGOS</b>
+                        </div>
+                        <div class="col-md-4 empresa-id-select-container">
+                            <form action="{{ route('cargos.search') }}" method="get" id="form_estructura_cargos">
+                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm" onchange="cargosByEmpresa(this);">
+                                    <option value="">-</option>
+                                    @foreach ($empresas as $index => $value)
+                                        <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            @if (isset($cargos))
-                <div class="card-body">
+        </div>
+        @if (isset($cargos))
+            <div class="form-group row">
+                <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card card-body">
@@ -79,8 +83,8 @@
                         </div>
                     </div>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

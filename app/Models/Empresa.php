@@ -41,10 +41,10 @@ class Empresa extends Model
     }
 
     public function scopeByCliente($query){
-        if(Auth::user()->id == 1){
-            return $query;
-        }else{
+        if(Auth::user()->id != 1){
             return $query->where('cliente_id', Auth::user()->cliente_id);
+        }else{
+            return null;
         }
     }
 }

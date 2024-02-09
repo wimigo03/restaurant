@@ -1,5 +1,4 @@
-table tbody tr:hover{
-	/*background:rgba(143, 217, 240, 0.497)!important;*/
+.hover-orange tbody tr:hover{
 	background: #ffd54f !important;
 	}
 .datepicker{
@@ -56,6 +55,55 @@ table tbody tr:hover{
 	--tts-radius: 0.5em;
 	--tts-size: 12px;
 }
+/*img pi-resto*/
+.logo-pi-resto {
+	width: 400px;
+	height:auto;
+	border-radius: 50%;
+	overflow: hidden;
+	opacity: 0.3;
+}
+.imagen-menu {
+	width: 30px;
+	height:auto;
+	border-radius: 10%;
+	overflow: hidden;
+	opacity: 0.8;
+}
+
+.imagen-pi-resto {
+	width: 500px;
+	height:auto;
+	border-radius: 50%;
+	overflow: hidden;
+	opacity: 0.3;
+}
+
+.imagen-mesa-1 {
+	overflow: hidden;
+	opacity: 0.4;
+}
+
+.cell-with-image {
+  width: 60px;
+  height: 60px;
+  position: relative;
+}
+
+.cell-with-image img {
+  width: 70%;
+  height: 70%;
+  object-fit: cover;
+}
+
+.imagen-callejxn {
+	width: 500px;
+	height:auto;
+	border-radius: 10%;
+	overflow: hidden;
+	opacity: 0.3;
+}
+
 .input-group {
 	height: 28px;
 }
@@ -97,4 +145,16 @@ label {
 
 body {
     background-color: #FFFFFF;
+}
+
+#dataTable_filter input {
+	width: 250px;
+	height: 30px;
+}
+#dataTable_length select {
+	width: 100px;
+	height: 30px;
+}
+#dataTable_filter input::placeholder {
+	font-size: 14px;
 }

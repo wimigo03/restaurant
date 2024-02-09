@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Empresa;
 use App\Models\Cliente;
+use App\Models\PlanCuenta;
 
 class PlanCuenta extends Model
 {
@@ -15,14 +16,29 @@ class PlanCuenta extends Model
     protected $fillable = [
         'empresa_id',
         'cliente_id',
+        'moneda_id',
         'nombre',
         'codigo',
+        'nivel',
+        'parent_id',
+        'auxiliar',
+        'cheque',
+        'detalle',
         'estado'
     ];
 
     const ESTADOS = [
         '1' => 'HABILITADO',
         '2' => 'NO HABILITADO'
+    ];
+
+    const CUENTAS = [
+        '1' => 'ACTIVO',
+        '2' => 'PASIVO',
+        '3' => 'PATRIMONIO',
+        '4' => 'INGRESOS',
+        '5' => 'COSTOS',
+        '6' => 'GASTOS'
     ];
 
     public function getStatusAttribute(){
@@ -40,5 +56,9 @@ class PlanCuenta extends Model
 
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id','id');
+    }
+
+    public function parent(){
+        return $this->belongsTo(PlanCuenta::class,'parent_id','id');
     }
 }

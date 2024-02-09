@@ -29,7 +29,20 @@
         <div class="form-group row">
             <div class="col-md-12">
                 <div class="card-header header">
-                    <b>{{ $empresa->nombre_comercial }} - SUCURSALES</b>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <b><i class="fa-solid fa-house-damage fa-fw"></i> {{ $empresa->nombre_comercial }} - SUCURSALES</b>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            @if (count($empresas_info) > 0)
+                                @foreach ($empresas_info as $empresa)
+                                    <img src="{{ url($empresa->url_logo) }}" alt="{{ $empresa->url_logo }}" class="imagen-menu">
+                                @endforeach
+                            @else
+                                <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-menu">
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -38,9 +51,11 @@
             <div class="form-group row">
                 <div class="col-md-6 pr-1">
                     @can('sucursal.create')
-                        <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
-                            &nbsp;<i class="fas fa-plus"></i>&nbsp;
-                        </button>
+                        <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
+                            <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
+                                &nbsp;<i class="fas fa-plus"></i>&nbsp;
+                            </button>
+                        </span>
                     @endcan
                     <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
                 </div>

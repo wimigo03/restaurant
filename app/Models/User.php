@@ -86,7 +86,7 @@ class User extends Authenticatable
 
     public function getCargoHeaderAttribute(){
         if($this->id == 1){
-            return 'ADMINISTRADOR';    
+            return 'SUPER ADMINISTRADOR';    
         }
         $cargo = DB::table('users as a')->join('cargos as b','a.cargo_id','b.id')->first()->nombre;
         return $cargo;
