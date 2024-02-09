@@ -118,12 +118,13 @@ class PersonalController extends Controller
             $apellidos = $request->ap_paterno != null ? $request->ap_paterno . ' ' . $request->ap_materno : $request->ap_materno;
             $apellido_username = $request->ap_paterno != null ? $request->ap_paterno : $request->ap_materno;
             $username = substr($request->primer_nombre, 0, 2) . $apellido_username;;
+            $username_minus = strtolower($username);
             $user = User::create([
                 'cargo_id' => $request->cargo_id,
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => Auth::user()->cliente_id,
                 'name' => $request->primer_nombre . ' ' . $apellidos,
-                'username' => $username,
+                'username' => $username_minus,
                 'password' => bcrypt('123456654321'),
                 'estado' => '1'
             ]);

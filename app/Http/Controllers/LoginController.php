@@ -20,11 +20,14 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        $credentials = $request->only('username', 'password');
-
+        //$credentials = $request->only('username', 'password');
+        $credentials['username'] = strtolower($request->username);
+        $credentials['password'] = $request->password;
+    //dd($credentials);
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $dominio = $this->dominio($user);
+            ($dominio);
             if($dominio){
                 if ($user->estado == 1) {
                     return redirect()->intended('/dashboard');

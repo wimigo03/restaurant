@@ -88,12 +88,13 @@ class EmpresaController extends Controller
             ]);
             
             $username = substr($request->nombre_comercial, 0, 5);
+            $username_minus = strtolower($username);
             $user = User::create([
                 'cargo_id' => $cargo->id,
                 'empresa_id' => $empresa->id,
                 'cliente_id' => $request->cliente_id,
                 'name' => $request->nombre_comercial,
-                'username' => $username,
+                'username' => $username_minus,
                 'password' => bcrypt('123456654321'),
                 'estado' => '1'
             ]);
