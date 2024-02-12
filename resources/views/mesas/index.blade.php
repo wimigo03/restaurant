@@ -37,7 +37,7 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable({
+            /*$('#dataTable').DataTable({
                 "processing":true,
                 "serverSide":true,
                 "ajax": {
@@ -90,7 +90,7 @@
                 "language":{
                     "url": '{{ asset("json/datatable-es.json") }}'
                 }
-            });
+            });*/
 
             $('#estado').select2({
                 theme: "bootstrap4",

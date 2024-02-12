@@ -22,12 +22,17 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <b><u>{{ $empresa->nombre_comercial }}</u></b>
+            </div>
+        </div>
         <div class="form-group row">
             <div class="col-md-12">
                 <div class="card-header header">
                     <div class="row">
-                        <div class="col-md-6 pr-1">
-                            <b><i class="fa-regular fa-chart-bar fa-fw"></i> {{ $empresa->nombre_comercial }} - PLAN DE CUENTAS</b>
+                        <div class="col-md-6 pr-1 text-bottom">
+                            <b><i class="fa-regular fa-chart-bar fa-fw"></i> PLAN DE CUENTAS</b>
                         </div>
                         <div class="col-md-2 pr-1 pl-1 text-right">
                             @if (count($empresas_info) > 0)

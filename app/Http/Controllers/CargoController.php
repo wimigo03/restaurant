@@ -71,10 +71,8 @@ class CargoController extends Controller
         } else return response()->json(['error'=>'Algo Salio Mal']);
     }
 
-    public function getDatosCargoByEmpresa(Request $request){
+    public function getDatosCargoByEmpresa($id){
         try{
-            $input = $request->all();
-            $id = $input['id'];
             $cargos = Cargo::where('empresa_id', $id)->orderBy('id','asc')->get()->toJson();
             if($cargos){
                 return response()->json([

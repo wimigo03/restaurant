@@ -87,7 +87,7 @@
     <div class="col-md-12">
         @include('layouts.partials.header')
         @include('mesas.partials.form-setting')
-        <div class="form-group row">
+        {{--<div class="form-group row">
             <div class="col-md-12 text-right">
                 <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
                     <i class="fas fa-paper-plane"></i>&nbsp;Procesar
@@ -97,7 +97,7 @@
                 </button>
                 <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
             </div>
-        </div>
+        </div>--}}
         @include('mesas.partials.modal-asignar-mesa')
     </div>
 </div>

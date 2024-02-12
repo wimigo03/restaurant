@@ -1,4 +1,4 @@
-<div class="form-group row font-verdana-bg">
+<div class="form-group row font-roboto-bg">
     <div class="col-md-12">
         <ul class="nav nav-tabs" id="myTabs" role="tablist">
             <li class="nav-item">

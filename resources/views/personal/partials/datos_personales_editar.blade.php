@@ -2,11 +2,11 @@
 <div class="form-group row">
     <div class="col-md-4 pr-1 font-roboto-bg">
         <label for="primer_nombre" class="d-inline">Primer Nombre</label>
-        <input type="text" name="primer_nombre" value="{{ old('primer_nombre') }}" id="primer_nombre" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
+        <input type="text" name="primer_nombre" value="{{ $personal->primer_nombre }}" id="primer_nombre" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
     </div>
     <div class="col-md-4 pr-1 pl-1 font-roboto-bg">
         <label for="segundo_nombre" class="d-inline">Segundo Nombre</label>
-        <input type="text" name="segundo_nombre" value="{{ old('segundo_nombre') }}" class="form-control font-roboto-bg" oninput="this.value = this.value.toUpperCase()">
+        <input type="text" name="segundo_nombre" value="{{ $personal->segundo_nombre }}" class="form-control font-roboto-bg" oninput="this.value = this.value.toUpperCase()">
     </div>
     <div class="col-md-4 pl-1 font-roboto-bg">
         <label for="foto" class="d-inline">Foto</label>
@@ -16,11 +16,11 @@
 <div class="form-group row">
     <div class="col-md-4 pr-1 font-roboto-bg">
         <label for="ap_paterno" class="d-inline">Apellido Paterno</label>
-        <input type="text" name="ap_paterno" value="{{ old('ap_paterno') }}" id="ap_paterno" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
+        <input type="text" name="ap_paterno" value="{{ $personal->apellido_paterno }}" id="ap_paterno" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
     </div>
     <div class="col-md-4 pr-1 pl-1 font-roboto-bg">
         <label for="ap_materno" class="d-inline">Apellido Materno</label>
-        <input type="text" name="ap_materno" value="{{ old('ap_materno') }}" id="ap_materno" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
+        <input type="text" name="ap_materno" value="{{ $personal->apellido_materno }}" id="ap_materno" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
     </div>
 </div>
 <div class="form-group row">
@@ -30,14 +30,14 @@
             <select name="nacionalidad" id="nacionalidad" class="form-control font-roboto-bg select2">
                 <option value="">--Seleccionar--</option>
                 @foreach ($nacionalidades as $index => $value)
-                    <option value="{{ $index }}" @if(old('nacionalidad') == $index) selected @endif >{{ $value }}</option>
+                    <option value="{{ $index }}" @if($personal->nacionalidad == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
         </div>
     </div>
     <div class="col-md-2 pr-1 pl-1 font-roboto-bg">
         <label for="ci_run" class="d-inline">Ci/Run</label>
-        <input type="text" name="ci_run" value="{{ old('ci_run') }}" id="ci_run" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
+        <input type="text" name="ci_run" value="{{ $personal->ci_run }}" id="ci_run" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
     </div>
     <div class="col-md-2 pr-1 pl-1 font-roboto-bg">
         <label for="extension" class="d-inline">Extension</label>
@@ -45,22 +45,23 @@
             <select name="extension" id="extension" class="form-control font-roboto-bg select2" onchange="verificarObligatorio();">
                 <option value="">--Seleccionar--</option>
                 @foreach ($extensiones as $index => $value)
-                    <option value="{{ $index }}" @if(old('extension') == $index) selected @endif >{{ $value }}</option>
+                    <option value="{{ $index }}" @if($personal->extension == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
         </div>
     </div>
     <div class="col-md-2 pr-1 pl-1 font-roboto-bg">
         <label for="fecha_nac" class="d-inline">Fecha nac.</label>
-        <input type="text" name="fecha_nac" value="{{ old('fecha_nac') }}" id="fecha_nac" placeholder="dd/mm/aaaa" class="form-control font-roboto-bg obligatorio" data-language="es" onkeyup=countChars(this); oninput="verificarObligatorio();">
+        <input type="text" name="fecha_nac" value="{{ \Carbon\Carbon::parse($personal->fecha_nac)->format('d/m/Y') }}" id="fecha_nac" placeholder="dd/mm/aaaa" class="form-control font-roboto-bg obligatorio" data-language="es" onkeyup=countChars(this); oninput="verificarObligatorio();">
+        {{--<input type="text" name="fecha_nac" value="{{ \Carbon\Carbon::parse($personal->fecha_nac)->format('d/m/Y') }}" id="fecha_nac" placeholder="dd/mm/aaaa" class="form-control font-roboto-bg obligatorio" data-language="es" onkeyup=countChars(this); oninput="verificarObligatorio();">--}}
     </div>
     <div class="col-md-1 pr-1 pl-1 font-roboto-bg">
         <label for="edad" class="d-inline">Edad</label>
-        <input type="text" name="edad_nac" value="{{ old('edad_nac') }}" id="edad_nac" class="form-control font-roboto-bg" readonly>
+        <input type="text" name="edad_nac" value="#" id="edad_nac" class="form-control font-roboto-bg" readonly>
     </div>
     <div class="col-md-3 pl-1 font-roboto-bg">
         <label for="lugar_nacimiento" class="d-inline">Lugar Nacimiento</label>
-        <input type="text" name="lugar_nacimiento" value="{{ old('lugar_nacimiento') }}" class="form-control font-roboto-bg" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
+        <input type="text" name="lugar_nacimiento" value="{{ $personal->lugar_nacimiento }}" class="form-control font-roboto-bg" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
     </div>
 </div>
 <div class="form-group row">
@@ -69,8 +70,8 @@
         <div class="select2-container--obligatorio" id="obligatorio_sexo">
             <select name="sexo" id="sexo" class="form-control font-roboto-bg select2 obligatorio" onchange="verificarObligatorio();">
                 <option value="">--Seleccionar--</option>
-                <option value="M" @if(old('sexo') == 'M') selected @endif >Masculino</option>
-                <option value="F" @if(old('sexo') == 'F') selected @endif >Femenino</option>
+                <option value="M" @if($personal->sexo == 'M') selected @endif >Masculino</option>
+                <option value="F" @if($personal->sexo == 'F') selected @endif >Femenino</option>
             </select>
         </div>
     </div>
@@ -79,8 +80,8 @@
         <div class="select2-container--obligatorio" id="obligatorio_licencia_conducir">
             <select name="licencia_conducir" id="licencia_conducir" class="form-control font-roboto-bg select2 obligatorio" onchange="verificarObligatorio();">
                 <option value="">--Seleccionar--</option>
-                <option value="SI" @if(old('licencia_conducir') == 'SI') selected @endif >SI</option>
-                <option value="NO" @if(old('licencia_conducir') == 'NO') selected @endif >NO</option>
+                <option value="SI" @if($personal->licencia_conducir == 'SI') selected @endif >SI</option>
+                <option value="NO" @if($personal->licencia_conducir == 'NO') selected @endif >NO</option>
             </select>
         </div>
     </div>
@@ -89,7 +90,7 @@
         <select name="licencia_categoria" id="licencia_categoria" class="form-control font-roboto-bg select2">
             <option value="">--Seleccionar--</option>
             @foreach ($licencia_categorias as $index => $value)
-                <option value="{{ $index }}" @if(old('licencia_categoria') == $index) selected @endif >{{ $value }}</option>
+                <option value="{{ $index }}" @if($personal->licencia_categoria == $index) selected @endif >{{ $value }}</option>
             @endforeach
         </select>
     </div>
@@ -97,46 +98,26 @@
 <div class="form-group row">
     <div class="col-md-2 pr-1 font-roboto-bg">
         <label for="celular" class="d-inline">Celular Personal</label>
-        <input type="text" name="celular" value="{{ old('celular') }}" id="celular" class="form-control font-roboto-bg obligatorio" onkeypress="return valideNumberSinDecimal(event);" oninput="verificarObligatorio();">
+        <input type="text" name="celular" value="{{ $personal->celular }}" id="celular" class="form-control font-roboto-bg obligatorio" onkeypress="return valideNumberSinDecimal(event);" oninput="verificarObligatorio();">
     </div>
     <div class="col-md-2 pr-1 pl-1 font-roboto-bg">
         <label for="telefono" class="d-inline">Telefono Fijo</label>
-        <input type="text" name="telefono" value="{{ old('telefono') }}" id="telefono" class="form-control font-roboto-bg" onkeypress="return valideNumberSinDecimal(event);">
+        <input type="text" name="telefono" value="{{ $personal->telefono }}" id="telefono" class="form-control font-roboto-bg" onkeypress="return valideNumberSinDecimal(event);">
     </div>
     <div class="col-md-6 pr-1 pl-1 font-roboto-bg">
         <label for="domicilio" class="d-inline">Domicilio</label>
-        <input type="text" name="domicilio" value="{{ old('domicilio') }}" id="domicilio" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
+        <input type="text" name="domicilio" value="{{ $personal->direccion_domicilio }}" id="domicilio" class="form-control font-roboto-bg obligatorio" oninput="this.value = this.value.toUpperCase(); verificarObligatorio();">
     </div>
     <div class="col-md-2 pr-1 pl-1 font-roboto-bg">
         <label for="e_civil" class="d-inline">Estado Civil</label>
         <div class="select2-container--obligatorio" id="obligatorio_estado_civil">
             <select name="estado_civil" id="estado_civil" class="form-control font-roboto-bg select2 obligatorio" onchange="verificarObligatorio();">
                 <option value="">--Seleccionar--</option>
-                <option value="SOLTERO(A)" @if(old('estado_civil') == 'SOLTERO(A)') selected @endif>SOLTERO(A)</option>
-                <option value="CONCUBINO(A)" @if(old('estado_civil') == 'CONCUBINO(A)') selected @endif>CONCUBINO(A)</option>
-                <option value="CASADO(A)" @if(old('estado_civil') == 'CASADO(A)') selected @endif>CASADO(A)</option>
-                <option value="DIVORCIADO(A)" @if(old('estado_civil') == 'DIVORCIADO(A)') selected @endif>DIVORCIADO(A)</option>
-                <option value="VIUDO(A)" @if(old('estado_civil') == 'VIUDO(A)') selected @endif>VIUDO(A)</option>
-            </select>
-        </div>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-md-2 pr-1 font-roboto-bg">
-        <label for="empresa_id" class="d-inline">Empresa</label>
-        <div class="select2-container--obligatorio" id="obligatorio_empresa_id">
-            <select name="empresa_id" id="empresa_id" class="form-control select2" onchange="verificarObligatorio();">
-                <option value="">-</option>
-                @foreach ($empresas as $index => $value)
-                    <option value="{{ $index }}" @if(old('empresa_id') == $index) selected @endif >{{ $value }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3 pr-1 pl-1 font-roboto-bg">
-        <label for="cargo" class="d-inline">Cargo</label>
-        <div class="select2-container--obligatorio" id="obligatorio_cargo_id">
-            <select id="cargo_id" name="cargo_id" placeholder="--Seleccionar--" class="form-control select2" onchange="verificarObligatorio();">
+                <option value="SOLTERO(A)" @if($personal->estado_civil == 'SOLTERO(A)') selected @endif>SOLTERO(A)</option>
+                <option value="CONCUBINO(A)" @if($personal->estado_civil == 'CONCUBINO(A)') selected @endif>CONCUBINO(A)</option>
+                <option value="CASADO(A)" @if($personal->estado_civil == 'CASADO(A)') selected @endif>CASADO(A)</option>
+                <option value="DIVORCIADO(A)" @if($personal->estado_civil == 'DIVORCIADO(A)') selected @endif>DIVORCIADO(A)</option>
+                <option value="VIUDO(A)" @if($personal->estado_civil == 'VIUDO(A)') selected @endif>VIUDO(A)</option>
             </select>
         </div>
     </div>

@@ -111,7 +111,8 @@ class PersonalController extends Controller
             'estado_civil' => 'required',
             'horario_id' => 'required',
             'tipo_contrato' => 'required',
-            'profesion_ocupacion' => 'required'
+            'profesion_ocupacion' => 'required',
+            'foto' => 'nullable|file|mimes:png,jpg,jpeg|max:2048'
         ]);
         try{
             $empresa = Empresa::where('id',$request->empresa_id)->first();
@@ -128,7 +129,7 @@ class PersonalController extends Controller
                 'password' => bcrypt('123456654321'),
                 'estado' => '1'
             ]);
-            
+
             $datos_personal = ([
                 'user_id' => $user->id,
                 'cargo_id' => $request->cargo_id,
@@ -155,6 +156,15 @@ class PersonalController extends Controller
             ]);
 
             $personal = Personal::create($datos_personal);
+
+            $personal_photo = Personal::find($personal->id);
+            $foto = isset($request->foto) ? 'foto.'.pathinfo($request->foto->getClientOriginalName(), PATHINFO_EXTENSION) : null;
+            $photo = isset($request->foto) ? 'uploads/empresas/' . $request->empresa_id . '/personal/'. $personal->id . '/foto.'.pathinfo($request->foto->getClientOriginalName(), PATHINFO_EXTENSION) : null;
+            $cargar_photo = isset($request->foto) ? $request->foto->move(public_path('uploads/empresas/' . $request->empresa_id . '/personal/' . $personal->id . '/'), $foto) : null;
+            $personal_photo->update([
+                'foto' => $photo
+            ]);
+
 
             if(isset($request->nombre_familiar)){
                 $cont = 0;
@@ -381,10 +391,28 @@ class PersonalController extends Controller
     }
 
     public function editar($id)
-    {dd($id);
-        $cargo = Cargo::find($id);
-        $tipos = Cargo::TIPOS;
-        return view('cargos.editar', compact('cargo','tipos'));
+    {
+        $personal = Personal::find($id);
+        $empresa = Empresa::find($personal->empresa_id);
+        $nacionalidades = Personal::NACIONALIDADES;
+        $extensiones = Personal::EXTENSIONES;
+        $licencia_categorias = Personal::LICENCIA_CATEGORIAS;
+        $afps = Afp::get();
+        $horarios = Horario::where('empresa_id',$personal->empresa_id)->where('nombre','OFICINA')->pluck('nombre','id');
+        $tipo_familiares = Familiar::TIPO_FAMILIARES;
+        $ocupaciones = Familiar::OCUPACIONES;
+        $niveles_estudio = Familiar::NIVELES_ESTUDIO;
+        return view('personal.editar', 
+                compact('personal',
+                        'empresa',
+                        'nacionalidades',
+                        'extensiones',
+                        'licencia_categorias',
+                        'afps',
+                        'horarios',
+                        'tipo_familiares',
+                        'ocupaciones',
+                        'niveles_estudio'));
     }
 
     public function update(Request $request)

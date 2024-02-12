@@ -21,17 +21,40 @@
     <link href="{{ asset('css/lobibox/lobibox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/datepicker/datepicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/tooltips/tooltips.min.css') }}" rel="stylesheet">
-    <link href="http://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
+    {{--<link href="http://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">--}}
     <style>
         .linea-informacion {
             border-bottom: 1px solid #3498db;
             padding-bottom: 5px;
             margin-bottom: 5px;
         }
+        .btn-float {
+            position: fixed;
+            top: 0px;
+            right: 20px;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .text-bottom {
+            position: relative;
+        }
+        .text-bottom b {
+            position: absolute;
+            bottom: 0;
+        }
     </style>
     @yield('styles')
   </head>
   <body>
+    <span class="btn-float">
+        <span class="tts:left tts-slideIn tts-custom" aria-label="Salir" style="cursor: pointer;">
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <img src="/images/exit.png" alt="Salir" class="imagen-salir">
+            </a>
+        </span>
+    </span>
     @include('layouts.alerta-modal')
     @include('layouts.confirmar-modal')
     <aside class="sidebar">
@@ -63,7 +86,7 @@
     <script src="{{ asset('js/lobibox/lobibox.js') }}"></script>
     <script src="{{ asset('js/datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('js/datepicker/datepicker.es.js') }}"></script>
-    <script src="http://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    {{--<script src="http://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>--}}
 
     @yield('scripts')
     

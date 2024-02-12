@@ -67,7 +67,7 @@ class EmpresaController extends Controller
                 ]);
 
             $empresa_logo = Empresa::find($empresa->id);
-            $empresa_logo = ([
+            $empresa_logo->update([
                 'url_logo' => 'uploads/empresas/' . $empresa->id . '/logos/' . $logo,
                 'url_cover' => 'uploads/empresas/' . $empresa->id . '/logos/' . $cover
             ]);

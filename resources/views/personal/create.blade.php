@@ -20,27 +20,27 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-12">
-        <div class="card card-custom">
-            <div class="card-header font-verdana-bg bg-gradient-warning text-white">
-                <b>REGISTRAR PERSONAL - {{ $empresa->nombre_comercial }}</b>
-            </div>
-            <div class="card-body">
-                <input type="hidden" value="{{ $empresa->id }}" id="empresa_input_id">
-                <form action="#" method="post" id="form">
-                    @csrf
-                    @include('personal.partials.form-create')
-                </form>
-                <div class="form-group row">
-                    <div class="col-md-12 text-right">
-                        <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                            <i class="fas fa-paper-plane"></i>&nbsp;Procesar
-                        </button>
-                        <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                            &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-                        </button>
-                        <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                    </div>
+        <div class="form-group row">
+            <div class="col-md-12">
+                <div class="card-header header">
+                    <b>{{ $empresa->nombre_comercial }} - REGISTRAR PERSONAL</b>
                 </div>
+            </div>
+        </div>
+        <input type="hidden" value="{{ $empresa->id }}" id="empresa_input_id">
+        <form action="#" method="post" id="form" enctype="multipart/form-data">
+            @csrf
+            @include('personal.partials.form-create')
+        </form>
+        <div class="form-group row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
+                    <i class="fas fa-paper-plane"></i>&nbsp;Procesar
+                </button>
+                <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
+                    &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
+                </button>
+                <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                 $(e.target).addClass('font-weight-bold');
             });
 
-            if($("#tipo_familiar >option:selected").val() == "OTRO"){
+            if($("#tipo_familiar_input >option:selected").val() == "OTRO"){
                 $("#form_otro_tipo").show();
             }else{
                 $("#form_otro_tipo").hide();
@@ -89,7 +89,17 @@
             $("#fecha_nac").datepicker({
                 inline: false, 
                 dateFormat: "dd/mm/yyyy",
-                autoClose: true
+                autoClose: true,
+                onSelect: function() {
+                    var date = document.getElementById("fecha_nac").value;
+                    if(validarFecha(date)){
+                        var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
+                        if ((date.match(RegExPattern)) && (date!='')) {
+                            var edad = calcularEdad(date);
+                            document.getElementById("edad_nac").value = edad;
+                        }
+                    }
+                }
             });
 
             $("#fecha_ingreso_fiscal").datepicker({
@@ -118,8 +128,7 @@
 
             if($("#empresa_id >option:selected").val() != ''){
                 var id = $("#empresa_id >option:selected").val();
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                getCargos(id,CSRF_TOKEN);
+                getCargos(id);
             }
 
             if($("#horario_id >option:selected").val() != ''){
@@ -237,19 +246,6 @@
             }
         });
 
-        $("#fecha_nac").datepicker({
-            onSelect: function() {
-                var date = document.getElementById("fecha_nac").value;
-                if(validarFecha(date)){
-                    var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
-                    if ((date.match(RegExPattern)) && (date!='')) {
-                        var edad = calcularEdad(date);
-                        document.getElementById("edad_nac").value = edad;
-                    }
-                }
-            }
-        });
-
         function countChars(obj){
             var cont = obj.value.length;
             if(cont > 9){
@@ -330,8 +326,8 @@
             return edad = Math.floor(((fechaActual - fechaNace) / (1000 * 60 * 60 * 24) / 365));
         }
 
-        $('#tipo_familiar').on('change', function() {
-            if($("#tipo_familiar >option:selected").val() == "OTRO"){
+        $('#tipo_familiar_input').on('change', function() {
+            if($("#tipo_familiar_input >option:selected").val() == "OTRO"){
                 $("#form_otro_tipo").show();
             }else{
                 $("#form_otro_tipo").hide();
@@ -399,16 +395,14 @@
 
         $('#empresa_id').change(function() {
             var id = $(this).val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            getCargos(id,CSRF_TOKEN);
+            getCargos(id);
         });
 
-        function getCargos(id,CSRF_TOKEN){
+        function getCargos(id){
             $.ajax({
                 type: 'GET',
-                url: '/cargos/get_datos_cargo_by_empresa',
+                url: '/cargos/get_datos_cargo_by_empresa/'+id,
                 data: {
-                    _token: CSRF_TOKEN,
                     id: id
                 },
                 success: function(data){
@@ -511,9 +505,9 @@
                                 "<input type='hidden' name='nivel_estudio_familiar[]' value='" + nivel_estudio_familiar + "'>" + nivel_estudio_familiar +
                             "</td>"+
                             "<td class='text-center p-1'>"+
-                                "<button type='button' class='btn btn-xs btn-danger' onclick='eliminarItem(this);'>" + 
-                                      "<i class='fas fa-trash'></i>" +  
-                                 "</button>" +
+                                "<span class='badge-with-padding badge badge-danger' onclick='eliminarItem(this);'>" + 
+                                      "<i class='fas fa-trash fa-fw'></i>" +  
+                                 "</span>" +
                             "</td>"
                         "</tr>";
 
