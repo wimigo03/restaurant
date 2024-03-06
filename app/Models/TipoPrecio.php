@@ -11,7 +11,10 @@ class TipoPrecio extends Model
 
     protected $table = 'tipo_precios';
     protected $fillable = [
+        'empresa_id',
+        'cliente_id',
         'nombre',
+        'observaciones',
         'estado'
     ];
 
@@ -26,6 +29,12 @@ class TipoPrecio extends Model
                 return "HABILITADO";
             case '2': 
                 return "NO HABILITADO";
+        }
+    }
+
+    public function scopeByEmpresa($query, $empresa_id){
+        if($empresa_id){
+            return $query->where('tipo_precios.empresa_id', $empresa_id);
         }
     }
 }

@@ -18,23 +18,18 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        @include('layouts.partials.header')
-        @include('zonas.partials.form-editar')
-        <div class="form-group row">
-            <div class="col-md-12 text-right">
-                <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Actualizar
-                </button>
-                <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                    &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-                </button>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
+    @include('zonas.partials.form-editar')
+    <div class="form-group row">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
+                <i class="fas fa-paper-plane"></i>&nbsp;Actualizar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
+                &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
+            </button>
+            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>
-</div>
 @endsection
 @section('scripts')
     @parent

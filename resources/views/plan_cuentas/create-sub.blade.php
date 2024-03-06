@@ -12,35 +12,18 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <span class="tts:left tts-slideIn tts-custom" aria-label="Limpiar" style="cursor: pointer;">
-                        <span class="btns btn btn-sm btn-info font-verdana" onclick="limpiar();">
-                            <i class="fa-solid fa-folder-tree fa-fw"></i>
-                        </span>
-                        <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                    </span>
-                    <b class="btns"><u>{{ $empresa->nombre_comercial }} - CREAR PLAN DE CUENTA DEPENDIENTE</u></b>
-                </div>
-            </div>
-        </div>
-        @include('plan_cuentas.partials.form-create-sub')
-        <div class="form-group row">
-            <div class="col-md-12 text-right">
-                <button class="btns btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Procesar
-                </button>
-                <button class="btns btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                    &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-                </button>
-                <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
+    @include('plan_cuentas.partials.form-create-sub')
+    <div class="form-group row">
+        <div class="col-md-12 text-right">
+            <button class="btns btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
+                <i class="fas fa-paper-plane"></i>&nbsp;Procesar
+            </button>
+            <button class="btns btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
+                &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
+            </button>
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>
-</div>
 @endsection
 @section('scripts')
     @parent

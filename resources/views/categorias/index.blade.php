@@ -34,72 +34,43 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <b>{{ $empresa->nombre_comercial }} - CATEGORIAS</b>
-                        </div>
-                        <div class="col-md-4 empresa-id-select-container">
-                            <form action="#" method="get" id="form_estructura">
-                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm">
-                                    <option value="">-</option>
-                                    @foreach ($empresas as $index => $value)
-                                        <option value="{{ $index }}" @if(isset($empresa_id) ? $empresa_id : request('empresa_id') == $index) selected @endif >{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        </div>
-                    </div>
+@include('categorias.partials.menu')
+@if (isset($categorias_platos) || isset($categorias_insumos))
+    <div class="form-group row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active font-roboto-15" id="tab1" data-toggle="tab" href="#content1" role="tab" aria-controls="content1" aria-selected="true">
+                        Menu
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-roboto-15" id="tab2" data-toggle="tab" href="#content2" role="tab" aria-controls="content2" aria-selected="false">
+                        Insumos
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabsContent">
+                <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
+                    @if (isset($categorias_platos))
+                        @include('categorias.partials.platos_final')
+                    @endif
+                </div>
+                <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
+                    @if (isset($categorias_insumos))
+                        @include('categorias.partials.insumos')
+                    @endif
                 </div>
             </div>
         </div>
-        @if (isset($categorias_platos) || isset($categorias_insumos))
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="nav nav-tabs" id="myTabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active font-roboto-bgt" id="tab1" data-toggle="tab" href="#content1" role="tab" aria-controls="content1" aria-selected="true">
-                                Menu
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-roboto-bgt" id="tab2" data-toggle="tab" href="#content2" role="tab" aria-controls="content2" aria-selected="false">
-                                Insumos
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTabsContent">
-                        <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
-                            @if (isset($categorias_platos))
-                                @include('categorias.partials.platos_final')
-                            @endif
-                        </div>
-                        <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
-                            @if (isset($categorias_insumos))
-                                @include('categorias.partials.insumos')
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
     </div>
-</div>
+@endif
 @endsection
 @section('scripts')
     @parent
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            /*if($("#empresa_id >option:selected").val() != ''){
-                var id = $("#empresa_id >option:selected").val();
-                cargosByEmpresa(id);
-            }*/
-            
             $("#btn_deshabilitar_platos").hide();
             $("#btn_habilitar_platos").hide();
             $("#btn_sub_platos_master").hide();
@@ -122,12 +93,6 @@
                     datosCategoriaInsumos(document.getElementById('categoria_insumo_id').value);
                 }
             }
-            
-            $('#empresa_id').select2({
-                theme: "bootstrap4",
-                placeholder: "--Empresa--",
-                width: '100%'
-            });
         });
 
         $('#empresa_id').change(function() {
@@ -327,6 +292,10 @@
             });
         }
 
+        $("#toggleSubMenu").click(function(){
+            $("#subMenuCategorias").slideToggle(250);
+        });
+
         function crear_platos(){
             $(".btns").hide();
             $(".spinner-btn").show();
@@ -339,7 +308,7 @@
         function crear_platos_master(){
             $(".btns").hide();
             $(".spinner-btn").show();
-            var id = $("#empresa_id >option:selected").val()
+            var id = $("#empresa_id").val()
             var url = "{{ route('categorias.create_platos_master',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
@@ -384,7 +353,7 @@
         function crear_insumos_master(){
             $(".btns").hide();
             $(".spinner-btn").show();
-            var id = $("#empresa_id >option:selected").val()
+            var id = $("#empresa_id").val()
             var url = "{{ route('categorias.create_insumos_master',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
@@ -421,7 +390,7 @@
             $(".btn").hide();
             $(".empresa-id-select-container").hide();
             $(".spinner-btn").show();
-            var id = $("#empresa_id >option:selected").val()
+            var id = $("#empresa_id").val()
             var status_platos = '1';
             var status_insumos = '[]';
             var url = "{{ route('categorias.index',[':id',':status_platos',':status_insumos']) }}";
@@ -435,7 +404,7 @@
             $(".btn").hide();
             $(".empresa-id-select-container").hide();
             $(".spinner-btn").show();
-            var id = $("#empresa_id >option:selected").val()
+            var id = $("#empresa_id").val()
             var status_platos = '[]';
             var status_insumos = '[]';
             var url = "{{ route('categorias.index',[':id',':status_platos',':status_insumos']) }}";
@@ -449,7 +418,7 @@
             $(".btn").hide();
             $(".empresa-id-select-container").hide();
             $(".spinner-btn").show();
-            var id = $("#empresa_id >option:selected").val()
+            var id = $("#empresa_id").val()
             var status_platos = '[]';
             var status_insumos = '1';
             var url = "{{ route('categorias.index',[':id',':status_platos',':status_insumos']) }}";
@@ -463,7 +432,7 @@
             $(".btn").hide();
             $(".empresa-id-select-container").hide();
             $(".spinner-btn").show();
-            var id = $("#empresa_id >option:selected").val()
+            var id = $("#empresa_id").val()
             var status_platos = '[]';
             var status_insumos = '[]';
             var url = "{{ route('categorias.index',[':id',':status_platos',':status_insumos']) }}";

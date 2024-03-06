@@ -1,12 +1,12 @@
 <div class="form-group row">
-    <div class="col-md-8 pr-1">
+    <div class="col-md-8 px-0 pr-1">
         <div class="card card-body">
             @if (isset($plan_de_cuentas))
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-10 px-0 pr-1">
                         <div id="treeview"></div>
                     </div>
-                    <div class="col-md-2 text-right">
+                    <div class="col-md-2 px-4 text-right">
                         <i class="fa fa-spinner custom-spinner fa-spin fa-fw spinner-btn" style="display: none;"></i>
                         @if (count($estado) == 1)
                             <div class="form-group row" id="btn_todos">
@@ -89,7 +89,7 @@
             @endif
         </div>
     </div>
-    <div class="col-md-4 pl-1">
+    <div class="col-md-4 px-0 pl-1">
         <div class="card card-body">
             <div id="contenido">
                 <input type="hidden" value="#" name="plancuenta_id" id="plancuenta_id">    

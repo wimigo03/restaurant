@@ -1,19 +1,19 @@
 {
-    "processing": "<span class='font-roboto-bg'>...Procesando...</span>",
-    "lengthMenu": "<span class='font-roboto-bg'>_MENU_</span>",
-    "zeroRecords": "<span class='font-roboto-bg'>No hay resultados para mostrar</span>",
-    "emptyTable": "<span class='font-roboto-bg'>No hay datos</span>",
-    "infoEmpty": "<span class='font-roboto-bg'>Ningun registro encontrado</span>",
-    "infoFiltered": "<span class='font-roboto-bg'>(filtrados de un total de _MAX_ registros)</span>",
+    "processing": "<span class='font-roboto-12'>...Procesando...</span>",
+    "lengthMenu": "<span class='font-roboto-12'>_MENU_</span>",
+    "zeroRecords": "<span class='font-roboto-12'>No hay resultados para mostrar</span>",
+    "emptyTable": "<span class='font-roboto-12'>No hay datos</span>",
+    "infoEmpty": "<span class='font-roboto-12'>Ningun registro encontrado</span>",
+    "infoFiltered": "<span class='font-roboto-12'>(filtrados de un total de _MAX_ registros)</span>",
     "search": "",
 	"searchPlaceholder": "Buscar",
     "infoThousands": ",",
-    "loadingRecords": "<span class='font-roboto-bg'>...Cargando...</span>",
+    "loadingRecords": "<span class='font-roboto-12'>...Cargando...</span>",
     "paginate": {
-        "first": "<span class='font-roboto-bg'>Primero</span>",
-        "last": "<span class='font-roboto-bg'>Último</span>",
-        "next": "<span class='font-roboto-bg'>Siguiente</span>",
-        "previous": "<span class='font-roboto-bg'>Anterior</span>"
+        "first": "<span class='font-roboto-12'>Primero</span>",
+        "last": "<span class='font-roboto-12'>Último</span>",
+        "next": "<span class='font-roboto-12'>Siguiente</span>",
+        "previous": "<span class='font-roboto-12'>Anterior</span>"
     },
     "aria": {
         "sortAscending": ": Activar para ordenar la columna de manera ascendente",
@@ -212,7 +212,7 @@
             "noMulti": "Este registro puede ser editado individualmente, pero no como parte de un grupo."
         }
     },
-    "info": "<span class='font-roboto-bg'>Mostrando _START_ a _END_ de _TOTAL_ registros</span>",
+    "info": "<span class='font-roboto-12'>Mostrando _START_ a _END_ de _TOTAL_ registros</span>",
     "stateRestore": {
         "creationModal": {
             "button": "Crear",

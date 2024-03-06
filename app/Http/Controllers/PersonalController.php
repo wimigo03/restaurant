@@ -14,10 +14,18 @@ use App\Models\Horario;
 use App\Models\HorarioDetalle;
 use App\Models\Familiar;
 use App\Models\Cargo;
+use App\Models\PlanCuentaAuxiliar;
 use Auth;
 
 class PersonalController extends Controller
 {
+    const ICONO = 'fas fa-user-friends fa-fw';
+    const INDEX = 'PERSONAL';
+    const CREATE = 'REGISTRAR PERSONAL';
+    const EDITAR = 'MODIFICAR PERSONAL';
+    const SHOW = 'DETALLE DE PERSONAL';
+    const RETIRAR = 'RETIRAR PERSONAL';
+
     public function indexAfter()
     {
         $empresas = Empresa::query()
@@ -31,6 +39,8 @@ class PersonalController extends Controller
 
     public function index($empresa_id)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
         $cargos = Cargo::where('empresa_id',$empresa_id)->pluck('nombre','id');
         $estados = PersonalLaboral::ESTADOS;
@@ -39,11 +49,13 @@ class PersonalController extends Controller
                                                 ->where('estado','1')
                                                 ->orderBy('id','desc')
                                                 ->paginate(10);
-        return view('personal.index', compact('empresa','cargos','estados','personal_laborales'));
+        return view('personal.index', compact('icono','header','empresa','cargos','estados','personal_laborales'));
     }
 
     public function search(Request $request)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa = Empresa::find($request->empresa_id);
         $cargos = Cargo::where('empresa_id',$empresa->id)->pluck('nombre','id');
         $estados = PersonalLaboral::ESTADOS;
@@ -60,12 +72,14 @@ class PersonalController extends Controller
                                                 ->byEstado($request->estado)
                                                 ->orderBy('id','desc')
                                                 ->paginate(10);
-        return view('personal.index', compact('empresa','cargos','estados','personal_laborales'));
+        return view('personal.index', compact('icono','header','empresa','cargos','estados','personal_laborales'));
         
     }
 
     public function create($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE;
         $empresa = Empresa::find($id);
         $empresas = Empresa::query()
                             ->byCliente()
@@ -74,17 +88,21 @@ class PersonalController extends Controller
         $nacionalidades = Personal::NACIONALIDADES;
         $extensiones = Personal::EXTENSIONES;
         $licencia_categorias = Personal::LICENCIA_CATEGORIAS;
+        $cargos = Cargo::where('empresa_id',$empresa->id)->where('estado','1')->pluck('nombre','id');
         $afps = Afp::pluck('nombre','id');
         $horarios = Horario::where('empresa_id',$id)->where('nombre','OFICINA')->pluck('nombre','id');
         $tipo_familiares = Familiar::TIPO_FAMILIARES;
         $ocupaciones = Familiar::OCUPACIONES;
         $niveles_estudio = Familiar::NIVELES_ESTUDIO;
         return view('personal.create', 
-                compact('empresa',
+                compact('icono',
+                        'header',
+                        'empresa',
                         'empresas',
                         'nacionalidades',
                         'extensiones',
                         'licencia_categorias',
+                        'cargos',
                         'afps',
                         'horarios',
                         'tipo_familiares',
@@ -382,6 +400,16 @@ class PersonalController extends Controller
                 $personal_contrato_servicio = PersonalContrato::create($datos_personal_servicio);
             }
 
+            $datos_auxiliar = ([
+                'empresa_id' => $request->empresa_id,
+                'cliente_id' => $empresa->cliente_id,
+                'nombre' => $personal->primer_nombre . ' ' . $personal->apellido_paterno . ' ' . $personal->apellido_materno,
+                'tipo' => '1',
+                'estado' => '1'
+            ]);
+
+            $auxiliar = PlanCuentaAuxiliar::create($datos_auxiliar);
+
             return redirect()->route('personal.index',$request->empresa_id)->with('success_message', 'Se agregó personal en la empresa seleccionada.');
         } catch (ValidationException $e) {
             return redirect()->route('personal.create')
@@ -392,6 +420,8 @@ class PersonalController extends Controller
 
     public function editar($id)
     {
+        $icono = self::ICONO;
+        $header = self::EDITAR;
         $personal = Personal::find($id);
         $empresa = Empresa::find($personal->empresa_id);
         $nacionalidades = Personal::NACIONALIDADES;
@@ -403,7 +433,9 @@ class PersonalController extends Controller
         $ocupaciones = Familiar::OCUPACIONES;
         $niveles_estudio = Familiar::NIVELES_ESTUDIO;
         return view('personal.editar', 
-                compact('personal',
+                compact('icono',
+                        'header',
+                        'personal',
                         'empresa',
                         'nacionalidades',
                         'extensiones',
@@ -444,6 +476,8 @@ class PersonalController extends Controller
 
     public function show($id)
     {
+        $icono = self::ICONO;
+        $header = self::SHOW;
         $personal_laboral = PersonalLaboral::where('id',$id)->first();
         $personal = Personal::find($personal_laboral->personal_id);
         $personal_contrato_fiscal = PersonalContrato::where('personal_laboral_id',$id)->where('tipo','F')->first();
@@ -454,6 +488,8 @@ class PersonalController extends Controller
         $horario_laboral_detalle = HorarioDetalle::where('horario_id',$personal_laboral->horario_id)->get();
         $familiares = Familiar::where('personal_id',$personal_laboral->personal_id)->get();
         return view('personal.show', compact(
+                                            'icono',
+                                            'header',
                                             'personal',
                                             'empresa',
                                             'personal_laboral',
@@ -467,10 +503,12 @@ class PersonalController extends Controller
 
     public function retirar($personal_laboral_id, $tipo)
     {
+        $icono = self::ICONO;
+        $header = self::RETIRAR;
         $personal_laboral = PersonalLaboral::find($personal_laboral_id);
         $personal = Personal::find($personal_laboral->personal_id);
         $empresa = Empresa::find($personal->empresa_id);
-        return view('personal.retirar', compact('personal_laboral','personal','empresa','tipo'));
+        return view('personal.retirar', compact('icono','header','personal_laboral','personal','empresa','tipo'));
     }
 
     public function destroy(Request $request)

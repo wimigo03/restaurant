@@ -18,37 +18,20 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <b>{{ $empresa->nombre_comercial }} - REGISTRAR PRODUCTO PARA EL MENU</b>
-                </div>
-            </div>
+    @include('productos.partials.menu')
+    @include('productos.partials.form-create')
+    <div class="form-group row">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
+                <i class="fas fa-paper-plane"></i>&nbsp;Procesar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
+                &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
+            </button>
+            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
-        @include('productos.partials.form-create')
-        <div class="form-group row">
-            <div class="col-md-6 pr-1">
-                <span class="tts:right tts-slideIn tts-custom" aria-label="Crear Unidad de Medida" style="cursor: pointer;">
-                    <button type="button" class="btn btn-warning font-verdana" data-toggle="modal" data-target="#ModalUnidadMedida">
-                        &nbsp;<i class="fa-solid fa-scale-balanced"></i>&nbsp;
-                    </button>
-                </span>
-            </div>
-            <div class="col-md-6 pl-1 text-right">
-                <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Procesar
-                </button>
-                <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                    &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-                </button>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
-        </div>
-        @include('productos.partials.modal-create-unidad')
     </div>
-</div>
+    @include('productos.partials.modal-create-unidad')
 @endsection
 @section('scripts')
     @parent
@@ -72,7 +55,12 @@
                 width: '100%'
             });
 
+            $("#subMenuProductos").hide();
             verificarObligatorio();
+        });
+
+        $("#toggleSubMenu").click(function(){
+            $("#subMenuProductos").slideToggle(250);
         });
 
         function alertaModal(mensaje){
@@ -81,6 +69,7 @@
         }
 
         $('#categoria_master_id').change(function() {
+            localStorage.clear();
             var id = $(this).val();
             getCodigoMaster(id);
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

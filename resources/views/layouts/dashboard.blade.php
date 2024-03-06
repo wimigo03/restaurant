@@ -28,15 +28,6 @@
             padding-bottom: 5px;
             margin-bottom: 5px;
         }
-        .btn-float {
-            position: fixed;
-            top: 0px;
-            right: 20px;
-            border: none;
-            padding: 15px;
-            cursor: pointer;
-            z-index: 1000;
-        }
         .text-bottom {
             position: relative;
         }
@@ -48,13 +39,6 @@
     @yield('styles')
   </head>
   <body>
-    <span class="btn-float">
-        <span class="tts:left tts-slideIn tts-custom" aria-label="Salir" style="cursor: pointer;">
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <img src="/images/exit.png" alt="Salir" class="imagen-salir">
-            </a>
-        </span>
-    </span>
     @include('layouts.alerta-modal')
     @include('layouts.confirmar-modal')
     <aside class="sidebar">
@@ -67,14 +51,20 @@
         </div>
         <div class="side-inner">
             @include('layouts.partials.perfil') 
-            {{--@include('layouts.partials.subperfil')--}} 
             @include('layouts.partials.menu') 
         </div>
     </aside>
     <main>
         <div class="site-section">
             <div class="container">
-                @yield('content')
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        @if (isset($empresa))
+                            @include('layouts.partials.header')
+                        @endif
+                        @yield('content')
+                    </div>
+                </div>
             </div>
         </div>  
     </main>
@@ -86,7 +76,20 @@
     <script src="{{ asset('js/lobibox/lobibox.js') }}"></script>
     <script src="{{ asset('js/datepicker/datepicker.min.js') }}"></script>
     <script src="{{ asset('js/datepicker/datepicker.es.js') }}"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"
+        integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/addons/cleave-phone.us.js"
+        integrity="sha512-sYKXH+IAMtg7mVursFAH+Xu1mIvmSqTd8LTEhKdRmvJhtX2IKUFpkZBZ9pigORvIR6Nt5klEF/P+psiJRa6crQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
     {{--<script src="http://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>--}}
+    
 
     @yield('scripts')
     

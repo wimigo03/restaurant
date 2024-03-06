@@ -25,7 +25,7 @@ class PermissionController extends Controller
 
     public function create()
     {
-        $titulos = Permission::select('title')->groupBy('title')->get();
+        $titulos = Permission::select('title')->groupBy('title')->orderBy('title','desc')->get();
         return view('permissions.create',compact('titulos'));
     }
 

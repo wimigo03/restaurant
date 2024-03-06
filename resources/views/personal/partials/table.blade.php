@@ -1,8 +1,8 @@
 <div class="form-group row">
     <div class="col-md-12">
-        <table class="table display {{--table-bordered--}} responsive table-striped">
+        <table class="table display responsive table-striped">
             <thead>
-                <tr class="font-roboto-bg">
+                <tr class="font-roboto-12">
                     <td class="text-left p-1"><b>COD. ING.</b></td>
                     <td class="text-left p-1"><b>INGRESO</b></td>
                     <td class="text-left p-1"><b>COD. RET.</b></td>
@@ -18,7 +18,7 @@
             </thead>
             <tbody>
                 @foreach ($personal_laborales as $datos)
-                    <tr class="font-roboto">
+                    <tr class="font-roboto-12">
                         @php
                             $contratos = App\Models\PersonalContrato::where('personal_id',$datos->personal_id)->get();
                         @endphp
@@ -83,7 +83,7 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-roboto-bg">
+        <div class="d-flex justify-content-end font-roboto-12">
             {!! $personal_laborales->links() !!}
         </div>
     </div>

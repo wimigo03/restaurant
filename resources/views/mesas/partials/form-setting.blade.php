@@ -2,7 +2,7 @@
     @csrf
     <input type="hidden" name="cliente_id" value="{{ $empresa->cliente_id }}" id="cliente_id">
     <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_id">
-    <div class="form-group row font-roboto-bg">
+    <div class="form-group row font-roboto-12">
         <div class="col-md-4 hiddenContent" id="datos-mesa" style="display: none;">
             x
         </div>

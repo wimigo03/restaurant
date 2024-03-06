@@ -9,6 +9,11 @@ use Auth;
 
 class UnidadController extends Controller
 {
+    const ICONO = 'fas fa-balance-scale fa-fw';
+    const INDEX = 'UNIDADES DE MEDIDA';
+    const CREATE = 'REGISTRAR UNIDAD DE MEDIDA';
+    const EDITAR = 'MODIFICAR UNIDAD DE MEDIDA';
+
     public function indexAfter()
     {
         $empresas = Empresa::query()
@@ -22,6 +27,8 @@ class UnidadController extends Controller
 
     public function index($empresa_id)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
         $estados = Unidad::ESTADOS;
         $tipos = Unidad::TIPOS;
@@ -29,11 +36,13 @@ class UnidadController extends Controller
                                 ->byEmpresa($empresa_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('unidades.index', compact('empresa','estados','tipos','unidades'));
+        return view('unidades.index', compact('icono','header','empresa','estados','tipos','unidades'));
     }
 
     public function search(Request $request)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa = Empresa::find($request->empresa_id);
         $estados = Unidad::ESTADOS;
         $tipos = Unidad::TIPOS;
@@ -45,14 +54,16 @@ class UnidadController extends Controller
                                 ->byEstado($request->estado)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('unidades.index', compact('empresa','estados','tipos','unidades'));
+        return view('unidades.index', compact('icono','header','empresa','estados','tipos','unidades'));
     }
 
     public function create($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE;
         $empresa = Empresa::find($id);
         $tipos = Unidad::TIPOS;
-        return view('unidades.create', compact('empresa','tipos'));
+        return view('unidades.create', compact('icono','header','empresa','tipos'));
     }
 
     public function store(Request $request)

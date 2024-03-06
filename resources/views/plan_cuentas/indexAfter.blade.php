@@ -6,36 +6,37 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <b><i class="fa-regular fa-chart-bar fa-fw mr-1"></i>&nbsp;PLAN DE CUENTAS</b>
-                        </div>
-                        <div class="col-md-4 empresa-id-select-container">
-                            <form action="#" method="get" id="form_estructura">
-                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm">
-                                    <option value="">-</option>
-                                    @foreach ($empresas as $index => $value)
-                                        <option value="{{ $index }}" @if(isset($empresa_id) ? $empresa_id : request('empresa_id') == $index) selected @endif >{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        </div>
+    <div class="form-group row">
+        <div class="col-md-12">
+            <div class="card-header header">
+                <div class="row">
+                    <div class="col-md-4 font-roboto-14" style="display: flex; align-items: flex-end;">
+                        <b>PLAN DE CUENTAS</b>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <span class="btns btn btn-sm btn-outline-dark font-verdana" id="toggleSubMenu" style="cursor: pointer;">
+                            <i class="fa-regular fa-chart-bar fa-fw fa-beat"></i>
+                        </span>
+                    </div>
+                    <div class="col-md-4 empresa-id-select-container">
+                        <form action="#" method="get" id="form_estructura">
+                            <select name="empresa_id" id="empresa_id" class="form-control form-control-sm">
+                                <option value="">-</option>
+                                @foreach ($empresas as $index => $value)
+                                    <option value="{{ $index }}" @if(isset($empresa_id) ? $empresa_id : request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="form-group row">
-            <div class="col-md-12 text-center">
-                <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-pi-resto">
-            </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-12 text-center">
+            <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-pi-resto">
         </div>
     </div>
-</div>
 @endsection
 @section('scripts')
     @parent

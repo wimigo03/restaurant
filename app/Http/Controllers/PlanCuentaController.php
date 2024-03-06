@@ -7,10 +7,16 @@ use App\Models\Categoria;
 use App\Models\Empresa;
 use App\Models\Producto;
 use App\Models\PlanCuenta;
+use App\Models\Moneda;
 use Auth;
 
 class PlanCuentaController extends Controller
 {
+    const ICONO = 'fa-regular fa-chart-bar fa-fw';
+    const INDEX = 'PLAN DE CUENTAS';
+    const CREATE = 'REGISTRAR PLAN DE CUENTA';
+    const EDITAR = 'MODIFICAR PLAN DE CUENTA';
+
     public function indexAfter()
     {
         $empresas = Empresa::query()
@@ -24,6 +30,8 @@ class PlanCuentaController extends Controller
 
     public function index($empresa_id,$status)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $estado = $status == 1 ? ['1'] : ['1','2'];
         $empresas_info = Empresa::where('cliente_id',Auth::user()->cliente_id)->get();
         $empresa = Empresa::find($empresa_id);
@@ -32,7 +40,7 @@ class PlanCuentaController extends Controller
                             ->pluck('nombre_comercial','id');
         $plan_de_cuentas = PlanCuenta::where('empresa_id',$empresa_id)->whereIn('estado',$estado)->get();
         $tree = $plan_de_cuentas != null ? $this->buildTree($plan_de_cuentas) : null;
-        return view('plan_cuentas.index', compact('estado','empresas_info','empresa','empresas','plan_de_cuentas','tree'));
+        return view('plan_cuentas.index', compact('icono','header','estado','empresas_info','empresa','empresas','plan_de_cuentas','tree'));
     }
 
     protected function buildTree($nodes)
@@ -83,10 +91,12 @@ class PlanCuentaController extends Controller
         ]);
         try{
             $codigo = PlanCuenta::select('id')->where('empresa_id',$request->empresa_id)->where('nivel','0')->get()->count() + 1;
+            $moneda = Moneda::find($request->moneda_id);
             $datos = [
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $request->cliente_id,
                 'moneda_id' => $request->moneda_id,
+                'pais_id' => $moneda->pais_id,
                 'nombre' => $request->nombre,
                 'codigo' => $codigo,
                 'nivel' => '0',
@@ -109,9 +119,11 @@ class PlanCuentaController extends Controller
 
     public function create_sub($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE;
         $plan_cuenta = PlanCuenta::find($id);
         $empresa = Empresa::find($plan_cuenta->empresa_id);
-        return view('plan_cuentas.create-sub', compact('plan_cuenta','empresa'));
+        return view('plan_cuentas.create-sub', compact('icono','header','plan_cuenta','empresa'));
     }
 
     public function store_sub(Request $request)
@@ -123,11 +135,12 @@ class PlanCuentaController extends Controller
         try{
             $nivel = $request->nivel + 1;
             $codigo = $request->codigo . '.' . (PlanCuenta::where('estado','1')->where('parent_id',$request->parent_id)->get()->count() + 1);
-            
+            $moneda = Moneda::find($request->moneda_id);
             $datos = [
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $request->cliente_id,
                 'moneda_id' => $request->moneda_id,
+                'pais_id' => $moneda->pais_id,
                 'nombre' => $request->nombre,
                 'codigo' => $codigo,
                 'nivel' => $nivel,

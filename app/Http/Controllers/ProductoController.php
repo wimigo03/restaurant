@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Producto;
+use App\Models\PrecioProducto;
 use App\Models\Empresa;
 use App\Models\Categoria;
 use App\Models\Unidad;
@@ -12,6 +13,12 @@ use PDF;
 
 class ProductoController extends Controller
 {
+    const ICONO = 'fas fa-wine-glass-alt fa-fw';
+    const INDEX = 'PRODUCTOS';
+    const CREATE = 'REGISTRAR PRODUCTO';
+    const EDITAR = 'MODIFICAR PRODUCTO';
+    const SHOW = 'DETALLE PRODUCTO';
+
     public function indexAfter()
     {
         $empresas = Empresa::query()
@@ -25,6 +32,8 @@ class ProductoController extends Controller
 
     public function index($empresa_id)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
         $categorias_master = Categoria::where('empresa_id',$empresa_id)->where('nivel','0')->pluck('nombre','id');
         $categorias = Categoria::where('empresa_id',$empresa_id)->where('nivel','1')->pluck('nombre','id');
@@ -34,11 +43,13 @@ class ProductoController extends Controller
                                 ->byEmpresa($empresa_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('productos.index', compact('empresa','categorias_master','categorias','tipos','estados','productos'));
+        return view('productos.index', compact('icono','header','empresa','categorias_master','categorias','tipos','estados','productos'));
     }
 
     public function search(Request $request)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa_id = $request->empresa_id;
         $empresa = Empresa::find($empresa_id);
         $categorias_master = Categoria::where('empresa_id',$empresa_id)->where('nivel','0')->pluck('nombre','id');
@@ -58,21 +69,24 @@ class ProductoController extends Controller
                                 ->byEstado($request->estado)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('productos.index', compact('empresa','categorias_master','categorias','tipos','estados','productos'));
+        return view('productos.index', compact('icono','header','empresa','categorias_master','categorias','tipos','estados','productos'));
         
     }
 
     public function create($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE;
         $empresa = Empresa::find($id);
         $categorias_master = Categoria::where('empresa_id',$id)->where('tipo','1')->where('nivel',0)->where('estado','1')->pluck('nombre','id');
         $categorias = Categoria::where('empresa_id',$id)->where('tipo','1')->where('nivel',1)->where('estado','1')->pluck('nombre','id');
         $unidades = Unidad::where('empresa_id',$id)->where('estado','1')->pluck('nombre','id');
         $tipos = Unidad::TIPOS;
-        return view('productos.create', compact('empresa','categorias_master','categorias','unidades','tipos'));
+        return view('productos.create', compact('icono','header','empresa','categorias_master','categorias','unidades','tipos'));
     }
 
-    public function getCodigoMaster($id){
+    public function getCodigoMaster($id)
+    {
         $categoria_master = Categoria::find($id);
         if($categoria_master != null){
             $codigo = $categoria_master->codigo . '-';
@@ -84,7 +98,8 @@ class ProductoController extends Controller
         return response()->json(['error'=>'Algo Salio Mal']);
     }
 
-    public function getCodigo($id){
+    public function getCodigo($id)
+    {
         $categoria = Categoria::find($id);
         if($categoria != null){
             $categoria_master = Categoria::find($categoria->parent_id);
@@ -122,11 +137,15 @@ class ProductoController extends Controller
             $foto_3 = isset($request->foto_3) ? 'alt(2)_' . strtolower($request->nombre) . '_' . strtolower($request->nombre_factura) . '.' . pathinfo(strtolower($request->foto_3->getClientOriginalName()), PATHINFO_EXTENSION) : null;
             
             $empresa = Empresa::find($request->empresa_id);
+            $categoria = Categoria::find($request->categoria_id);
             $datos = [
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $empresa->cliente_id,
                 'categoria_master_id' => $request->categoria_master_id,
                 'categoria_id' => $request->categoria_id,
+                'plan_cuenta_id' => $categoria->plan_cuenta_id,
+                'moneda_id' => $categoria->moneda_id,
+                'pais_id' => $categoria->pais_id,
                 'unidad_id' => $request->unidad_id,
                 'nombre' => $request->nombre,
                 'nombre_factura' => $request->nombre_factura,
@@ -157,12 +176,14 @@ class ProductoController extends Controller
 
     public function editar($id)
     {
+        $icono = self::ICONO;
+        $header = self::EDITAR;
         $producto = Producto::find($id);
         $empresa = Empresa::find($producto->empresa_id);
         $categorias_master = Categoria::where('empresa_id',$producto->empresa_id)->where('tipo','1')->where('nivel',0)->where('estado','1')->get();
         $categorias = Categoria::where('empresa_id',$producto->empresa_id)->where('tipo','1')->where('nivel',1)->where('estado','1')->get();
         $unidades = Unidad::where('empresa_id',$producto->empresa_id)->where('estado','1')->get();
-        return view('productos.editar', compact('producto','empresa','categorias_master','categorias','unidades'));
+        return view('productos.editar', compact('icono','header','producto','empresa','categorias_master','categorias','unidades'));
     }
 
     public function update(Request $request)
@@ -185,11 +206,15 @@ class ProductoController extends Controller
 
             $empresa = Empresa::find($request->empresa_id);
             $producto = Producto::find($request->producto_id);
+            $categoria = Categoria::find($request->categoria_id);
             $datos = [
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $empresa->cliente_id,
                 'categoria_master_id' => $request->categoria_master_id,
                 'categoria_id' => $request->categoria_id,
+                'plan_cuenta_id' => $categoria->plan_cuenta_id,
+                'moneda_id' => $categoria->moneda_id,
+                'pais_id' => $categoria->pais_id,
                 'unidad_id' => $request->unidad_id,
                 'nombre' => $request->nombre,
                 'nombre_factura' => $request->nombre_factura,
@@ -221,9 +246,11 @@ class ProductoController extends Controller
 
     public function show($id)
     {
+        $icono = self::ICONO;
+        $header = self::SHOW;
         $producto = Producto::find($id);
         $empresa = Empresa::find($producto->empresa_id);
-        return view('productos.show', compact('empresa','producto'));
+        return view('productos.show', compact('icono','header','empresa','producto'));
     }
 
     public function pdf($id)
@@ -236,6 +263,11 @@ class ProductoController extends Controller
 
     public function habilitar($id){
         try{
+            $precio_producto = PrecioProducto::select('id')->where('producto_id',$id)->where('estado','2')->orderBy('id','desc')->first();
+            $precio_producto = PrecioProducto::find($precio_producto->id);
+            $precio_producto->update([
+                'estado' => '1'
+            ]);
             $producto = Producto::find($id);
             $producto->update([
                 'estado' => '1'
@@ -250,6 +282,11 @@ class ProductoController extends Controller
 
     public function deshabilitar($id){
         try{
+            $precio_producto = PrecioProducto::select('id')->where('producto_id',$id)->where('estado','1')->orderBy('id','desc')->first();
+            $precio_producto = PrecioProducto::find($precio_producto->id);
+            $precio_producto->update([
+                'estado' => '2'
+            ]);
             $producto = Producto::find($id);
             $producto->update([
                 'estado' => '2'

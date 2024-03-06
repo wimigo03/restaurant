@@ -9,6 +9,12 @@ use Auth;
 
 class SucursalController extends Controller
 {
+    const ICONO = 'fa-solid fa-house-damage fa-fw';
+    const INDEX = 'SUCURSAL';
+    const CREATE = 'REGISTRAR SUCURSAL';
+    const EDITAR = 'MODIFICAR SUCURSAL';
+    const SHOW = 'DETALLE SUCURSAL';
+
     public function indexAfter()
     {
         $empresas_info = Empresa::where('cliente_id',Auth::user()->cliente_id)->get();
@@ -23,14 +29,15 @@ class SucursalController extends Controller
 
     public function index($empresa_id)
     {
-        $empresas_info = Empresa::where('cliente_id',Auth::user()->cliente_id)->get();
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
         $estados = Sucursal::ESTADOS;
         $sucursales = Sucursal::query()
                                 ->byEmpresa($empresa_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('sucursal.index', compact('empresas_info','empresa','estados','sucursales'));
+        return view('sucursal.index', compact('icono','header','empresa','estados','sucursales'));
     }
 
     public function search(Request $request)
@@ -51,8 +58,10 @@ class SucursalController extends Controller
 
     public function create($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE;
         $empresa = Empresa::find($id);
-        return view('sucursal.create', compact('empresa'));
+        return view('sucursal.create', compact('icono','header','empresa'));
     }
 
     public function store(Request $request)
@@ -85,9 +94,11 @@ class SucursalController extends Controller
 
     public function editar($id)
     {
+        $icono = self::ICONO;
+        $header = self::EDITAR;
         $sucursal = Sucursal::find($id);
         $empresa = Empresa::find($sucursal->empresa_id);
-        return view('sucursal.editar', compact('sucursal','empresa'));
+        return view('sucursal.editar', compact('icono','header','sucursal','empresa'));
     }
 
     public function update(Request $request)

@@ -10,9 +10,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $cargo = Auth::user()->cargo;
-        $empresas_info = Empresa::where('cliente_id',Auth::user()->cliente_id)->get();
-        return view('home.index',compact('empresas_info','cargo'));
+        $empresas = Empresa::query()->byCliente()->get();
+        return view('home.index',compact('empresas'));
     }
 
     /*public function logout(Request $request)

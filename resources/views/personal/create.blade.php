@@ -18,33 +18,18 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <b>{{ $empresa->nombre_comercial }} - REGISTRAR PERSONAL</b>
-                </div>
-            </div>
-        </div>
-        <input type="hidden" value="{{ $empresa->id }}" id="empresa_input_id">
-        <form action="#" method="post" id="form" enctype="multipart/form-data">
-            @csrf
-            @include('personal.partials.form-create')
-        </form>
-        <div class="form-group row">
-            <div class="col-md-12 text-right">
-                <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Procesar
-                </button>
-                <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                    &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-                </button>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
+    @include('personal.partials.form-create')
+    <div class="form-group row">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
+                <i class="fas fa-paper-plane"></i>&nbsp;Procesar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
+                &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
+            </button>
+            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>
-</div>
 @endsection
 @section('scripts')
     @parent
@@ -125,11 +110,6 @@
                 dateFormat: "dd/mm/yyyy",
                 autoClose: true
             });
-
-            if($("#empresa_id >option:selected").val() != ''){
-                var id = $("#empresa_id >option:selected").val();
-                getCargos(id);
-            }
 
             if($("#horario_id >option:selected").val() != ''){
                 var horario_id = $("#horario_id >option:selected").val();
@@ -393,43 +373,6 @@
             });
         }
 
-        $('#empresa_id').change(function() {
-            var id = $(this).val();
-            getCargos(id);
-        });
-
-        function getCargos(id){
-            $.ajax({
-                type: 'GET',
-                url: '/cargos/get_datos_cargo_by_empresa/'+id,
-                data: {
-                    id: id
-                },
-                success: function(data){
-                    if(data.cargos){
-                        var arr = Object.values($.parseJSON(data.cargos));
-                        $("#cargo_id").empty();
-                        var select = $("#cargo_id");
-                        select.append($("<option></option>").attr("value", '').text('--Cargo--'));
-                        var cargoIdSeleccionado = localStorage.getItem('cargoIdSeleccionado');
-                        $.each(arr, function(index, json) {
-                            var opcion = $("<option></option>").attr("value", json.id).text(json.nombre);
-                            if (json.id == cargoIdSeleccionado) {
-                                opcion.attr('selected', 'selected');
-                            }
-                            select.append(opcion);
-                        });
-                        select.on('change', function() {
-                            localStorage.setItem('cargoIdSeleccionado', $(this).val());
-                        });
-                    }
-                },
-                error: function(xhr){
-                    console.log(xhr.responseText);
-                }
-            });
-        }
-
         function alertaModal(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});
@@ -625,10 +568,6 @@
         function validarDatosLaboralesHeader(){
             if($("#profesion_ocupacion").val() == ""){
                 alertaModal("<center>El campo en <u>Datos Laborales</u><br><b>[Profesion/Ocupacion]</b><br>es un dato obligatorio...</center>");
-                return false;
-            }
-            if($("#empresa_id >option:selected").val() == ""){
-                alertaModal("<center>El campo en <u>Datos Laborales</u><br><b>[Empresa]</b><br>es un dato obligatorio...</center>");
                 return false;
             }
             if($("#tipo_contrato >option:selected").val() == ""){
@@ -834,12 +773,6 @@
                 $("#obligatorio_estado_civil").addClass('select2-container--obligatorio');
             }
 
-            if($("#empresa_id >option:selected").val() !== ""){
-                $("#obligatorio_empresa_id").removeClass('select2-container--obligatorio');
-            }else{
-                $("#obligatorio_empresa_id").addClass('select2-container--obligatorio');
-            }
-
             if($("#cargo_id >option:selected").val() !== ""){
                 $("#obligatorio_cargo_id").removeClass('select2-container--obligatorio');
             }else{
@@ -924,7 +857,7 @@
         function cancelar(){
             $(".btn").hide();            
             $(".spinner-btn").show();
-            var id = $("#empresa_input_id").val();
+            var id = $("#empresa_id").val();
             var url = "{{ route('personal.index',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;

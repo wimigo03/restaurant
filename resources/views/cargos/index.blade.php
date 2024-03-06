@@ -16,67 +16,43 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
+    @if (isset($cargos))
         <div class="form-group row">
             <div class="col-md-12">
-                <div class="card-header header">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <b>{{ $empresa->nombre_comercial }} - CARGOS</b>
-                        </div>
-                        <div class="col-md-4 empresa-id-select-container">
-                            <form action="#" method="get" id="form_estructura">
-                                <select name="empresa_id" id="empresa_id" class="form-control form-control-sm">
-                                    <option value="">-</option>
-                                    @foreach ($empresas as $index => $value)
-                                        <option value="{{ $index }}" @if(isset($empresa_id) ? $empresa_id : request('empresa_id') == $index) selected @endif >{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card card-body">
+                            <div id="treeview"></div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        @if (isset($cargos))
-            <div class="form-group row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card card-body">
-                                <div id="treeview"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card card-body">
-                                <div id="contenido">
-                                    <input type="hidden" value="{{ $cargos[0]->id }}" name="cargo_id" id="cargo_id">    
-                                    @include('cargos.partials.contenido')
-                                    <div class="form-group row">
-                                        <div class="col-md-12 text-right">
-                                            @can('cargos.habilitar')
-                                                <button class="btn btn-outline-danger font-verdana" type="button" onclick="deshabilitar();" id="btn_deshabilitar">
-                                                    <i class="fas fa-times"></i>&nbsp;Deshabilitar
-                                                </button>
-                                            @endcan
-                                            @can('cargos.habilitar')
-                                            <button class="btn btn-outline-success font-verdana" type="button" onclick="habilitar();" id="btn_habilitar">
-                                                <i class="fas fa-check"></i>&nbsp;Habilitar
+                    <div class="col-md-6">
+                        <div class="card card-body">
+                            <div id="contenido">
+                                <input type="hidden" value="{{ $cargos[0]->id }}" name="cargo_id" id="cargo_id">    
+                                @include('cargos.partials.contenido')
+                                <div class="form-group row">
+                                    <div class="col-md-12 text-right">
+                                        @can('cargos.habilitar')
+                                            <button class="btn btn-outline-danger font-verdana" type="button" onclick="deshabilitar();" id="btn_deshabilitar">
+                                                <i class="fas fa-times"></i>&nbsp;Deshabilitar
                                             </button>
-                                            @endcan
-                                            @can('cargos.create')
-                                                <button class="btn btn-outline-success font-verdana" type="button" onclick="crear();" id="btn_create_dependiente">
-                                                    <i class="fas fa-plus"></i>&nbsp;Crear dependiente
-                                                </button>
-                                            @endcan
-                                            @can('cargos.modificar')
-                                                <button class="btn btn-outline-warning font-verdana" type="button" onclick="modificar();" id="btn_modificar_dependiente">
-                                                    &nbsp;<i class="fas fa-edit"></i>&nbsp;Modificar
-                                                </button>
-                                            @endcan
-                                            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                                        </div>
+                                        @endcan
+                                        @can('cargos.habilitar')
+                                        <button class="btn btn-outline-success font-verdana" type="button" onclick="habilitar();" id="btn_habilitar">
+                                            <i class="fas fa-check"></i>&nbsp;Habilitar
+                                        </button>
+                                        @endcan
+                                        @can('cargos.create')
+                                            <button class="btn btn-outline-success font-verdana" type="button" onclick="crear();" id="btn_create_dependiente">
+                                                <i class="fas fa-plus"></i>&nbsp;Crear dependiente
+                                            </button>
+                                        @endcan
+                                        @can('cargos.modificar')
+                                            <button class="btn btn-outline-warning font-verdana" type="button" onclick="modificar();" id="btn_modificar_dependiente">
+                                                &nbsp;<i class="fas fa-edit"></i>&nbsp;Modificar
+                                            </button>
+                                        @endcan
+                                        <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
                                     </div>
                                 </div>
                             </div>
@@ -84,9 +60,8 @@
                     </div>
                 </div>
             </div>
-        @endif
-    </div>
-</div>
+        </div>
+    @endif
 @endsection
 @section('scripts')
     @parent
@@ -99,26 +74,7 @@
             if(document.getElementById('cargo_id')){
                 datosCargo(document.getElementById('cargo_id').value);
             }
-            $('#empresa_id').select2({
-                theme: "bootstrap4",
-                placeholder: "--Empresa--",
-                width: '100%'
-            });
         });
-
-        $('#empresa_id').change(function() {
-            var id = $(this).val();
-            cargosByEmpresa(id);
-        });
-
-        function cargosByEmpresa(id){
-            $(".btn").hide();
-            $(".empresa-id-select-container").hide();
-            $(".spinner-btn").show();
-            var url = "{{ route('cargos.index',[':id']) }}";
-            url = url.replace(':id',id);
-            window.location.href = url;
-        }
 
         $(function () {
             var nodo_id = {{ request('nodeId', 0) }};

@@ -226,7 +226,7 @@ class MesaController extends Controller
         $sucursal = Sucursal::find($sucursal_id);
         $zonas = Zona::where('sucursal_id',$sucursal_id)->where('estado','1')->get();
         $empresa = Empresa::find($sucursal->empresa_id);
-        return view('mesas.setting', compact('icono','header','zonas','empresa'));
+        return view('mesas.set  ting', compact('icono','header','zonas','empresa'));
     }
 
     public function getMesasByZona(Request $request){

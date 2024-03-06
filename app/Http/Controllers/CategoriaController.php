@@ -11,6 +11,14 @@ use Auth;
 
 class CategoriaController extends Controller
 {
+    const ICONO = 'fas fa-poll-h fa-fw';
+    const INDEX = 'CATEGORIAS';
+    const CREATE_MASTER = 'REGISTRAR CATEGORIA MASTER';
+    const CREATE_SUBMASTER = 'REGISTRAR SUBCATEGORIA MASTER';
+    const CREATE_INSUMOS = 'REGISTRAR CATEGORIA INSUMOS';
+    const CREATE_SUBINSUMOS = 'REGISTRAR SUBCATEGORIA INSUMOS';
+    const EDITAR = 'MODIFICAR CATEGORIA';
+
     public function indexAfter()
     {
         $empresas = Empresa::query()
@@ -24,6 +32,8 @@ class CategoriaController extends Controller
 
     public function index($empresa_id, $status_platos, $status_insumos)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $estado_platos = $status_platos == 1 ? ['1'] : ['1','2'];
         $estado_insumos = $status_insumos == 1 ? ['1'] : ['1','2'];
         $empresa = Empresa::find($empresa_id);
@@ -34,7 +44,7 @@ class CategoriaController extends Controller
         $categorias_insumos = Categoria::where('empresa_id',$empresa_id)->whereIn('estado',$estado_insumos)->where('tipo','2')->get();
         $tree = $categorias_platos != null ? $this->buildTree($categorias_platos) : null;
         $tree_insumos = $categorias_insumos != null ? $this->buildTree($categorias_insumos) : null;
-        return view('categorias.index', compact('estado_platos','estado_insumos','empresa','empresas','categorias_platos','categorias_insumos','tree','tree_insumos'));
+        return view('categorias.index', compact('icono','header','estado_platos','estado_insumos','empresa','empresas','categorias_platos','categorias_insumos','tree','tree_insumos'));
     }
 
     protected function buildTree($nodes)
@@ -96,10 +106,13 @@ class CategoriaController extends Controller
 
     public function create_platos($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE_SUBMASTER;
         $categoria = Categoria::find($id);
+        $empresa = Empresa::find($categoria->empresa_id);
         $tipo = '1';
-        $plan_cuentas = PlanCuenta::where('empresa_id',$categoria->empresa_id)->pluck('nombre','id');
-        return view('categorias.create', compact('categoria','tipo','plan_cuentas'));
+        $plan_cuentas = PlanCuenta::where('empresa_id',$categoria->empresa_id)->where('detalle','1')->where('estado','1')->pluck('nombre','id');
+        return view('categorias.create', compact('icono','header','categoria','empresa','tipo','plan_cuentas'));
     }
 
     public function store(Request $request)
@@ -113,10 +126,13 @@ class CategoriaController extends Controller
             $parent = Categoria::select('numeracion','nivel')->find($request->parent_id);
             $nivel = $parent->nivel + 1;
             $numeracion = $parent->numeracion . '.' . (Categoria::where('estado','1')->where('parent_id',$request->parent_id)->get()->count() + 1);
-            
+            $plan_cuenta = PlanCuenta::find($request->plan_cuenta_id);
             $categoria = Categoria::create([
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $request->cliente_id,
+                'plan_cuenta_id' => $request->plan_cuenta_id,
+                'moneda_id' => $plan_cuenta != null ? $plan_cuenta->moneda_id : null,
+                'pais_id' => $plan_cuenta != null ? $plan_cuenta->pais_id : null,
                 'nombre' => $request->categoria,
                 'codigo' => $request->codigo,
                 'numeracion' => $numeracion,
@@ -140,10 +156,13 @@ class CategoriaController extends Controller
 
     public function editar($id)
     {
+        $icono = self::ICONO;
+        $header = self::EDITAR;
         $categoria = Categoria::find($id);
+        $empresa = Empresa::find($categoria->empresa_id);
         $tipo = $categoria->tipo == '1' ? 'PLATOS FINAL' : 'INSUMOS';
-        $plan_cuentas = PlanCuenta::where('empresa_id',$categoria->empresa_id)->get();
-        return view('categorias.editar', compact('categoria','tipo','plan_cuentas'));
+        $plan_cuentas = PlanCuenta::where('empresa_id',$categoria->empresa_id)->where('detalle','1')->where('estado','1')->get();
+        return view('categorias.editar', compact('icono','header','empresa','categoria','tipo','plan_cuentas'));
     }
 
     public function update(Request $request)
@@ -176,10 +195,12 @@ class CategoriaController extends Controller
 
     public function create_platos_master($empresa_id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE_MASTER;
         $empresa = Empresa::where('id',$empresa_id)->first();
         $tipo = '1';
-        $plan_cuentas = PlanCuenta::where('empresa_id',$empresa_id)->pluck('nombre','id');
-        return view('categorias.create-master', compact('empresa','tipo','plan_cuentas'));
+        $plan_cuentas = PlanCuenta::where('empresa_id',$empresa_id)->where('detalle','1')->where('estado','1')->pluck('nombre','id');
+        return view('categorias.create-master', compact('icono','header','empresa','tipo','plan_cuentas'));
     }
 
     public function store_master(Request $request)
@@ -191,10 +212,13 @@ class CategoriaController extends Controller
         ]);
         try{
             $numeracion = Categoria::where('estado','1')->where('empresa_id',$request->empresa_id)->where('tipo',$request->tipo)->where('nivel',0)->get()->count() + 1;
-            
+            $plan_cuenta = PlanCuenta::find($request->plan_cuenta_id);
             $categoria = Categoria::create([
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $request->cliente_id,
+                'plan_cuenta_id' => $request->plan_cuenta_id,
+                'moneda_id' => $plan_cuenta != null ? $plan_cuenta->moneda_id : null,
+                'pais_id' => $plan_cuenta != null ? $plan_cuenta->pais_id : null,
                 'nombre' => $request->categoria,
                 'codigo' => $request->codigo,
                 'numeracion' => $numeracion,
@@ -259,18 +283,23 @@ class CategoriaController extends Controller
 
     public function create_insumos_master($empresa_id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE_INSUMOS;
         $empresa = Empresa::where('id',$empresa_id)->first();
         $tipo = '2';
-        $plan_cuentas = PlanCuenta::where('empresa_id',$empresa_id)->pluck('nombre','id');
-        return view('categorias.create-master-insumos', compact('empresa','tipo','plan_cuentas'));
+        $plan_cuentas = PlanCuenta::where('empresa_id',$empresa_id)->where('detalle','1')->where('estado','1')->pluck('nombre','id');
+        return view('categorias.create-master-insumos', compact('icono','header','empresa','tipo','plan_cuentas'));
     }
 
     public function create_insumos($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE_SUBINSUMOS;
         $categoria = Categoria::find($id);
+        $empresa = Empresa::find($categoria->empresa_id);
         $tipo = '2';
-        $plan_cuentas = PlanCuenta::where('empresa_id',$categoria->empresa_id)->pluck('nombre','id');
-        return view('categorias.create-insumos', compact('categoria','tipo','plan_cuentas'));
+        $plan_cuentas = PlanCuenta::where('empresa_id',$categoria->empresa_id)->where('detalle','1')->where('estado','1')->pluck('nombre','id');
+        return view('categorias.create-insumos', compact('icono','header','empresa','categoria','tipo','plan_cuentas'));
     }
 
     public function getDatosSubCategorias(Request $request){

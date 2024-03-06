@@ -2,35 +2,30 @@
 <title>Pi-Resto | Mesas</title>
 @extends('layouts.dashboard')
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        @include('layouts.partials.header')
-        @include('mesas.partials.search')
-        <div class="form-group row">
-            <div class="col-md-6 pr-1">
-                @can('mesas.create')
-                    <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
-                        <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
-                            <i class="fas fa-plus fa-fw"></i>
-                        </button>
-                    </span>
-                @endcan
-                <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
-            <div class="col-md-6 pl-1 text-right">
-                <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
-                    <i class="fas fa-search fa-fw"></i>&nbsp;Buscar
-                </button>
-                <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
-                    <i class="fas fa-eraser fa-fw"></i>&nbsp;Limpiar
-                </button>
-                <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
+    @include('mesas.partials.search')
+    <div class="form-group row">
+        <div class="col-md-6 px-0 pr-1">
+            @can('mesas.create')
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
+                    <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
+                        <i class="fas fa-plus fa-fw"></i>
+                    </button>
+                </span>
+            @endcan
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
-        @include('mesas.partials.table')
-        {{--@include('mesas.partials.tableAjax')--}}
+        <div class="col-md-6 px-0 pl-1 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
+                <i class="fas fa-search fa-fw"></i>&nbsp;Buscar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
+                <i class="fas fa-eraser fa-fw"></i>&nbsp;Limpiar
+            </button>
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
+        </div>
     </div>
-</div>
+    @include('mesas.partials.table')
+    {{--@include('mesas.partials.tableAjax')--}}
 @endsection
 @section('scripts')
     @parent

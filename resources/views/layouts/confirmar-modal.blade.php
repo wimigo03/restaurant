@@ -9,8 +9,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        Estas por <span class="text-success"><b>[Confirmar]</b></span> este proceso. ¿Esta seguro que desea continuar...?
+      <div class="modal-body text-center">
+        Estas por <span class="text-success"><b>[Confirmar]</b></span> este proceso.<br>
+        <b>¿Estas seguro que desea continuar?</b>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary font-verdana" type="button" onclick="confirmar();">

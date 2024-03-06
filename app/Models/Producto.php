@@ -21,6 +21,8 @@ class Producto extends Model
         'categoria_master_id',
         'categoria_id',
         'plan_cuenta_id',
+        'moneda_id',
+        'pais_id',
         'unidad_id',
         'nombre',
         'nombre_factura',
@@ -85,17 +87,6 @@ class Producto extends Model
     public function scopeByEmpresa($query, $empresa_id){
         if($empresa_id)  
             return $query->where('empresa_id', $empresa_id);
-    }
-
-    public function scopeByTipoPrecio($query, $tipo_precio_id){
-        if ($tipo_precio_id != '[]') {
-                return $query
-                    ->whereIn('id', function ($subquery) use($tipo_precio_id) {
-                        $subquery->select('producto_id')
-                            ->from('precio_ventas')
-                            ->where('tipo_precio_id',$tipo_precio_id);
-                    });
-        }
     }
 
     public function scopeByProducto($query, $producto_id){

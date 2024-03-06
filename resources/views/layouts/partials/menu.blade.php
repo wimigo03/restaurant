@@ -1,9 +1,23 @@
 <div class="nav-menu">
     <ul>
-        @can('precio.ventas.index')
+        {{--@can('precio.productos.index')
             <li>
-                <a href="{{ route('precio.ventas.indexAfter') }}">
+                <a href="{{ route('precio.productos.indexAfter') }}">
                     <i class="fa-solid fa-tag fa-fw mr-1"></i>&nbsp;Precios
+                </a>
+            </li>
+        @endcan--}}
+        @can('comprobante.index')
+            <li>
+                <a href="{{ route('comprobante.indexAfter') }}">
+                    <i class="fa-solid fa-file-invoice-dollar fa-fw mr-1"></i>&nbsp;Comprobantes
+                </a>
+            </li>
+        @endcan
+        @can('tipo.cambio.index')
+            <li>
+                <a href="{{ route('tipo.cambio.indexAfter') }}">
+                    <i class="fa-solid fa-circle-dollar-to-slot fa-fw mr-1"></i>&nbsp;Tipo de Cambio
                 </a>
             </li>
         @endcan
@@ -28,13 +42,6 @@
                 </a>
             </li>
         @endcan
-        @can('cargos.index')
-            <li>
-                <a href="{{ route('cargos.indexAfter') }}">
-                    <i class="fa-solid fa-diagram-project fa-fw mr-1"></i>&nbsp;Cargos
-                </a>
-            </li>
-        @endcan
         @can('sucursal.index')
             <li>
                 <a href="{{ route('sucursal.indexAfter') }}">
@@ -42,20 +49,20 @@
                 </a>
             </li>
         @endcan
-        @can('categorias.index')
+        {{--@can('categorias.index')
             <li>
                 <a href="{{ route('categorias.indexAfter') }}">
                     <i class="fas fa-poll-h fa-fw mr-1"></i>&nbsp;Categorias
                 </a>
             </li>
-        @endcan
-        @can('unidades.index')
+        @endcan--}}
+        {{--@can('unidades.index')
             <li>
                 <a href="{{ route('unidades.indexAfter') }}">
                     <i class="fas fa-balance-scale fa-fw mr-1"></i>&nbsp;Unidades
                 </a>
             </li>
-        @endcan
+        @endcan--}}
         @can('productos.index')
             <li>
                 <a href="{{ route('productos.indexAfter') }}">
@@ -63,27 +70,44 @@
                 </a>
             </li>
         @endcan
-        @can('personal.index')
+        @canany(['cargos.index','personal.index'])
             <li>
-                <a href="{{ route('personal.indexAfter') }}">
-                    <i class="fas fa-user-friends fa-fw mr-1"></i>&nbsp;Personal
-                </a>
-            </li>
-        @endcan
-        @can('clientes.index')
-            <li>
-                <a href="{{ route('clientes.index') }}">
-                    <i class="fas fa-address-card fa-fw mr-1"></i>&nbsp;Clientes
-                </a>
-            </li>
-        @endcan
-        @canany(['users.index','roles.index','permissions.index'])
-            <li>
-                <a href="" data-toggle="collapse" data-target="#dashboard_users" class="active collapsed" aria-expanded="false">
-                    <i class="fa-solid fa-gift fa-fw mr-1"></i>&nbsp;Usuarios
+                <a href="" data-toggle="collapse" data-target="#dashboard_rrhh" class="active collapsed" aria-expanded="false">
+                    <i class="fa-solid fa-gift fa-fw mr-1"></i>&nbsp;Recursos Humanos
                     <span class="fa fa-arrow-circle-left float-right"></span>
                 </a>
-                <ul class="sub-menu collapse" id="dashboard_users">
+                <ul class="sub-menu collapse" id="dashboard_rrhh">
+                    @can('cargos.index')
+                        <li>
+                            <a href="{{ route('cargos.indexAfter') }}">
+                                <i class="fa-solid fa-diagram-project fa-fw mr-2"></i>&nbsp;Cargos
+                            </a>
+                        </li>
+                    @endcan
+                    @can('personal.index')
+                        <li>
+                            <a href="{{ route('personal.indexAfter') }}">
+                                <i class="fas fa-user-friends fa-fw mr-2"></i>&nbsp;Personal
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcanany
+        @canany(['clientes.index','users.index','roles.index','permissions.index'])
+            <li>
+                <a href="" data-toggle="collapse" data-target="#dashboard_setting" class="active collapsed" aria-expanded="false">
+                    <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Configuracion
+                    <span class="fa fa-arrow-circle-left float-right"></span>
+                </a>
+                <ul class="sub-menu collapse" id="dashboard_setting">
+                    @can('clientes.index')
+                        <li>
+                            <a href="{{ route('clientes.index') }}">
+                                <i class="fas fa-address-card fa-fw mr-2"></i>&nbsp;Clientes
+                            </a>
+                        </li>
+                    @endcan
                     @can('users.index')
                         <li>
                             <a href="{{ route('users.index') }}">

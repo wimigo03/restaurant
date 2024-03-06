@@ -44,12 +44,7 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        @include('layouts.partials.header')
-        @include('zonas.partials.form-create')
-    </div>
-</div>
+    @include('zonas.partials.form-create')
 @endsection
 @section('scripts')
     @parent

@@ -9,38 +9,28 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <b>PRODUCTOS - {{ $empresa->nombre_comercial }}</b>
-                </div>
-            </div>
-        </div>
-        @include('productos.partials.search')
-        <div class="form-group row">
-            <div class="col-md-6 pr-1">
-                @can('productos.create')
-                    <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
-                        &nbsp;<i class="fas fa-plus"></i>&nbsp;
-                    </button>
-                @endcan
-                <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
-            <div class="col-md-6 pl-1 text-right">
-                <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
-                    &nbsp;<i class="fas fa-search"></i>&nbsp;Buscar
+    @include('productos.partials.menu')
+    @include('productos.partials.search')
+    <div class="form-group row">
+        <div class="col-md-6 px-0 pr-1">
+            @can('productos.create')
+                <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
+                    &nbsp;<i class="fas fa-plus"></i>&nbsp;
                 </button>
-                <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
-                    &nbsp;<i class="fas fa-eraser"></i>&nbsp;Limpiar
-                </button>
-                <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
+            @endcan
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
-        @include('productos.partials.table')
+        <div class="col-md-6 px-0 pl-1 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
+                &nbsp;<i class="fas fa-search"></i>&nbsp;Buscar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
+                &nbsp;<i class="fas fa-eraser"></i>&nbsp;Limpiar
+            </button>
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
+        </div>
     </div>
-</div>
+    @include('productos.partials.table')
 @endsection
 @section('scripts')
     @parent
@@ -67,6 +57,10 @@
                 placeholder: "--Tipo--",
                 width: '100%'
             });
+        });
+
+        $("#toggleSubMenu").click(function(){
+            $("#subMenuProductos").slideToggle(250);
         });
 
         function create(){

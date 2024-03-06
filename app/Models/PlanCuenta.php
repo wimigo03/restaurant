@@ -17,6 +17,7 @@ class PlanCuenta extends Model
         'empresa_id',
         'cliente_id',
         'moneda_id',
+        'pais_id',
         'nombre',
         'codigo',
         'nivel',

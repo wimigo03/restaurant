@@ -24,55 +24,29 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <b><i class="fa-solid fa-house-damage fa-fw"></i> {{ $empresa->nombre_comercial }} - SUCURSALES</b>
-                        </div>
-                        <div class="col-md-4 text-right">
-                            @if (count($empresas_info) > 0)
-                                @foreach ($empresas_info as $empresa)
-                                    <img src="{{ url($empresa->url_logo) }}" alt="{{ $empresa->url_logo }}" class="imagen-menu">
-                                @endforeach
-                            @else
-                                <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-menu">
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+    @include('sucursal.partials.search')
+    <div class="form-group row">
+        <div class="col-md-6 px-0 pr-1">
+            @can('sucursal.create')
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
+                    <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
+                        &nbsp;<i class="fas fa-plus"></i>&nbsp;
+                    </button>
+                </span>
+            @endcan
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
-        @if (isset($sucursales))
-            @include('sucursal.partials.search')
-            <div class="form-group row">
-                <div class="col-md-6 pr-1">
-                    @can('sucursal.create')
-                        <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
-                            <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
-                                &nbsp;<i class="fas fa-plus"></i>&nbsp;
-                            </button>
-                        </span>
-                    @endcan
-                    <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                </div>
-                <div class="col-md-6 pl-1 text-right">
-                    <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
-                        &nbsp;<i class="fas fa-search"></i>&nbsp;Buscar
-                    </button>
-                    <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
-                        &nbsp;<i class="fas fa-eraser"></i>&nbsp;Limpiar
-                    </button>
-                    <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                </div>
-            </div>
-            @include('sucursal.partials.table')
-        @endif
+        <div class="col-md-6 px-0 pl-1 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
+                &nbsp;<i class="fas fa-search"></i>&nbsp;Buscar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
+                &nbsp;<i class="fas fa-eraser"></i>&nbsp;Limpiar
+            </button>
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
+        </div>
     </div>
-</div>
+    @include('sucursal.partials.table')
 @endsection
 @section('scripts')
     @parent

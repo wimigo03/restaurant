@@ -17,6 +17,8 @@ class Categoria extends Model
         'empresa_id',
         'cliente_id',
         'plan_cuenta_id',
+        'moneda_id',
+        'pais_id',
         'nombre',
         'detalle',
         'codigo',

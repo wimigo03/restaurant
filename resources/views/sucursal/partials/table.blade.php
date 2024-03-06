@@ -1,8 +1,8 @@
 <div class="form-group row">
     <div class="col-md-12">
-        <table class="table display {{--table-bordered--}} responsive table-striped">
+        <table class="table display responsive table-striped">
             <thead>
-                <tr class="font-roboto-bg">
+                <tr class="font-roboto-12">
                     <td class="text-left p-1"><b>ID</b></td>
                     <td class="text-left p-1"><b>NOMBRE</b></td>
                     <td class="text-left p-1"><b>CIUDAD</b></td>
@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 @foreach ($sucursales as $datos)
-                    <tr class="font-roboto">
+                    <tr class="font-roboto-11">
                         <td class="text-left p-1">{{ $datos->id }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->ciudad }}</td>
@@ -52,7 +52,7 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-roboto-bg">
+        <div class="d-flex justify-content-end font-roboto-12">
             {!! $sucursales->links() !!}
         </div>
     </div>

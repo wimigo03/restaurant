@@ -18,33 +18,23 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div class="card-header header">
-                    <b>{{ $empresa->nombre_comercial }} - REGISTRAR UNIDAD DE MEDIDA</b>
-                </div>
-            </div>
-        </div>
-        <input type="hidden" value="{{ $empresa->id }}" id="empresa_input_id">
-        <form action="#" method="post" id="form">
-            @csrf
-            @include('unidades.partials.form-create')
-        </form>
-        <div class="form-group row">
-            <div class="col-md-12 text-right">
-                <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Procesar
-                </button>
-                <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                    &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-                </button>
-                <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-            </div>
+    @include('unidades.partials.menu')
+    <input type="hidden" value="{{ $empresa->id }}" id="empresa_input_id">
+    <form action="#" method="post" id="form">
+        @csrf
+        @include('unidades.partials.form-create')
+    </form>
+    <div class="form-group row">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
+                <i class="fas fa-paper-plane"></i>&nbsp;Procesar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
+                &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
+            </button>
+            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>
-</div>
 @endsection
 @section('scripts')
     @parent
@@ -56,8 +46,13 @@
                 placeholder: "--Seleccionar--",
                 width: '100%'
             });
+            $("#subMenuUnidades").hide();
         });
 
+        $("#toggleSubMenu").click(function(){
+            $("#subMenuUnidades").slideToggle(250);
+        });
+        
         function alertaModal(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});

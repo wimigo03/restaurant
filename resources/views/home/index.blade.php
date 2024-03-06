@@ -1,10 +1,11 @@
 @extends('layouts.dashboard')
 @section('content')
+<br>
     <div class="form-group row">
-        @if (count($empresas_info) > 0)
-            @foreach ($empresas_info as $empresa)
+        @if (count($empresas) > 0)
+            @foreach ($empresas as $datos)
                 <div class="col-md-12 text-center">
-                    <img src="{{ url($empresa->url_cover) }}" alt="{{ $empresa->url_cover }}" class="imagen-callejxn">
+                    <img src="{{ url($datos->url_cover) }}" alt="{{ $datos->url_cover }}" class="imagen-callejxn">
                 </div>
             @endforeach
         @else

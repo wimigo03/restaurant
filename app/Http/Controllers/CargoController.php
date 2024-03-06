@@ -12,6 +12,11 @@ use DB;
 
 class CargoController extends Controller
 {
+    const ICONO = 'fa-solid fa-diagram-project fa-fw';
+    const INDEX = 'CARGOS';
+    const CREATE = 'REGISTRAR CARGO';
+    const EDITAR = 'MODIFICAR CARGO';
+
     public function indexAfter()
     {
         $empresas = Empresa::query()
@@ -25,6 +30,8 @@ class CargoController extends Controller
 
     public function index($empresa_id)
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
         $empresas = Empresa::query()
                             ->byCliente()
@@ -35,7 +42,7 @@ class CargoController extends Controller
         }else{
             return redirect()->route('cargos.index',['empresa_id' => $empresa_id])->with('info_message', 'La empresa seleccionada no tiene cargos agregados por favor comunicarse con la unidad de sistemas.');
         }
-        return view('cargos.index', compact('empresa','empresas','cargos','tree'));
+        return view('cargos.index', compact('icono','header','empresa','empresas','cargos','tree'));
     }
 
     protected function buildTree($nodes)
@@ -73,7 +80,7 @@ class CargoController extends Controller
 
     public function getDatosCargoByEmpresa($id){
         try{
-            $cargos = Cargo::where('empresa_id', $id)->orderBy('id','asc')->get()->toJson();
+            $cargos = Cargo::where('empresa_id', $id)->where('estado','1')->orderBy('id','asc')->get()->toJson();
             if($cargos){
                 return response()->json([
                     'cargos' => $cargos
@@ -86,10 +93,13 @@ class CargoController extends Controller
 
     public function create($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE;
         $cargo = Cargo::find($id);
+        $empresa = Empresa::find($cargo->empresa_id);
         $tipos = Cargo::TIPOS;
         $cuentas_contables = PlanCuenta::where('empresa_id',$cargo->empresa_id)->pluck('nombre','id');
-        return view('cargos.create', compact('cargo','tipos','cuentas_contables'));
+        return view('cargos.create', compact('icono','header','cargo','empresa','tipos','cuentas_contables'));
     }
 
     public function store(Request $request)

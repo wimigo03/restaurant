@@ -1,7 +1,7 @@
 <form action="#" method="post" id="form">
     @csrf
     <input type="hidden" name="sucursal_id" value="{{ $sucursal->id }}" id="sucursal_id">
-    <div class="form-group row font-roboto-bg">
+    <div class="form-group row font-roboto-12">
         <div class="col-md-12">
             <ul class="nav nav-tabs" id="myTabs" role="tablist">
                 <li class="nav-item">

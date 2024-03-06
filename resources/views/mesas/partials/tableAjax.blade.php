@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <table id="dataTable" class="table display responsive table-striped">
             <thead>
-                <tr class="font-roboto-bg">
+                <tr class="font-roboto-12">
                     <td class="text-left p-1"><b>ID</b></td>
                     <td class="text-left p-1"><b>SUCURSAL</b></td>
                     <td class="text-left p-1"><b>ZONA</b></td>
