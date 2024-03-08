@@ -50,9 +50,6 @@ class PrecioProductoController extends Controller
 
     public function searchTipoBase(Request $request)
     {
-        $request->validate([
-            'tipo_precio_id' => 'required',
-        ]);
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
@@ -80,9 +77,6 @@ class PrecioProductoController extends Controller
 
     public function searchTipo(Request $request)
     {
-        $request->validate([
-            'tipo_precio_id' => 'required',
-        ]);
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){

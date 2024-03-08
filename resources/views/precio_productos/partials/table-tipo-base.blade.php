@@ -50,7 +50,7 @@
                             <input type="text" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final-sus" readonly>
                         </td>
                         <td class="text-right p-1" width="100px">
-                            <input type="text" name="precio_final[]" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final" readonly>
+                            <input type="text" name="precio_final[]" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final">
                         </td>
                         <td class="text-right p-1" width="70px">
                             <input type="text" name="porcentaje_detalle[]" placeholder="0" class="form-control font-roboto-11 text-right input-porcentaje-detalle" onKeyUp="CalcularCambio({{ $datos->id }})" readonly>

@@ -26,7 +26,8 @@ Route::post('/login', 'LoginController@login');
 Route::post('/logout', 'LoginController@logout')->name('logout');
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
-    Route::get('dashboard', 'HomeController@index');
+    Route::get('dashboard', 'HomeController@index')->name('home.index');
+    Route::get('/change/{module}', 'HomeController@change')->name('change');
     /*Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');*/

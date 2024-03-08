@@ -15,4 +15,4 @@
         <h3 class="name">MULTIEMPRESA</h3>
         <span class="country">{{ auth()->user()->cargo_header }}</span>
     @endif
-</div>
+</div>  

@@ -50,7 +50,8 @@
             </a>
         </div>
         <div class="side-inner">
-            @include('layouts.partials.perfil') 
+            @include('layouts.partials.perfil')
+            {{--@include('layouts.partials.subperfil')--}}
             @include('layouts.partials.menu') 
         </div>
     </aside>
@@ -95,6 +96,12 @@
     
     <script src="{{ asset('js/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/treeview/jstree.min.js') }}"></script>
-
+    <script>
+        /*function goToDashboardType(input){
+            var url = "{{route('change',':tipo')}}"
+            url = url.replace(':tipo', input.value);
+            window.location.href = url;
+        }*/
+    </script>
   </body>
 </html>

@@ -8,6 +8,9 @@ use App\Models\PrecioProducto;
 use App\Models\Empresa;
 use App\Models\Categoria;
 use App\Models\Unidad;
+use App\Models\User;
+use App\Models\TipoCambio;
+use App\Models\TipoPrecio;
 use Auth;
 use PDF;
 
@@ -131,6 +134,11 @@ class ProductoController extends Controller
             'foto_2' => 'nullable|file|mimes:png|max:2048',
             'foto_3' => 'nullable|file|mimes:png|max:2048',
         ]);
+        $date = date('Y-m-d');
+        $tipo_cambio = TipoCambio::where('fecha',$date)->first();
+        if($tipo_cambio == null){
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+        }
         try{
             $foto_1 = isset($request->foto_1) ? 'prin_' . strtolower($request->nombre) . '_' . strtolower($request->nombre_factura) . '.' . pathinfo(strtolower($request->foto_1->getClientOriginalName()), PATHINFO_EXTENSION) : null;
             $foto_2 = isset($request->foto_2) ? 'alt(1)_' . strtolower($request->nombre) . '_' . strtolower($request->nombre_factura) . '.' . pathinfo(strtolower($request->foto_2->getClientOriginalName()), PATHINFO_EXTENSION) : null;
@@ -138,6 +146,7 @@ class ProductoController extends Controller
             
             $empresa = Empresa::find($request->empresa_id);
             $categoria = Categoria::find($request->categoria_id);
+            $user = User::where('id',Auth::user()->id)->first();
             $datos = [
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $empresa->cliente_id,
@@ -165,6 +174,31 @@ class ProductoController extends Controller
             $foto_1 = isset($request->foto_1) ? $request->foto_1->move(public_path('uploads/empresas/' . $empresa->id . '/img/productos/' . $producto->id . '/'), $foto_1) : null;
             $foto_2 = isset($request->foto_2) ? $request->foto_2->move(public_path('uploads/empresas/' . $empresa->id . '/img/productos/' . $producto->id . '/'), $foto_2) : null;
             $foto_3 = isset($request->foto_3) ? $request->foto_3->move(public_path('uploads/empresas/' . $empresa->id . '/img/productos/' . $producto->id . '/'), $foto_3) : null;
+
+            $tipos_precio = TipoPrecio::where('empresa_id',$request->empresa_id)->where('estado','1')->get();
+            foreach($tipos_precio as $tipo_precio){
+                $datosPrecioProducto = [
+                    'producto_id' => $producto->id,
+                    'empresa_id' => $empresa->id,
+                    'cliente_id' => $empresa->cliente_id,
+                    'categoria_id' => $producto->categoria_id,
+                    'categoria_master_id' => $producto->categoria_master_id,
+                    'plan_cuenta_id' => $producto->plan_cuenta_id,
+                    'unidad_id' => $producto->unidad_id,
+                    'moneda_id' => $producto->moneda_id,
+                    'pais_id' => $producto->pais_id,
+                    'tipo_precio_id' => $tipo_precio->id,
+                    'user_id' => $user->id,
+                    'cargo_id' => $user->cargo_id,
+                    'tipo_movimiento' => '0',
+                    'tipo_cambio' => $tipo_cambio != null ? $tipo_cambio->dolar_oficial : 0,
+                    'porcentaje' => 0,
+                    'precio' => 0,
+                    'estado' => '1'
+                ];
+    
+                $precio_producto = PrecioProducto::create($datosPrecioProducto);
+            }
 
             return redirect()->route('productos.index',['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó un producto correctamente.');
         } catch (ValidationException $e) {

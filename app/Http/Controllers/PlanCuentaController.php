@@ -220,9 +220,11 @@ class PlanCuentaController extends Controller
 
     public function editar($id)
     {
+        $icono = self::ICONO;
+        $header = self::CREATE;
         $plan_cuenta = PlanCuenta::find($id);
         $empresa = Empresa::find($plan_cuenta->empresa_id);
-        return view('plan_cuentas.editar-sub', compact('plan_cuenta','empresa'));
+        return view('plan_cuentas.editar-sub', compact('icono','header','plan_cuenta','empresa'));
     }
 
     public function update(Request $request)

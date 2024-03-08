@@ -1,16 +1,16 @@
 <div class="nav-menu">
     <ul>
-        {{--@can('precio.productos.index')
+        @can('plan.cuentas.index')
             <li>
-                <a href="{{ route('precio.productos.indexAfter') }}">
-                    <i class="fa-solid fa-tag fa-fw mr-1"></i>&nbsp;Precios
+                <a href="{{ route('plan_cuentas.indexAfter') }}">
+                    <i class="fa-regular fa-chart-bar fa-fw mr-1"></i>&nbsp;Plan de Cuentas
                 </a>
             </li>
-        @endcan--}}
-        @can('comprobante.index')
+        @endcan
+        @can('plan.cuentas.auxiliar.index')
             <li>
-                <a href="{{ route('comprobante.indexAfter') }}">
-                    <i class="fa-solid fa-file-invoice-dollar fa-fw mr-1"></i>&nbsp;Comprobantes
+                <a href="{{ route('plan_cuentas.auxiliar.indexAfter') }}">
+                    <i class="fas fa-user-friends fa-fw mr-1"></i>&nbsp;Plan de Cuentas Auxiliares
                 </a>
             </li>
         @endcan
@@ -18,6 +18,13 @@
             <li>
                 <a href="{{ route('tipo.cambio.indexAfter') }}">
                     <i class="fa-solid fa-circle-dollar-to-slot fa-fw mr-1"></i>&nbsp;Tipo de Cambio
+                </a>
+            </li>
+        @endcan
+        @can('comprobante.index')
+            <li>
+                <a href="{{ route('comprobante.indexAfter') }}">
+                    <i class="fa-solid fa-file-invoice-dollar fa-fw mr-1"></i>&nbsp;Comprobantes
                 </a>
             </li>
         @endcan
@@ -32,13 +39,6 @@
             <li>
                 <a href="{{ route('zonas.indexAfter') }}">
                     <i class="fa-solid fa-house-laptop fa-fw mr-1"></i>&nbsp;Zonas
-                </a>
-            </li>
-        @endcan
-        @can('plan.cuentas.index')
-            <li>
-                <a href="{{ route('plan_cuentas.indexAfter') }}">
-                    <i class="fa-regular fa-chart-bar fa-fw mr-1"></i>&nbsp;Plan de Cuentas
                 </a>
             </li>
         @endcan

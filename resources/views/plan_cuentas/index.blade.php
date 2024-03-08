@@ -112,19 +112,19 @@
                         $("#btn_modificar").hide();
                     }
                     if(json.detalle === '1'){
-                        $('#detalle').text('NO ES CUENTA DETALLE');
-                    }else{
                         $('#detalle').text('SI ES CUENTA DETALLE');
+                    }else{
+                        $('#detalle').text('NO ES CUENTA DETALLE');
                     }
                     if(json.cheque === '1'){
-                        $('#cheque').text('NO TIENE CHEQUE');
-                    }else{
                         $('#cheque').text('SI TIENE CHEQUE');
+                    }else{
+                        $('#cheque').text('NO TIENE CHEQUE');
                     }
                     if(json.auxiliar === '1'){
-                        $('#auxiliar').text('NO TIENE AUXILIAR');
-                    }else{
                         $('#auxiliar').text('SI TIENE AUXILIAR');
+                    }else{
+                        $('#auxiliar').text('NO TIENE AUXILIAR');
                     }
                     if(json.estado === '1'){
                         $('#estado').text('HABILITADO');

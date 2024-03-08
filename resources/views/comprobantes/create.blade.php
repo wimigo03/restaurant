@@ -302,6 +302,11 @@
             }
         }
 
+        function copiar_concepto(){
+            var concepto = $("#concepto").val();
+            document.getElementById('glosa').value = concepto;
+        }
+
         function agregar_detalle(){
             if(!validar_detalle()){
                 return false;

@@ -81,6 +81,15 @@
                 numeralThousandsGroupStyle: 'thousand'
             });
 
+            $('.input-precio-final').each(function() {
+                var formattedValue = Number($(this).val()).toLocaleString('es-ES');
+                $(this).val(formattedValue);
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
+            });
+
             $('.input-porcentaje-detalle').each(function() {
                 var formattedValue = Number($(this).val()).toLocaleString('es-ES');
                 $(this).val(formattedValue);

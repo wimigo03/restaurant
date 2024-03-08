@@ -14,6 +14,7 @@ use App\Models\Empresa;
 use App\Models\Cargo;
 use App\Models\Cliente;
 use DB;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -88,7 +89,7 @@ class User extends Authenticatable
         if($this->id == 1){
             return 'SUPER ADMINISTRADOR';    
         }
-        $cargo = DB::table('users as a')->join('cargos as b','a.cargo_id','b.id')->first()->nombre;
+        $cargo = DB::table('users as a')->join('cargos as b','a.cargo_id','b.id')->where('a.id',Auth::user()->id)->first()->nombre;
         return $cargo;
     }
 

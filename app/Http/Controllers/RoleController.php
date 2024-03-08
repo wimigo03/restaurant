@@ -12,6 +12,7 @@ class RoleController extends Controller
 {
     public function index()
     {
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
         if(Auth::user()->id){
             $empresas = Empresa::pluck('nombre_comercial','id');
         }else{
