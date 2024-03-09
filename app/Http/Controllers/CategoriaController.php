@@ -119,7 +119,7 @@ class CategoriaController extends Controller
     {
         $request->validate([
             'categoria' => 'required|unique:categorias,nombre,null,id,empresa_id,' . $request->empresa_id,
-            'codigo' => 'required|max:3',
+            'codigo' => 'required|max:4',
             'tipo' => 'required'
         ]);
         try{
@@ -169,7 +169,7 @@ class CategoriaController extends Controller
     {
         $request->validate([
             'categoria' => 'required|unique:categorias,nombre,' . $request->categoria_id . ',id,empresa_id,' . $request->empresa_id,
-            'codigo' => 'required|max:3',
+            'codigo' => 'required|max:4',
         ]);
         try{
             $categoria = Categoria::find($request->categoria_id);
@@ -207,7 +207,7 @@ class CategoriaController extends Controller
     {
         $request->validate([
             'categoria' => 'required|unique:categorias,nombre,null,id,empresa_id,' . $request->empresa_id,
-            'codigo' => 'required|max:3',
+            'codigo' => 'required|max:4',
             'tipo' => 'required'
         ]);
         try{

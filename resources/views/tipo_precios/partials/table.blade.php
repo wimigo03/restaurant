@@ -1,6 +1,6 @@
 <div class="form-group row">
-    <div class="col-md-12">
-        <table class="table display responsive table-striped">
+    <div class="col-md-12 abs-center">
+        <table class="table display responsive table-striped" style="width:50%;">
             <thead>
                 <tr class="font-roboto-12">
                     <td class="text-left p-1"><b>ID</b></td>
@@ -22,21 +22,23 @@
                             </span>
                         </td>
                         <td class="text-center p-1">
-                            @can('tipo.precios.habilitar')
-                                @if($datos->status == "HABILITADO")
-                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar" style="cursor: pointer;">
-                                        <a href="{{ route('tipo.precios.deshabilitar',$datos->id) }}" class="badge-with-padding badge badge-danger">
-                                            <i class="fas fa-lg fa-arrow-alt-circle-down"></i>
-                                        </a>
-                                    </span>
-                                @else
-                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar" style="cursor: pointer;">
-                                        <a href="{{ route('tipo.precios.habilitar',$datos->id) }}" class="badge-with-padding badge badge-success">
-                                            <i class="fas fa-lg fa-arrow-alt-circle-up"></i>
-                                        </a>
-                                    </span>
-                                @endif
-                            @endcan
+                            @if ($datos->id != 1)
+                                @can('tipo.precios.habilitar')
+                                    @if($datos->status == "HABILITADO")
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar" style="cursor: pointer;">
+                                            <a href="{{ route('tipo.precios.deshabilitar',$datos->id) }}" class="badge-with-padding badge badge-danger">
+                                                <i class="fas fa-lg fa-arrow-alt-circle-down"></i>
+                                            </a>
+                                        </span>
+                                    @else
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar" style="cursor: pointer;">
+                                            <a href="{{ route('tipo.precios.habilitar',$datos->id) }}" class="badge-with-padding badge badge-success">
+                                                <i class="fas fa-lg fa-arrow-alt-circle-up"></i>
+                                            </a>
+                                        </span>
+                                    @endif
+                                @endcan
+                            @endif
                         </td>
                     </tr>
                 @endforeach

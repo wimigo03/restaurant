@@ -13,8 +13,8 @@
         ...
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary font-verdana-bg" type="button" data-dismiss="modal">
-          <i class="fas fa-check"></i>&nbsp;Entendido
+        <button class="btn btn-primary font-roboto-12" type="button" data-dismiss="modal">
+          <i class="fa-solid fa-face-meh fa-fw"></i>&nbsp;Continuar
         </button>
       </div>
     </div>

@@ -157,66 +157,69 @@ class PrecioProductoController extends Controller
             $user = User::where('id',Auth::user()->id)->first();
             $cont = 0;
             while($cont < count($request->precio_producto_id)){
-                $precio_producto = PrecioProducto::find($request->precio_producto_id[$cont]);
-                $precio_producto->update([
-                    'estado' => '3'
-                ]);
+                $precio_final = floatval(str_replace(",", "", $request->precio_final[$cont]));
+                $porcentaje_detalle = $request->porcentaje_detalle[$cont] == null ? 0 : $request->porcentaje_detalle[$cont];
+                $porcentaje_detalle = floatval(str_replace(",", "", $porcentaje_detalle));
+                if($precio_final != 0){
+                    $precio_producto = PrecioProducto::find($request->precio_producto_id[$cont]);
+                    $precio_producto->update([
+                        'estado' => '3'
+                    ]);
+                    $datosPrecioProducto = [
+                        'producto_id' => $precio_producto->producto_id,
+                        'empresa_id' => $precio_producto->empresa_id,
+                        'cliente_id' => $precio_producto->cliente_id,
+                        'categoria_id' => $precio_producto->categoria_id,
+                        'categoria_master_id' => $precio_producto->categoria_master_id,
+                        'plan_cuenta_id' => $precio_producto->plan_cuenta_id,
+                        'unidad_id' => $precio_producto->unidad_id,
+                        'moneda_id' => $precio_producto->moneda_id,
+                        'pais_id' => $precio_producto->pais_id,
+                        'tipo_precio_id' => $precio_producto->tipo_precio_id,
+                        'user_id' => $user->id,
+                        'cargo_id' => $user->cargo_id,
+                        'tipo_cambio' => $request->tipo_cambio,
+                        'porcentaje' => $porcentaje_detalle == 0 ? $precio_final : $porcentaje_detalle,
+                        'precio' => $precio_final,
+                        'estado' => '1'
+                    ];
 
-                $datosPrecioProducto = [
-                    'producto_id' => $precio_producto->producto_id,
-                    'empresa_id' => $precio_producto->empresa_id,
-                    'cliente_id' => $precio_producto->cliente_id,
-                    'categoria_id' => $precio_producto->categoria_id,
-                    'categoria_master_id' => $precio_producto->categoria_master_id,
-                    'plan_cuenta_id' => $precio_producto->plan_cuenta_id,
-                    'unidad_id' => $precio_producto->unidad_id,
-                    'moneda_id' => $precio_producto->moneda_id,
-                    'pais_id' => $precio_producto->pais_id,
-                    'tipo_precio_id' => $precio_producto->tipo_precio_id,
-                    'user_id' => $user->id,
-                    'cargo_id' => $user->cargo_id,
-                    'tipo_movimiento' => $request->tipo_movimiento,
-                    'tipo_cambio' => $request->tipo_cambio,
-                    'porcentaje' => $request->porcentaje_detalle[$cont],
-                    'precio' => floatval(str_replace(",", "", $request->precio_final[$cont])),
-                    'estado' => '1'
-                ];
+                    $precioProducto = PrecioProducto::create($datosPrecioProducto);
 
-                $precioProducto = PrecioProducto::create($datosPrecioProducto);
-
-                if($precio_producto->tipo_precio_id == 1){
-                    $todos_los_precios = PrecioProducto::where('producto_id',$precio_producto->producto_id)
-                                                        ->where('tipo_precio_id','!=',1)
-                                                        ->where('estado','1')
-                                                        ->get();
-                    foreach($todos_los_precios as $data){
-                        $precio_producto = PrecioProducto::find($data->id);
-                        $datos_pproducto = [
-                            'estado' => '3'
-                        ];
-                        $precio_producto->update($datos_pproducto);
-
-                        $datos_precio_producto = [
-                            'producto_id' => $precio_producto->producto_id,
-                            'empresa_id' => $precio_producto->empresa_id,
-                            'cliente_id' => $precio_producto->cliente_id,
-                            'categoria_id' => $precio_producto->categoria_id,
-                            'categoria_master_id' => $precio_producto->categoria_master_id,
-                            'plan_cuenta_id' => $precio_producto->plan_cuenta_id,
-                            'unidad_id' => $precio_producto->unidad_id,
-                            'moneda_id' => $precio_producto->moneda_id,
-                            'pais_id' => $precio_producto->pais_id,
-                            'tipo_precio_id' => $precio_producto->tipo_precio_id,
-                            'user_id' => $user->id,
-                            'cargo_id' => $user->cargo_id,
-                            'tipo_movimiento' => $request->tipo_movimiento,
-                            'tipo_cambio' => $request->tipo_cambio,
-                            'porcentaje' => $request->porcentaje_detalle[$cont],
-                            'precio' => $precio_producto->precio + ($request->porcentaje_detalle[$cont] * $precio_producto->precio / 100),
-                            'estado' => '1'
-                        ];
-
-                        $precioProductoUpdate = PrecioProducto::create($datos_precio_producto);
+                    if($precio_producto->tipo_precio_id == 1){
+                        $todos_los_precios = PrecioProducto::where('producto_id',$precio_producto->producto_id)
+                                                            ->where('tipo_precio_id','!=',1)
+                                                            ->where('estado','1')
+                                                            ->get();
+                        foreach($todos_los_precios as $data){
+                            $precio_producto = PrecioProducto::find($data->id);
+                            $datos_pproducto = [
+                                'estado' => '3'
+                            ];
+                            $precio_producto->update($datos_pproducto);
+    
+                            $datos_precio_producto = [
+                                'producto_id' => $precio_producto->producto_id,
+                                'empresa_id' => $precio_producto->empresa_id,
+                                'cliente_id' => $precio_producto->cliente_id,
+                                'categoria_id' => $precio_producto->categoria_id,
+                                'categoria_master_id' => $precio_producto->categoria_master_id,
+                                'plan_cuenta_id' => $precio_producto->plan_cuenta_id,
+                                'unidad_id' => $precio_producto->unidad_id,
+                                'moneda_id' => $precio_producto->moneda_id,
+                                'pais_id' => $precio_producto->pais_id,
+                                'tipo_precio_id' => $precio_producto->tipo_precio_id,
+                                'user_id' => $user->id,
+                                'cargo_id' => $user->cargo_id,
+                                'tipo_movimiento' => $request->tipo_movimiento,
+                                'tipo_cambio' => $request->tipo_cambio,
+                                'porcentaje' => $request->porcentaje_detalle[$cont],
+                                'precio' => $precio_producto->precio + ($request->porcentaje_detalle[$cont] * $precio_producto->precio / 100),
+                                'estado' => '1'
+                            ];
+    
+                            $precioProductoUpdate = PrecioProducto::create($datos_precio_producto);
+                        }
                     }
                 }
 

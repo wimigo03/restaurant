@@ -34,7 +34,6 @@ class PrecioProducto extends Model
         'tipo_precio_id',
         'user_id',
         'cargo_id',
-        'tipo_movimiento',
         'tipo_cambio',
         'porcentaje',
         'precio',

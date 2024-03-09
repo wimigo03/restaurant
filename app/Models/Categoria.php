@@ -35,7 +35,7 @@ class Categoria extends Model
     ];
 
     const TIPOS = [
-        '1' => 'PLATOS FINAL',
+        '1' => 'MENU',
         '2' => 'INSUMOS'
     ];
 
@@ -51,7 +51,7 @@ class Categoria extends Model
     public function getTipoProductoAttribute(){
         switch ($this->tipo) {
             case '1': 
-                return "PLATOS FINAL";
+                return "MENU";
             case '2': 
                 return "INSUMOS";
         }

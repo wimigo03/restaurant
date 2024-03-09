@@ -32,7 +32,12 @@
                             {{ $datos->tipo_p->nombre }}
                         </td>
                         <td class="text-left p-1" style="vertical-align: middle;">{{ $datos->producto->codigo }}</td>
-                        <td class="text-left p-1" style="vertical-align: middle;">{{ $datos->producto->nombre }}</td>
+                        <td class="text-left p-1" style="vertical-align: middle;">
+                            {{ $datos->producto->nombre }}
+                            @if ($datos->porcentaje == 0)
+                                <span class="text-danger"><i>(Nuevo)</i></span>
+                            @endif
+                        </td>
                         <td class="text-right p-1" style="vertical-align: middle;">
                             {{ number_format($datos->precio_anterior_base/$datos->tipo_cambio,2,'.',',') }}
                         </td>
@@ -50,10 +55,10 @@
                             <input type="text" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final-sus" readonly>
                         </td>
                         <td class="text-right p-1" width="100px">
-                            <input type="text" name="precio_final[]" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final">
+                            <input type="text" name="precio_final[]" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final" onKeyUp="CalcularCambioPrecioFinal({{ $datos->id }})">
                         </td>
                         <td class="text-right p-1" width="70px">
-                            <input type="text" name="porcentaje_detalle[]" placeholder="0" class="form-control font-roboto-11 text-right input-porcentaje-detalle" onKeyUp="CalcularCambio({{ $datos->id }})" readonly>
+                            <input type="text" name="porcentaje_detalle[]" placeholder="0" class="form-control font-roboto-11 text-right input-porcentaje-detalle" onKeyUp="CalcularCambioPorcentaje({{ $datos->id }})">
                         </td>
                         <td class="text-center p-1" width="150px">
                             <span class="badge-with-padding 
