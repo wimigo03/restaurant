@@ -117,18 +117,14 @@ class Producto extends Model
 
     public function scopeByCategoriaMaster($query, $categoria_master_id){
         if ($categoria_master_id) {
-                return $query
-                    ->whereIn('categoria_id', function ($subquery) use($categoria_master_id) {
-                        $subquery->select('id')
-                            ->from('categorias')
-                            ->where('parent_id',$categoria_master_id);
-                    });
+            return $query->where('categoria_master_id', $categoria_master_id);
         }
     }
 
     public function scopeByCategoria($query, $categoria_id){
-        if($categoria_id)  
+        if($categoria_id){
             return $query->where('categoria_id', $categoria_id);
+        }
     }
 
     public function scopeByTipo($query, $tipo){

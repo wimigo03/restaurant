@@ -141,8 +141,9 @@ class ProductoController extends Controller
         $request->validate([
             'categoria_master_id' => 'required',
             //'categoria_id' => 'required',
-            'nombre' => 'required|unique:productos,nombre,null,id,empresa_id,' . $request->empresa_id,
-            'nombre_factura' => 'required|unique:productos,nombre_factura,null,id,empresa_id,' . $request->empresa_id,
+            'unidad_id' => 'required',
+            'nombre' => 'required|unique:productos,nombre,null,id,empresa_id,' . $request->empresa_id . ',categoria_master_id,' . $request->categoria_master_id,
+            'nombre_factura' => 'required|unique:productos,nombre_factura,null,id,empresa_id,' . $request->empresa_id . ',categoria_master_id,' . $request->categoria_master_id,
             'codigo' => 'required',
             'detalle' => 'required',
             'foto_1' => 'nullable|file|mimes:png|max:2048',

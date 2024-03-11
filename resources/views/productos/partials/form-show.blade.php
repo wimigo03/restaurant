@@ -13,7 +13,7 @@
     </div>
     <div class="col-md-4 pr-1 pl-1 font-verdana">
         <label for="#" class="d-inline">CATEGORIA.- </label>
-        {{ $producto->categoria->nombre }}
+        {{ $producto->categoria != null ? $producto->categoria->nombre : '-' }}
     </div>
     <div class="col-md-4 px-0 font-verdana">
         <label for="#" class="d-inline">PLAN DE CUENTA.- </label>
