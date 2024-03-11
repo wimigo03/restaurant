@@ -80,8 +80,8 @@
             });
 
             $('.input-precio-final').each(function() {
-                var formattedValue = Number($(this).val()).toLocaleString('es-ES');
-                $(this).val(formattedValue);
+                /*var formattedValue = Number($(this).val()).toLocaleString('es-ES');
+                $(this).val(formattedValue);*/
                 new Cleave(this, {
                     numeral: true,
                     numeralThousandsGroupStyle: 'thousand'
@@ -89,8 +89,8 @@
             });
 
             $('.input-porcentaje-detalle').each(function() {
-                var formattedValue = Number($(this).val()).toLocaleString('es-ES');
-                $(this).val(formattedValue);
+                /*var formattedValue = Number($(this).val()).toLocaleString('es-ES');
+                $(this).val(formattedValue);*/
                 new Cleave(this, {
                     numeral: true,
                     numeralThousandsGroupStyle: 'thousand'
@@ -241,8 +241,8 @@
 
             if(porcentaje == ''){
                 for (var i = 0; i < celdasPrecioActual.length; i++) {
-                    document.getElementsByClassName("input-porcentaje-detalle")[i].value = 0;
-                    document.getElementsByClassName("input-precio-final")[i].value = 0;
+                    document.getElementsByClassName("input-porcentaje-detalle")[i].value = '';
+                    document.getElementsByClassName("input-precio-final")[i].value = '';
                 }
             }
         }
@@ -284,20 +284,22 @@
             precio_final_detalle = precio_final_detalle.replace(/,/g, '');
             precio_final_detalle = (isNaN(parseFloat(precio_final_detalle)))? 0 : parseFloat(precio_final_detalle);
             try{
-                var porcentaje = (precio_final_detalle - precio_base) / precio_base * 100;
-                var precio_final_sus = precio_final_detalle / tipo_cambio;
-                $('.detalle-'+id+' .input-porcentaje-detalle').each(function() {
-                    new Cleave(this, {
-                        numeral: true,
-                        numeralThousandsGroupStyle: 'thousand'
-                    }).setRawValue(porcentaje);
-                });
-                $('.detalle-'+id+' .input-precio-final-sus').each(function() {
-                    new Cleave(this, {
-                        numeral: true,
-                        numeralThousandsGroupStyle: 'thousand'
-                    }).setRawValue(precio_final_sus);
-                });
+                if(precio_final_detalle != 0){
+                    var porcentaje = (precio_final_detalle - precio_base) / precio_base * 100;
+                    var precio_final_sus = precio_final_detalle / tipo_cambio;
+                    $('.detalle-'+id+' .input-porcentaje-detalle').each(function() {
+                        new Cleave(this, {
+                            numeral: true,
+                            numeralThousandsGroupStyle: 'thousand'
+                        }).setRawValue(porcentaje);
+                    });
+                    $('.detalle-'+id+' .input-precio-final-sus').each(function() {
+                        new Cleave(this, {
+                            numeral: true,
+                            numeralThousandsGroupStyle: 'thousand'
+                        }).setRawValue(precio_final_sus);
+                    });
+                }
             }catch(e){
                 console.log('ERROR')
             }

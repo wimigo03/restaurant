@@ -102,7 +102,7 @@
                     id: id
                 },
                 success: function(data){
-                    if(data.subcategorias){
+                    if(data.subcategorias != '[]'){
                         var arr = Object.values($.parseJSON(data.subcategorias));
                         $("#categoria_id").empty();
                         var select = $("#categoria_id");
@@ -118,6 +118,9 @@
                         select.on('change', function() {
                             localStorage.setItem('categoriaIdSeleccionado', $(this).val());
                         });
+                    }else{
+                        var categoria_master_id = $("#categoria_master_id >option:selected").val();
+                        getCodigoSinCategoria(categoria_master_id);
                     }
                 },
                 error: function(xhr){
@@ -194,6 +197,25 @@
             });
         }
 
+        function getCodigoSinCategoria(id){
+            $.ajax({
+                type: 'GET',
+                url: '/productos/get_codigo_sin/'+id,
+                dataType: 'json',
+                data: {
+                    id: id
+                },
+                success: function(json){
+                    $('#codigo').val(json.codigo);
+                    //$('#categoria_master').val(json.categoria_master);
+                    //$('#categoria_master_id').val(json.categoria_master_id);
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
         function valideNumberSinDecimal(evt) {
             var code = (evt.which) ? evt.which : evt.keyCode;
             if ((code >= 48 && code <= 57) || code === 8) {
@@ -225,10 +247,10 @@
         }
 
         function validarDatos(){
-            if($("#categoria_id >option:selected").val() == ""){
+            /*if($("#categoria_id >option:selected").val() == ""){
                 alertaModal("<center>La <b>[CATEGORIA]</b> es un dato obligatorio...</center>");
                 return false;
-            }
+            }*/
             if($("#categoria_master_id").val() == ""){
                 alertaModal("<center>La <b>[CATEGORIA MASTER]</b> es un dato obligatorio...</center>");
                 return false;

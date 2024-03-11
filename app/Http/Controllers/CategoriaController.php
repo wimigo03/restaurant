@@ -118,7 +118,7 @@ class CategoriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'categoria' => 'required|unique:categorias,nombre,null,id,empresa_id,' . $request->empresa_id,
+            'categoria' => 'required|unique:categorias,nombre,null,id,empresa_id,' . $request->empresa_id . ',parent_id,' . $request->parent_id,
             'codigo' => 'required|max:4',
             'tipo' => 'required'
         ]);

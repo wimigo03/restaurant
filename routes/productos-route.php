@@ -8,6 +8,7 @@ Route::prefix('productos')->name('productos.')->middleware(['auth:sanctum',confi
     Route::post('/store', 'ProductoController@store')->name('store')->middleware('can:productos.create');
     Route::get('/get_codigo_master/{categoria_master_id}', 'ProductoController@getCodigoMaster')->name('get.codigo.master');
     Route::get('/get_codigo/{categoria_id}', 'ProductoController@getCodigo')->name('get.codigo');
+    Route::get('/get_codigo_sin/{categoria_master_id}', 'ProductoController@getCodigoSinCategoria')->name('get.codigo.sin.categoria');
     Route::get('/editar/{id}', 'ProductoController@editar')->name('editar')->middleware('can:productos.modificar');
     Route::post('/update', 'ProductoController@update')->name('update')->middleware('can:productos.modificar');
     Route::get('/show/{id}', 'ProductoController@show')->name('show')->middleware('can:productos.show');

@@ -3,9 +3,9 @@
         <table id="table-precios" class="table display responsive table-striped hover-orange">
             <thead>
                 <tr class="font-roboto-12">
-                    <td class="text-left p-1" rowspan="2" style="vertical-align: bottom;"><b>TIPO</b></td>
-                    <td class="text-left p-1" rowspan="2" style="vertical-align: bottom;"><b>CODIGO</b></td>
-                    <td class="text-left p-1" rowspan="2" style="vertical-align: bottom;"><b>PRODUCTO</b></td>
+                    <td class="text-center p-1" rowspan="2" style="vertical-align: bottom;"><b>TIPO</b></td>
+                    <td class="text-center p-1" rowspan="2" style="vertical-align: bottom;"><b>CODIGO</b></td>
+                    <td class="text-center p-1" rowspan="2" style="vertical-align: bottom;"><b>PRODUCTO</b></td>
                     <td class="text-center p-1" colspan="2"><b>PRECIO ANTERIOR</b></td>
                     <td class="text-center p-1" colspan="2"><b>PRECIO ACTUAL</b></td>
                     <td class="text-center p-1" colspan="2"><b>NUEVO PRECIO</b></td>
@@ -19,7 +19,7 @@
                     <td class="text-center p-1"><b>$U$</b></td>
                     <td class="text-center p-1"><b>BS.</b></td>
                     <td class="text-center p-1"><b>$U$</b></td>
-                    <td class="text-center p-1"><b>BS.</b></td>
+                    <td class="text-center p-1 bg-warning"><b>BS.</b></td>
                     <td class="text-center p-1"><b>$U$</b></td>
                     <td class="text-center p-1"><b>BS.</b></td>
                 </tr>
@@ -47,7 +47,7 @@
                         <td class="text-right p-1" style="vertical-align: middle;">
                             {{ number_format($datos->precio/$datos->tipo_cambio,2,'.',',') }}
                         </td>
-                        <td class="text-right p-1" style="vertical-align: middle;">
+                        <td class="text-right p-1 bg-warning" style="vertical-align: middle;">
                             <input type="hidden" value="{{ $datos->precio }}" class="form-control font-roboto-12 input-precio-base">
                             {{ number_format($datos->precio,2,'.',',') }}
                         </td>

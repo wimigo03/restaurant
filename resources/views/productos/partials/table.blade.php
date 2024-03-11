@@ -3,13 +3,12 @@
         <table class="table display {{--table-bordered--}} responsive table-striped">
             <thead>
                 <tr class="font-roboto-12">
-                    <td class="text-left p-1"><b>ID</b></td>
-                    <td class="text-left p-1"><b>NOMBRE</b></td>
-                    <td class="text-left p-1"><b>EN FACTURA</b></td>
-                    <td class="text-left p-1"><b>CODIGO</b></td>
+                    <td class="text-center p-1"><b>NOMBRE</b></td>
+                    <td class="text-center p-1"><b>EN FACTURA</b></td>
+                    <td class="text-center p-1"><b>CODIGO</b></td>
                     <td class="text-center p-1"><b>UN.</b></td>
-                    <td class="text-left p-1"><b>CATEGORIA</b></td>
-                    <td class="text-left p-1"><b>SUB CATEGORIA</b></td>
+                    <td class="text-center p-1"><b>CATEGORIA</b></td>
+                    <td class="text-center p-1"><b>SUB CATEGORIA</b></td>
                     <td class="text-center p-1"><b>TIPO</b></td>
                     <td class="text-center p-1"><b>EST.</b></td>
                     @canany(['productos.modificar','productos.show'])
@@ -20,14 +19,13 @@
             <tbody>
                 @foreach ($productos as $datos)
                     <tr class="font-roboto-11">
-                        <td class="text-left p-1">{{ $datos->id }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->nombre_factura }}</td>
-                        <td class="text-left p-1">{{ $datos->codigo }}</td>
+                        <td class="text-center p-1">{{ $datos->codigo }}</td>
                         <td class="text-center p-1">{{ $datos->unidad->codigo }}</td>
-                        <td class="text-left p-1">{{ $datos->categoria_master }}</td>
-                        <td class="text-left p-1">{{ $datos->categoria->nombre }}</td>
-                        <td class="text-center p-1">{{ $datos->categoria->tipo_producto }}</td>
+                        <td class="text-center p-1">{{ $datos->categoria_master }}</td>
+                        <td class="text-center p-1">{{ $datos->categoria != null ? $datos->categoria->nombre : '-' }}</td>
+                        <td class="text-center p-1">{{ $datos->categoria_m->tipo_producto }}</td>
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="@if($datos->status == "H") HABILITADO @else DESHABILITADO @endif" style="cursor: pointer;">
                                 <span class="badge-with-padding @if($datos->status == "H") badge badge-success @else badge badge-danger @endif">

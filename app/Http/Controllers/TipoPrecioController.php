@@ -82,10 +82,16 @@ class TipoPrecioController extends Controller
             $user = User::where('id',Auth::user()->id)->first();
             $productos = Producto::where('empresa_id',$empresa->id)->where('estado','1')->get();
             foreach ($productos as $producto) {
+                $precio_base = PrecioProducto::select('precio')
+                                                ->where('empresa_id',$empresa->id)
+                                                ->where('producto_id',$producto->id)
+                                                ->where('tipo_precio_id','1')
+                                                ->where('estado','1')
+                                                ->first();
                 $datosPrecioProducto = [
                     'producto_id' => $producto->id,
-                    'empresa_id' => $empresa->id,
                     'cliente_id' => $empresa->cliente_id,
+                    'empresa_id' => $empresa->id,
                     'categoria_id' => $producto->categoria_id,
                     'categoria_master_id' => $producto->categoria_master_id,
                     'plan_cuenta_id' => $producto->plan_cuenta_id,
@@ -95,10 +101,9 @@ class TipoPrecioController extends Controller
                     'tipo_precio_id' => $tipo_precio->id,
                     'user_id' => $user->id,
                     'cargo_id' => $user->cargo_id,
-                    'tipo_movimiento' => '0',
                     'tipo_cambio' => $tipo_cambio != null ? $tipo_cambio->dolar_oficial : 0,
                     'porcentaje' => 0,
-                    'precio' => 0,
+                    'precio' => $precio_base->precio,
                     'estado' => '1'
                 ];
 

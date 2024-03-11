@@ -121,11 +121,26 @@ class ProductoController extends Controller
         return response()->json(['error'=>'Algo Salio Mal']);
     }
 
+    public function getCodigoSinCategoria($id)
+    {
+        $categoria_master = Categoria::find($id);
+        $numeracion = Producto::where('categoria_master_id',$id)->where('categoria_id',null)->get()->count() + 1;
+        $numeracion = $numeracion != null ? str_pad($numeracion, 3, '0', STR_PAD_LEFT) : '001';
+        $codigo = $categoria_master->codigo . '-00-' . $numeracion;
+        return response()->json([
+            'codigo' => $codigo,
+            //'categoria_master' => $categoria_master->nombre,
+            //'categoria_master_id' => $categoria_master->id
+        ]);
+
+        return response()->json(['error'=>'Algo Salio Mal']);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'categoria_master_id' => 'required',
-            'categoria_id' => 'required',
+            //'categoria_id' => 'required',
             'nombre' => 'required|unique:productos,nombre,null,id,empresa_id,' . $request->empresa_id,
             'nombre_factura' => 'required|unique:productos,nombre_factura,null,id,empresa_id,' . $request->empresa_id,
             'codigo' => 'required',
@@ -145,7 +160,11 @@ class ProductoController extends Controller
             $foto_3 = isset($request->foto_3) ? 'alt(2)_' . strtolower($request->nombre) . '_' . strtolower($request->nombre_factura) . '.' . pathinfo(strtolower($request->foto_3->getClientOriginalName()), PATHINFO_EXTENSION) : null;
             
             $empresa = Empresa::find($request->empresa_id);
-            $categoria = Categoria::find($request->categoria_id);
+            if($request->categoria_id != null){
+                $categoria = Categoria::find($request->categoria_id);
+            }else{
+                $categoria = Categoria::find($request->categoria_master_id);
+            }
             $user = User::where('id',Auth::user()->id)->first();
             $datos = [
                 'empresa_id' => $request->empresa_id,

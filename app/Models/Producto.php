@@ -73,14 +73,9 @@ class Producto extends Model
     }
 
     public function getCategoriaMasterAttribute() {
-        if($this->categoria_id){
-            $categoria = Categoria::select('parent_id')->find($this->categoria_id);
-            if($categoria != null){
-                $categoria_master = Categoria::select('nombre')->where('id',$categoria->parent_id)->first();
-                if($categoria_master != null){
-                    return $categoria_master->nombre;
-                }
-            }
+        $categoria_master = Categoria::select('nombre')->where('id',$this->categoria_master_id)->first();
+        if($categoria_master != null){
+            return $categoria_master->nombre;
         }
     }
 

@@ -3,9 +3,9 @@
         <table id="table-precios" class="table display responsive table-striped hover-orange">
             <thead>
                 <tr class="font-roboto-12">
-                    <td class="text-left p-1" rowspan="2" style="vertical-align: bottom;"><b>TIPO</b></td>
-                    <td class="text-left p-1" rowspan="2" style="vertical-align: bottom;"><b>CODIGO</b></td>
-                    <td class="text-left p-1" rowspan="2" style="vertical-align: bottom;"><b>PRODUCTO</b></td>
+                    <td class="text-center p-1" rowspan="2" style="vertical-align: bottom;"><b>TIPO</b></td>
+                    <td class="text-center p-1" rowspan="2" style="vertical-align: bottom;"><b>CODIGO</b></td>
+                    <td class="text-center p-1" rowspan="2" style="vertical-align: bottom;"><b>PRODUCTO</b></td>
                     <td class="text-center p-1" colspan="2"><b>PRECIO ACTUAL</b></td>
                     <td class="text-center p-1" colspan="2"><b>NUEVO PRECIO</b></td>
                     <td class="text-center p-1" rowspan="2" style="vertical-align: bottom;"><b>(%)</b></td>
@@ -33,18 +33,18 @@
                         <td class="text-right p-1" style="vertical-align: middle;">
                             {{ number_format($datos->precio/$datos->tipo_cambio,2,'.',',') }}
                         </td>
-                        <td class="text-right p-1" style="vertical-align: middle;">
-                            <input type="hidden" value="{{ $datos->precio }}" class="form-control font-roboto-12 input-precio-base">
+                        <td class="text-right p-1 bg-warning" style="vertical-align: middle;">
+                            <input type="hidden" value="{{ $datos->precio }}" class="form-control font-roboto-12 input-precio-actual">
                             {{ number_format($datos->precio,2,'.',',') }}
                         </td>
                         <td class="text-right p-1" width="100px">
                             <input type="text" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final-sus" readonly>
                         </td>
                         <td class="text-right p-1" width="100px">
-                            <input type="text" name="precio_final[]" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final" readonly>
+                            <input type="text" name="precio_final[]" placeholder="0" class="form-control font-roboto-11 text-right input-precio-final" onKeyUp="CalcularCambioPrecioFinal({{ $datos->id }})">
                         </td>
                         <td class="text-right p-1" width="70px">
-                            <input type="text" name="porcentaje_detalle[]" placeholder="0" class="form-control font-roboto-11 text-right input-porcentaje-detalle" onKeyUp="CalcularCambio({{ $datos->id }})" readonly>
+                            <input type="text" name="porcentaje_detalle[]" placeholder="0" class="form-control font-roboto-11 text-right input-porcentaje-detalle" onKeyUp="CalcularCambioPorcentaje({{ $datos->id }})">
                         </td>
                         <td class="text-center p-1" width="150px">
                             <span class="badge-with-padding 

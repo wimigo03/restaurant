@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-md-1 pr-1 pl-1">
                     <label for="porcentaje" class="d-inline">Porc.</label>
-                    <input type="text" name="porcentaje" value="{{ old('porcentaje') }}" placeholder="0" id="porcentaje" class="form-control font-roboto-12" readonly>
+                    <input type="text" name="porcentaje" value="{{ old('porcentaje') }}" placeholder="0" id="porcentaje" class="form-control font-roboto-12">
                 </div>
                 <div class="col-md-1 pr-1 pl-1 font-roboto-15">
                     <br>
@@ -67,8 +67,6 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            $('#tipo_movimiento').val('').trigger('change');
-            document.getElementById('porcentaje').value = '';
             var tabla = document.getElementById("table-precios");
             var celdasPrecioActual = tabla.getElementsByClassName("input-porcentaje-detalle");
             for (var i = 0; i < celdasPrecioActual.length; i++) {
@@ -76,14 +74,20 @@
                 document.getElementsByClassName("input-precio-final-sus")[i].value = '';
                 document.getElementsByClassName("input-porcentaje-detalle")[i].value = '';
             }
+            
             new Cleave('#porcentaje', {
                 numeral: true,
                 numeralThousandsGroupStyle: 'thousand'
             });
 
+            $('.input-precio-final').each(function() {
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
+            });
+
             $('.input-porcentaje-detalle').each(function() {
-                var formattedValue = Number($(this).val()).toLocaleString('es-ES');
-                $(this).val(formattedValue);
                 new Cleave(this, {
                     numeral: true,
                     numeralThousandsGroupStyle: 'thousand'
@@ -124,6 +128,10 @@
                 var id = $("#categoria_master_id >option:selected").val();
                 var empresa_id = $("#empresa_id").val();
                 getCategorias(id,empresa_id);
+            }
+
+            if($("#porcentaje").val() != ''){
+                actualizarTablaPrecios();
             }
         });
 
@@ -191,21 +199,16 @@
         });
 
         $('#tipo_movimiento').on('change', function() {
-            if($("#tipo_movimiento >option:selected").val() != ''){
-                document.getElementById("porcentaje").removeAttribute("readonly");
-                document.querySelectorAll(".input-porcentaje-detalle").forEach(function(elemento) {
-                    elemento.removeAttribute("readonly");
-                });
-                actualizarTablaPrecios();
-            }
+            actualizarTablaPrecios();
         });
 
         $('#porcentaje').on('input', function () {
             if($("#tipo_movimiento >option:selected").val() == ''){
                 alerta("<center><b>[SE DEBE SELECCIONAR UN TIPO DE MOVIMIENTO]</b></center>");
                 document.getElementById("porcentaje").value = '';
+            }else{
+                actualizarTablaPrecios();
             }
-            actualizarTablaPrecios();
         });
 
         function actualizarTablaPrecios(){
@@ -214,78 +217,89 @@
             var tipo_cambio = $("#tipo_cambio").val();
             var tabla = document.getElementById("table-precios");
             var celdasPrecioActual = tabla.getElementsByClassName("input-porcentaje-detalle");
-            if(tipo_movimiento != '' && porcentaje != ''){
-                if(parseFloat(porcentaje) <= 100){
+            if(porcentaje != '' && porcentaje != 0){
+                if(tipo_movimiento === '1'){
                     for (var i = 0; i < celdasPrecioActual.length; i++) {
                         document.getElementsByClassName("input-porcentaje-detalle")[i].value = porcentaje;
                     }
-
-                    var celdasId = tabla.getElementsByClassName("input-precio-producto-id");
-                    for (var i = 0; i < celdasId.length; i++) {
-                        var id = celdasId[i].value;
-                        var precio_producto_id = $('.detalle-'+id+' .input-precio-producto-id').val();
-                        PrecioFinal(tipo_movimiento,precio_producto_id,tipo_cambio);
-                    }
                 }else{
-                    alerta("<center>El descuento no puede ser mayor a <b>[100%]</b>...</center>");
-                    document.getElementById("porcentaje").value = '';
                     for (var i = 0; i < celdasPrecioActual.length; i++) {
-                        document.getElementsByClassName("input-porcentaje-detalle")[i].value = '';
+                        document.getElementsByClassName("input-porcentaje-detalle")[i].value = -porcentaje;
                     }
                 }
-            }
-            if(porcentaje == ''){
-                for (var i = 0; i < celdasPrecioActual.length; i++) {
-                    document.getElementsByClassName("input-porcentaje-detalle")[i].value = 0;
-                }
+                
                 var celdasId = tabla.getElementsByClassName("input-precio-producto-id");
                 for (var i = 0; i < celdasId.length; i++) {
                     var id = celdasId[i].value;
                     var precio_producto_id = $('.detalle-'+id+' .input-precio-producto-id').val();
-                    tipo_movimiento_3 = '3'
-                    PrecioFinal(tipo_movimiento_3,precio_producto_id,tipo_cambio);
+                    var precio_final = PrecioFinal(tipo_movimiento,precio_producto_id,tipo_cambio);
+                }
+            }
+
+            if(porcentaje == ''){
+                for (var i = 0; i < celdasPrecioActual.length; i++) {
+                    document.getElementsByClassName("input-porcentaje-detalle")[i].value = '';
+                    document.getElementsByClassName("input-precio-final")[i].value = '';
                 }
             }
         }
 
-        function CalcularCambio(id) {
+        function CalcularCambioPorcentaje(id) {
             var tipo_cambio = $("#tipo_cambio").val();
             var tipo_movimiento = $("#tipo_movimiento >option:selected").val();
-            var precio_base = $('.detalle-'+id+' .input-precio-base').val();
+            var precio_actual = $('.detalle-'+id+' .input-precio-actual').val();
             var porcentaje_detalle = $('.detalle-'+id+' .input-porcentaje-detalle').val();
-            try{
-                if(tipo_movimiento != ''){
-                    tipo_cambio = parseFloat(tipo_cambio);
-                    precio_base = (isNaN(parseFloat(precio_base)))? 0 : parseFloat(precio_base);
-                    porcentaje_detalle = porcentaje_detalle.replace(/,/g, '');
-                    porcentaje_detalle = (isNaN(parseFloat(porcentaje_detalle)))? 0 : parseFloat(porcentaje_detalle);
-                    if(porcentaje_detalle > 100){
-                        porcentaje_detalle = 100;
-                        var resultado = Number.parseFloat(porcentaje_detalle).toFixed(2);
-                        $('.detalle-'+id+' .input-porcentaje-detalle').val(resultado);
-                    }
-                    if(tipo_movimiento === '1'){
-                        var precio_final = precio_base + (porcentaje_detalle * precio_base / 100);
-                    }else{
-                        var precio_final = precio_base - (porcentaje_detalle * precio_base / 100);
-                    }
-                    var precio_final_sus = precio_final / tipo_cambio;
+            precio_actual = (isNaN(parseFloat(precio_actual)))? 0 : parseFloat(precio_actual);
+            porcentaje_detalle = porcentaje_detalle.replace(/,/g, '');
+            porcentaje_detalle = (isNaN(parseFloat(porcentaje_detalle)))? 0 : parseFloat(porcentaje_detalle);
+            try{    
+                var precio_final = precio_actual + (porcentaje_detalle * precio_actual / 100);
+                var precio_final_sus = precio_final / tipo_cambio;
+                $('.detalle-'+id+' .input-precio-final').each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralThousandsGroupStyle: 'thousand'
+                    }).setRawValue(precio_final);
+                });
+                $('.detalle-'+id+' .input-precio-final-sus').each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralThousandsGroupStyle: 'thousand'
+                    }).setRawValue(precio_final_sus);
+                });
+            }catch(e){
+                console.log('ERROR')
+            }
+        }
 
-                    var resultado = Number.parseFloat(precio_final).toFixed(2);
-                    $('.detalle-'+id+' .input-precio-final').each(function() {
-                        new Cleave(this, {
-                            numeral: true,
-                            numeralThousandsGroupStyle: 'thousand'
-                        }).setRawValue(resultado);
-                    });
-                    var resultado_sus = Number.parseFloat(precio_final_sus).toFixed(2);
-                        $('.detalle-'+id+' .input-precio-final-sus').each(function() {
-                        new Cleave(this, {
-                            numeral: true,
-                            numeralThousandsGroupStyle: 'thousand'
-                        }).setRawValue(resultado_sus);
-                    });
+        function CalcularCambioPrecioFinal(id) {
+            var tipo_cambio = parseFloat($("#tipo_cambio").val());
+            var tipo_movimiento = $("#tipo_movimiento >option:selected").val();
+            var precio_actual = $('.detalle-'+id+' .input-precio-actual').val();
+            precio_actual = (isNaN(parseFloat(precio_actual)))? 0 : parseFloat(precio_actual);
+            var precio_final_detalle = $('.detalle-'+id+' .input-precio-final').val();
+            precio_final_detalle = precio_final_detalle.replace(/,/g, '');
+            precio_final_detalle = (isNaN(parseFloat(precio_final_detalle)))? 0 : parseFloat(precio_final_detalle);
+            try{
+                if(precio_final_detalle != 0){
+                    var porcentaje = (precio_final_detalle - precio_actual) / precio_actual * 100;
+                    var precio_final_sus = precio_final_detalle / tipo_cambio;
+                }else{
+                    var porcentaje = 0;
+                    var precio_final_sus = 0;
                 }
+                $('.detalle-'+id+' .input-porcentaje-detalle').each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralThousandsGroupStyle: 'thousand'
+                    }).setRawValue(porcentaje);
+                });
+                $('.detalle-'+id+' .input-precio-final-sus').each(function() {
+                    new Cleave(this, {
+                        numeral: true,
+                        numeralThousandsGroupStyle: 'thousand'
+                    }).setRawValue(precio_final_sus);
+                });
             }catch(e){
                 console.log('ERROR')
             }
@@ -293,32 +307,24 @@
 
         function PrecioFinal(tipo_movimiento,precio_producto_id,tipo_cambio) {
             var porcentaje = $('.detalle-'+precio_producto_id+' .input-porcentaje-detalle').val();
-            var precio_base = $('.detalle-'+precio_producto_id+' .input-precio-base').val();
-            try{
-                tipo_cambio = parseFloat(tipo_cambio);
-                precio_base = (isNaN(parseFloat(precio_base)))? 0 : parseFloat(precio_base);
-                porcentaje = (isNaN(parseFloat(porcentaje)))? 0 : parseFloat(porcentaje);
+            var precio_base = $('.detalle-'+precio_producto_id+' .input-precio-actual').val();
+            tipo_cambio = parseFloat(tipo_cambio);
+            precio_base = (isNaN(parseFloat(precio_base)))? 0 : parseFloat(precio_base);
+            porcentaje = (isNaN(parseFloat(porcentaje)))? 0 : parseFloat(porcentaje);
+            try{   
                 precio_base = parseFloat(precio_base.toFixed(2));
-                if(tipo_movimiento === '1'){
-                    var precio_final = precio_base + (porcentaje * precio_base / 100);
-                }else{
-                    if(tipo_movimiento === '2'){
-                        var precio_final = precio_base - (porcentaje * precio_base / 100);    
-                    }else{
-                        var precio_final = precio_base;    
-                    }
-                }
+                var precio_final = precio_base + (porcentaje * precio_base / 100);
                 var precio_final_sus = precio_final / tipo_cambio;
                 var resultado = Number.parseFloat(precio_final).toFixed(2);
                 var resultado_sus = Number.parseFloat(precio_final_sus).toFixed(2);
-                //$('.detalle-'+precio_producto_id+' .input-precio-final').val(resultado);
+
                 $('.detalle-'+precio_producto_id+' .input-precio-final').each(function() {
                     new Cleave(this, {
                         numeral: true,
                         numeralThousandsGroupStyle: 'thousand'
                     }).setRawValue(resultado);
                 });
-                //$('.detalle-'+precio_producto_id+' .input-precio-final-sus').val(resultado_sus);
+
                 $('.detalle-'+precio_producto_id+' .input-precio-final-sus').each(function() {
                     new Cleave(this, {
                         numeral: true,
@@ -336,28 +342,12 @@
         }
 
         function procesar() {
-            if(!validar()){
+            /*if(!validar()){
                 return false;
-            }
+            }*/
             $('#modal_confirmacion').modal({
                 keyboard: false
             })
-        }
-
-        function validar(){
-            if($("#tipo_cambio").val() == ""){
-                alerta("<b>[TIPO DE CAMBIO]</b> no existe o es invalido");
-                return false;
-            }
-            if($("#tipo_movimiento >option:selected").val() == ""){
-                alerta("<b>[TIPO DE MOVIMIENTO]</b> no existe o es invalido");
-                return false;
-            }
-            if($("#porcentaje").val() == ""){
-                alerta("<b>[PORCENTAJE]</b> no existe o es invalido");
-                return false;
-            }
-            return true;
         }
 
         function confirmar(){
