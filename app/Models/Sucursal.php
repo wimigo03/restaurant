@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Empresa;
 use App\Models\Cliente;
+use App\Models\Zona;
+use App\Models\Mesa;
 
 class Sucursal extends Model
 {
@@ -34,6 +36,16 @@ class Sucursal extends Model
             case '2': 
                 return "NO HABILITADO";
         }
+    }
+
+    public function getZonasAttribute(){
+        $zonas = Zona::where('sucursal_id',$this->id)->where('estado','1')->get()->count();
+        return $zonas;
+    }
+
+    public function getMesasAttribute(){
+        $mesas = Mesa::where('sucursal_id',$this->id)->where('estado','!=','2')->get()->count();
+        return $mesas;
     }
 
     public function empresa(){
