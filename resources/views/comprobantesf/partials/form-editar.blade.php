@@ -37,17 +37,17 @@
             <label for="tipo" class="d-inline">Tipo</label>
             <input type="text" value="{{ App\Models\ComprobanteF::TIPOS[$comprobante->tipo] }}" id="tipo" class="form-control font-roboto-12" disabled>
         </div>
-    </div>
-    <div class="form-group row">
         <div class="col-md-3 px-0 pr-1 font-roboto-12">
-            {{--<div id="hemos_recibido">
+            <div id="hemos_recibido">
                 <label for="hemos_recibido" class="d-inline">Hemos recibido de</label>
-            </div>--}}
+            </div>
             <div id="hemos_entregado">
                 <label for="hemos_entregado" class="d-inline">Hemos Entregado a</label>
             </div>
             <input type="text" name="entregado_recibido" value="{{ $comprobante->entregado_recibido }}" id="entregado_recibido" class="form-control font-roboto-12 obligatorio intro" oninput="this.value = this.value.toUpperCase(); obligatorio();">
         </div>
+    </div>
+    <div class="form-group row">
         <div class="col-md-9 px-0 pl-1 font-roboto-12">
             <label for="concepto" class="d-inline">Concepto</label>
             <input type="text" name="concepto" value="{{ $comprobante->concepto }}" id="concepto" class="form-control font-roboto-12 obligatorio intro" oninput="this.value = this.value.toUpperCase(); obligatorio();">
@@ -77,7 +77,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3 pr-1 pl-1 font-roboto-12">
+        <div class="col-md-3 pr-1 pl-1 font-roboto-12 tiene-auxiliar">
             <label for="auxiliar" class="d-inline">Auxiliar</label>
             <select id="auxiliar_id" class="form-control select2">
                 <option value="">-</option>
@@ -86,27 +86,37 @@
                 @endforeach
             </select>
         </div>
+        <div class="col-md-3 pr-1 pl-1 font-roboto-12 no-tiene-auxiliar">
+            &nbsp;
+        </div>
         <div class="col-md-1 pr-1 pl-1 font-roboto-12">
             <label for="debe" class="d-inline">Debe (Bs.)</label>
-            <input type="text" placeholder="0" id="debe" class="form-control font-roboto-12" onkeypress="return valideNumberConDecimal(event);">
+            <input type="text" placeholder="0" id="debe" class="form-control font-roboto-12 input-formatear-numero">
         </div>
         <div class="col-md-1 px-0 pl-1 font-roboto-12">
             <label for="haber" class="d-inline">Haber (Bs.)</label>
-            <input type="text" placeholder="0" id="haber" class="form-control font-roboto-12" onkeypress="return valideNumberConDecimal(event);">
+            <input type="text" placeholder="0" id="haber" class="form-control font-roboto-12 input-formatear-numero">
         </div>
     </div>
     <div class="form-group row">
         <div class="col-md-9 px-0 pr-1 font-roboto-12">
-            <label for="glosa" class="d-inline">Glosa</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="glosa" class="d-inline">Glosa</label>
+                </div>
+                <div class="col-md-6 text-right">
+                    <span class="text-danger" style="cursor: pointer" onclick="copiar_concepto();">[Copiar desde concepto]</span>
+                </div>
+            </div>
             <input type="text" id="glosa" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-1 pr-1 pl-1 font-roboto-12">
             <label for="debe" class="d-inline">Debe ($u$)</label>
-            <input type="text" placeholder="0" id="debe_sus" class="form-control font-roboto-12" onkeypress="return valideNumberConDecimal(event);" readonly>
+            <input type="text" placeholder="0" id="debe_sus" class="form-control font-roboto-12 input-formatear-numero" readonly>
         </div>
         <div class="col-md-1 pr-1 pl-1 font-roboto-12">
             <label for="haber" class="d-inline">Haber ($u$)</label>
-            <input type="text" placeholder="0" id="haber_sus" class="form-control font-roboto-12" onkeypress="return valideNumberConDecimal(event);" readonly>
+            <input type="text" placeholder="0" id="haber_sus" class="form-control font-roboto-12 input-formatear-numero" readonly>
         </div>
         <div class="col-md-1 px-0 pl-1 font-roboto-12 text-right">
             <br>
@@ -156,8 +166,9 @@
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
+                <tfoot id="tfoot">
                     <tr class="font-roboto-11">
+                        <input type="hidden" value="#" name="monto_total" id="monto_total">
                         <td class="text-center p-1" colspan="5"><b>TOTAL</b></td>
                         <td id="total_debe" class="text-right p-1"><b>{{ number_format($total_debe,2,'.',',') }}</b></td>
                         <td id="total_haber" class="text-right p-1"><b>{{ number_format($total_haber,2,'.',',') }}</b></td>

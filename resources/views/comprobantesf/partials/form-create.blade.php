@@ -115,7 +115,14 @@
     </div>
     <div class="form-group row">
         <div class="col-md-9 px-0 pr-1 font-roboto-12">
-            <label for="glosa" class="d-inline">Glosa</label>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="glosa" class="d-inline">Glosa</label>
+                </div>
+                <div class="col-md-6 text-right">
+                    <span class="text-danger" style="cursor: pointer" onclick="copiar_concepto();">[Copiar desde concepto]</span>
+                </div>
+            </div>
             <input type="text" id="glosa" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase();">
         </div>
         <div class="col-md-1 pr-1 pl-1 font-roboto-12">

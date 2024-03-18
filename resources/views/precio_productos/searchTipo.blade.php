@@ -11,17 +11,6 @@
 @section('content')
     @include('precio_productos.partials.menu')
     @include('precio_productos.partials.search')
-    <div class="form-group row">
-        <div class="col-md-12 text-right">
-            <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
-                <i class="fas fa-search fa-fw"></i>&nbsp;Buscar
-            </button>
-            <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
-                <i class="fas fa-eraser fa-fw"></i>&nbsp;Limpiar
-            </button>
-            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-        </div>
-    </div>
     @if (isset($precio_productos))
         <form action="#" method="post" id="form-precios">
             @csrf

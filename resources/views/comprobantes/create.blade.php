@@ -52,8 +52,8 @@
             }else{
                 if($("#tipo >option:selected").val() === "2"){
                     $("#hemos_entregado").show();
-                    $("#hemos_recibido").show();
-                    $("#entregado_recibido").hide();
+                    $("#hemos_recibido").hide();
+                    $("#entregado_recibido").show();
                 }else{
                     if($("#tipo >option:selected").val() === "3"){
                         $("#hemos_entregado").hide();

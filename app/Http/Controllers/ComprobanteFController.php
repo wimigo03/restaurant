@@ -156,6 +156,18 @@ class ComprobanteFController extends Controller
         }
     }
 
+    public function primerComprobanteMes($tipo,$empresa_id,$fecha)
+    {
+        $primer_comprobante = ComprobanteF::where('tipo',$tipo)
+                                            ->where('empresa_id',$empresa_id)
+                                            ->whereMonth('fecha', date('m', strtotime($fecha)))
+                                            ->whereYear('fecha', date('Y', strtotime($fecha)))
+                                            ->where('nro',1)
+                                            ->orderBy('nro','desc')
+                                            ->first();
+        return $primer_comprobante;
+    }
+
     public function tieneAuxiliar($plan_cuenta_id)
     {
         $plan_cuenta = PlanCuenta::find($plan_cuenta_id);
@@ -279,8 +291,8 @@ class ComprobanteFController extends Controller
                     'sucursal_id' => $request->sucursal_id[$cont],
                     'plan_cuenta_auxiliar_id' => $request->auxiliar_id[$cont],
                     'glosa' => $request->glosa[$cont],
-                    'debe' => $request->debe[$cont],
-                    'haber' => $request->haber[$cont],
+                    'debe' => floatval(str_replace(",", "", $request->debe[$cont])),
+                    'haber' => floatval(str_replace(",", "", $request->haber[$cont])),
                     'estado' => '1'
                 ];
 

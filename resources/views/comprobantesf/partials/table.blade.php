@@ -3,7 +3,6 @@
         <table class="table display responsive table-striped hover-orange">
             <thead>
                 <tr class="font-roboto-12 bg-warning text-white">
-                    <td class="text-left p-1"><b>ID</b></td>
                     <td class="text-left p-1"><b>FECHA</b></td>
                     <td class="text-left p-1"><b>NRO. COMPROBANTE</b></td>
                     <td class="text-left p-1"><b>CONCEPTO</b></td>
@@ -18,7 +17,6 @@
             <tbody>
                 @foreach ($comprobantes as $datos)
                     <tr class="font-roboto-12">
-                        <td class="text-left p-1">{{ $datos->id }}</td>
                         <td class="text-left p-1">{{ \Carbon\Carbon::parse($datos->fecha)->format('d/m/Y') }}</td>
                         <td class="text-left p-1">{{ $datos->nro_comprobante }}</td>
                         <td class="text-left p-1">{{ $datos->concepto }}</td>

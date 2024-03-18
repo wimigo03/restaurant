@@ -13,11 +13,11 @@
                 <div class="card-header header">
                     <div class="row">
                         <div class="col-md-4 font-roboto-14" style="display: flex; align-items: flex-end;">
-                            <b>PRECIOS DE VENTA</b>
+                            <b>BALANCE DE APERTURA</b>
                         </div>
                         <div class="col-md-4 text-center">
                             <span class="btns btn btn-sm btn-outline-dark font-verdana" id="toggleSubMenu" style="cursor: pointer;">
-                                <i class="fa-solid fa-tag fa-fw fa-beat"></i>
+                                <i class="fa-solid fa-layer-group fa-fw fa-beat"></i>
                             </span>
                         </div>
                         <div class="col-md-4 empresa-id-select-container">
@@ -77,7 +77,7 @@
             $(".btn").hide();
             $(".empresa-id-select-container").hide();
             $(".spinner-btn").show();
-            var url = "{{ route('precio.productos.index',':id') }}";
+            var url = "{{ route('balance.apertura.index',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
         }

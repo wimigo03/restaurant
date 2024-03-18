@@ -1,5 +1,19 @@
 <div class="nav-menu">
     <ul>
+        @can('estado.resultado.index')
+            <li>
+                <a href="{{ route('estado.resultado.indexAfter') }}">
+                    <i class="fa-solid fa-layer-group fa-fw mr-1"></i>&nbsp;Estado de Resultado
+                </a>
+            </li>
+        @endcan
+        @can('balance.apertura.index')
+            <li>
+                <a href="{{ route('balance.apertura.indexAfter') }}">
+                    <i class="fa-solid fa-layer-group fa-fw mr-1"></i>&nbsp;Balance Apertura
+                </a>
+            </li>
+        @endcan
         @can('plan.cuentas.index')
             <li>
                 <a href="{{ route('plan_cuentas.indexAfter') }}">
@@ -49,24 +63,17 @@
                 </a>
             </li>
         @endcan
-        {{--@can('categorias.index')
-            <li>
-                <a href="{{ route('categorias.indexAfter') }}">
-                    <i class="fas fa-poll-h fa-fw mr-1"></i>&nbsp;Categorias
-                </a>
-            </li>
-        @endcan--}}
-        {{--@can('unidades.index')
-            <li>
-                <a href="{{ route('unidades.indexAfter') }}">
-                    <i class="fas fa-balance-scale fa-fw mr-1"></i>&nbsp;Unidades
-                </a>
-            </li>
-        @endcan--}}
         @can('productos.index')
             <li>
                 <a href="{{ route('productos.indexAfter') }}">
                     <i class="fas fa-wine-glass-alt fa-fw mr-1"></i>&nbsp;Productos
+                </a>
+            </li>
+        @endcan
+        @can('configuracion.index')
+            <li>
+                <a href="{{ route('configuracion.indexAfter') }}">
+                    <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Configuracion
                 </a>
             </li>
         @endcan
@@ -97,7 +104,7 @@
         @canany(['clientes.index','users.index','roles.index','permissions.index'])
             <li>
                 <a href="" data-toggle="collapse" data-target="#dashboard_setting" class="active collapsed" aria-expanded="false">
-                    <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Configuracion
+                    <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Administrar
                     <span class="fa fa-arrow-circle-left float-right"></span>
                 </a>
                 <ul class="sub-menu collapse" id="dashboard_setting">

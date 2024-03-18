@@ -55,6 +55,14 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::middleware('web')
             ->namespace($this->namespace)
+            ->group(base_path('routes/estado-resultado-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/configuracion-route.php'));
+            
+        Route::middleware('web')
+            ->namespace($this->namespace)
             ->group(base_path('routes/clientes-route.php'));
 
         Route::middleware('web')
@@ -136,5 +144,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/comprobantesf-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/balance-apertura-route.php'));
     }
 }

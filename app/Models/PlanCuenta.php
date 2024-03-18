@@ -62,4 +62,12 @@ class PlanCuenta extends Model
     public function parent(){
         return $this->belongsTo(PlanCuenta::class,'parent_id','id');
     }
+
+    public static function orderByCodigo($planCuentas)
+    {
+        $sortedCollection = $planCuentas->sort(function ($a, $b) {
+            return version_compare($a['codigo'], $b['codigo']);
+        });
+        return $sortedCollection;
+    }
 }

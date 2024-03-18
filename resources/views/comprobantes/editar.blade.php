@@ -36,11 +36,49 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
+            $('.input-formatear-numero').each(function() {
+                var formattedValue = Number($(this).val()).toLocaleString('es-ES');
+                $(this).val(formattedValue);
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
+            });
+
+            if($("#tipo").val() === "INGRESO"){
+                $("#hemos_entregado").hide();
+                $("#entregado_recibido").show();
+                $("#hemos_recibido").show();
+            }else{
+                if($("#tipo").val() === "EGRESO"){
+                    $("#hemos_entregado").show();
+                    $("#hemos_recibido").hide();
+                    $("#entregado_recibido").show();
+                }else{
+                    if($("#tipo").val() === "TRASPASO"){
+                        $("#hemos_entregado").hide();
+                        $("#hemos_recibido").hide();
+                        $("#entregado_recibido").hide();
+                    }else{
+                        $("#hemos_entregado").hide();
+                        $("#hemos_recibido").hide();
+                        $("#entregado_recibido").hide();
+                    }
+                }
+            }
+
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
                 width: '100%'
             });
+
+            $(".tiene-auxiliar").show();
+            $(".no-tiene-auxiliar").hide();
+            if($("#plan_cuenta_id >option:selected").val() != ""){
+                var plan_cuenta_id = $("#plan_cuenta_id >option:selected").val();
+                tiene_auxiliar(plan_cuenta_id);
+            }
 
             obligatorio();
         });
@@ -83,34 +121,41 @@
             }
         }
 
+        function formatNumberWithThousandsSeparator(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
         function sumar_debe(){
             var table = document.getElementById("tabla_comprobante_detalle");
             var suma_debe = 0;
             for (var i = 1; i < table.rows.length - 1; i++) {
-                var debe = parseFloat(table.rows[i].cells[5].textContent);
+                var debe_cleave = table.rows[i].cells[5].textContent;
+                var debe = parseFloat(debe_cleave.replace(/,/g, ''));
                 if (!isNaN(debe)) {
                     suma_debe += debe;
                 }
             }
-            document.getElementById("total_debe").textContent = suma_debe.toFixed(2);
+            
+            document.getElementById("total_debe").textContent = formatNumberWithThousandsSeparator(suma_debe);
+            document.getElementById('monto_total').value = suma_debe.toFixed(2);
             return suma_debe.toFixed(2);
-
         }
 
         function sumar_haber(){
             var table = document.getElementById("tabla_comprobante_detalle");
             var suma_haber = 0;
             for (var i = 1; i < table.rows.length - 1; i++) {
-                var haber = parseFloat(table.rows[i].cells[6].textContent);
+                var haber_cleave = table.rows[i].cells[6].textContent;
+                var haber = parseFloat(haber_cleave.replace(/,/g, ''));
                 if (!isNaN(haber)) {
                     suma_haber += haber;
                 }
             }
-            document.getElementById("total_haber").textContent = suma_haber.toFixed(2);
+            document.getElementById("total_haber").textContent = formatNumberWithThousandsSeparator(suma_haber);
             return suma_haber.toFixed(2);
         }
 
-        function redondear_debe(){
+        /*function redondear_debe(){
             var input_debe = document.getElementById("debe");
             input_debe.addEventListener("input", function() {
                 var valor = this.value;
@@ -130,35 +175,54 @@
                     this.value = decimales[0] + "." + decimales[1].slice(0, 2);
                 }
             });
-        }
+        }*/
 
         $('#debe').on('input', function () {
-            var debe = parseFloat($("#debe").val());
+            procesar_debe();
+        });
+
+        function procesar_debe(){
+            var debe = parseFloat($("#debe").val().replace(/,/g, ''));
             var tipo_cambio = parseFloat($("#dolar_oficial").val());
-            redondear_debe();
             if(!isNaN(debe)){
-                debe_sus = debe * tipo_cambio;
-                document.getElementById('debe_sus').value = debe_sus.toFixed(2);
+                var debe_sus = debe / tipo_cambio;
+                document.getElementById('debe_sus').value = debe_sus;
+                new Cleave('#debe_sus', {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
                 document.getElementById('haber').value = '';
                 document.getElementById('haber_sus').value = '';
             }else{
                 document.getElementById('debe_sus').value = '';
             }
-        });
+        }
 
         $('#haber').on('input', function () {
-            var haber = parseFloat($("#haber").val());
+            procesar_haber();
+        });
+
+        function procesar_haber(){
+            var haber = parseFloat($("#haber").val().replace(/,/g, ''));
             var tipo_cambio = parseFloat($("#dolar_oficial").val());
-            redondear_haber();
             if(!isNaN(haber)){
-                haber_sus = haber * tipo_cambio;
-                document.getElementById('haber_sus').value = haber_sus.toFixed(2);
+                haber_sus = haber / tipo_cambio;
+                document.getElementById('haber_sus').value = haber_sus;
+                new Cleave('#haber_sus', {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
                 document.getElementById('debe').value = '';
                 document.getElementById('debe_sus').value = '';
             }else{
                 document.getElementById('haber_sus').value = '';
             }
-        });
+        }
+
+        function copiar_concepto(){
+            var concepto = $("#concepto").val();
+            document.getElementById('glosa').value = concepto;
+        }
 
         function agregar_detalle(){
             if(!validar_detalle()){
@@ -215,11 +279,14 @@
                         "</tr>";
 
             $("#tabla_comprobante_detalle").append(fila); 
+            document.getElementById("tfoot").style.display = "table-footer-group";
             $('#sucursal_id').val('').trigger('change');
             $('#plan_cuenta_id').val('').trigger('change');
             $('#auxiliar_id').val('').trigger('change');
             document.getElementById('debe').value = '';
             document.getElementById('haber').value = '';
+            document.getElementById('debe_sus').value = '';
+            document.getElementById('haber_sus').value = '';
             document.getElementById('glosa').value = '';
             sumar_debe();
             sumar_haber();
@@ -321,6 +388,36 @@
             }
 
             return true;
+        }
+
+        $('#plan_cuenta_id').on('change', function() {
+            if($("#plan_cuenta_id >option:selected").val() != ''){
+                var plan_cuenta_id = $("#plan_cuenta_id >option:selected").val();
+                tiene_auxiliar(plan_cuenta_id);
+            }
+        });
+
+        function tiene_auxiliar(id){
+            $.ajax({
+                type: 'GET',
+                url: '/comprobante/tiene_auxiliar/'+id,
+                dataType: 'json',
+                data: {
+                    id: id
+                },
+                success: function(json){
+                    if(json.auxiliar === '1'){
+                        $(".tiene-auxiliar").show();
+                        $(".no-tiene-auxiliar").hide();
+                    }else{
+                        $(".tiene-auxiliar").hide();
+                        $(".no-tiene-auxiliar").show();
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
         }
 
         function confirmar(){

@@ -55,7 +55,7 @@
                             <b>CATEGORIA.- </b>
                         </td>
                         <td>
-                            {{ $producto->categoria->nombre }}
+                            {{$producto->categoria != null ? $producto->categoria->nombre : '-' }}
                         </td>
                     </tr>
                     <tr>
