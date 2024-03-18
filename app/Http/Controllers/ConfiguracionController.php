@@ -115,7 +115,8 @@ class ConfiguracionController extends Controller
                 $dias = InicioMesFiscal::DIAS;
                 $meses = InicioMesFiscal::MESES;
                 $anteriores = InicioMesFiscal::where('configuracion_id',$id)->orderBy('id','desc')->get();
-                return view('configuracion.inicioMesFiscalCreate', compact('configuracion','icono','header','empresa','dias','meses','anteriores'));
+                
+                return view('configuracion.inicio_mes_fiscal_create', compact('configuracion','icono','header','empresa','dias','meses','anteriores'));
                 break;
         }
 
