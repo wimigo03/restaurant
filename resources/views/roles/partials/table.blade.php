@@ -15,7 +15,7 @@
                 @foreach ($roles as $datos)
                     <tr class="font-verdana-bg">
                         <td class="text-left p-1">{{ $datos->id }}</td>
-                        <td class="text-left p-1">{{ $datos->empresa->nombre_comercial }}</td>
+                        <td class="text-left p-1">{{ $datos->empresa != null ? $datos->empresa->nombre_comercial : '-' }}</td>
                         <td class="text-left p-1">{{ $datos->name }}</td>
                         @can('roles.editar')
                             <td class="text-center p-1">

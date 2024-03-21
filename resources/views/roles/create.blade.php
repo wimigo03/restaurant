@@ -59,7 +59,10 @@
         function cancelar(){
             $(".btn").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('roles.index') }}";
+            var id = $("#empresa_id").val();
+            var url = "{{ route('roles.index',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
     </script>
 @stop

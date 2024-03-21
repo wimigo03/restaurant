@@ -9,49 +9,17 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card card-custom">
-            <div class="card-header font-verdana-bg bg-gradient-secondary text-white">
-                <b>ROLES</b>
-            </div>
-            <div class="card-body">
-                <form action="#" method="get" id="form">
-                    @include('roles.partials.search')
-                </form>
-                <div class="form-group row">
-                    <div class="col-md-6 pr-1">
-                        @can('roles.create')
-                            <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
-                                &nbsp;<i class="fas fa-plus"></i>&nbsp;
-                            </button>
-                        @endcan
-                        <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                    </div>
-                    <div class="col-md-6 pl-1 text-right">
-                        <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
-                            &nbsp;<i class="fas fa-search"></i>&nbsp;Buscar
-                        </button>
-                        <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
-                            &nbsp;<i class="fas fa-eraser"></i>&nbsp;Limpiar
-                        </button>
-                        <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                    </div>
-                </div>
-                @include('roles.partials.table')
-            </div>
-        </div>
-    </div>
-</div>
+@include('roles.partials.search')
+@include('roles.partials.table')
 @endsection
 @section('scripts')
     @parent
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            $('#empresa_id').select2({
+            $('.select2').select2({
                 theme: "bootstrap4",
-                placeholder: "--Empresa--",
+                placeholder: "--Seleccionar--",
                 width: '100%'
             });
         });
@@ -64,23 +32,32 @@
         });
      
         function search(){
-            var url = "{{ route('roles.search') }}";
-            $("#form").attr('action', url);
             $(".btn").hide();
-            $(".spinner-btn-send").show();
+            $(".spinner-btn").show();
+            var id = $("#empresa_id").val();
+            var url = "{{ route('roles.search',':id') }}";
+            $("#form").attr('action', url);
+            url = url.replace(':id',id);
+            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
             $(".btn").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('roles.index') }}";
+            var id = $("#empresa_id").val();
+            var url = "{{ route('roles.index',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
 
         function create(){
             $(".btn").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('roles.create') }}";
+            var id = $("#empresa_id").val()
+            var url = "{{ route('roles.create',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
     </script>
 @stop

@@ -1,18 +1,7 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="card card-custom">
-            <div class="card-header bg-gradient-warning text-white font-verdana-bg">
-                <b>ROLES Y PERMISOS</b>
-            </div>
-            <div class="card-body">
-                @include('roles.partials.form-editar')
-            </div>
-        </div>
-    </div>
-</div>
+    @include('roles.partials.form-editar')
 @endsection
 @section('scripts')
     @parent
@@ -53,7 +42,10 @@
         function cancelar(){
             $(".btn").hide();
             $(".spinner-btn").show();
-            window.location.href = "{{ route('roles.index') }}";
+            var id = $("#empresa_id").val();
+            var url = "{{ route('roles.index',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
     </script>
 @stop

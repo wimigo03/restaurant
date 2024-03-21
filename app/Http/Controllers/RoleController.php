@@ -10,31 +10,43 @@ use Auth;
 
 class RoleController extends Controller
 {
-    public function index()
+    const ICONO = 'fas fa-user-shield fa-fw';
+    const INDEX = 'ROLES';
+    const CREATE = 'REGISTRAR ROL';
+
+    public function indexAfter()
+    {
+        $empresas = Empresa::query()
+                            ->byCliente()
+                            ->pluck('nombre_comercial','id');
+        if(count($empresas) == 1 && Auth::user()->id != 1){
+            return redirect()->route('role.index.index',Auth::user()->empresa_id);
+        }
+        return view('roles.indexAfter', compact('empresas'));
+    }
+
+    public function index($empresa_id)
     {
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-        if(Auth::user()->id){
-            $empresas = Empresa::pluck('nombre_comercial','id');
-        }else{
-            $empresas = Empresa::where('cliente_id',Auth::user()->cliente_id)->pluck('nombre_comercial','id');
-        }
+        $icono = self::ICONO;
+        $header = self::INDEX;
+        $empresa = Empresa::find($empresa_id);
         $roles = Role::where('id','!=',1)->paginate(10);
-        return view('roles.index', compact('empresas','roles'));
+        return view('roles.index', compact('icono','header','empresa','roles'));
     }
 
     public function search(Request $request)
     {
-        if(Auth::user()->id){
-            $empresas = Empresa::pluck('nombre_comercial','id');
-        }else{
-            $empresas = Empresa::where('cliente_id',Auth::user()->cliente_id)->pluck('nombre_comercial','id');
-        }
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        $icono = self::ICONO;
+        $header = self::INDEX;
+        $empresa = Empresa::find($request->empresa_id);
         $roles = Role::query()
-                            ->byEmpresa($request->empresa_id)
-                            ->byNombre($request->nombre)
-                            ->where('id','!=',1)
-                            ->paginate(10);
-        return view('roles.index', compact('empresas','roles'));
+                        ->byEmpresa($request->empresa_id)
+                        ->byNombre($request->nombre)
+                        ->where('id','!=',1)
+                        ->paginate(10);
+        return view('roles.index', compact('icono','header','empresa','roles'));
     }
 
     public function getDatosByEmpresa(Request $request){
@@ -52,14 +64,12 @@ class RoleController extends Controller
         }
     }
 
-    public function create()
+    public function create($empresa_id)
     {
-        if(Auth::user()->id){
-            $empresas = Empresa::pluck('nombre_comercial','id');
-        }else{
-            $empresas = Empresa::where('cliente_id',Auth::user()->cliente_id)->pluck('nombre_comercial','id');
-        }
-        return view('roles.create',compact('empresas'));
+        $icono = self::ICONO;
+        $header = self::INDEX;
+        $empresa = Empresa::find($empresa_id);
+        return view('roles.create',compact('icono','header','empresa'));
     }
 
     public function store(Request $request)
@@ -75,26 +85,29 @@ class RoleController extends Controller
                 'empresa_id' => $request->empresa_id,
                 'name' => $request->nombre
             ]);
-            return redirect()->route('roles.index')->with('success_message', 'Se agregó un nuevo rol.');
+            return redirect()->route('roles.index',$request->empresa_id)->with('success_message', 'Se agregó un nuevo rol.');
         } catch (ValidationException $e) {
-            return redirect()->route('roles.create')
+            return redirect()->route('roles.create',$request->empresa_id)
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }
     }
 
     public function editar($id){
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $role = Role::find($id);
+        $empresa = Empresa::find($role->empresa_id);
         $permisosOrdenados = $this->permisos_ordenados();
         $permissions = Permission::all();
-        return view('roles.editar',compact('role','permissions','permisosOrdenados'));
+        return view('roles.editar',compact('icono','header','empresa','role','permissions','permisosOrdenados'));
     }
 
     public function update(Request $request){
         $role = Role::find($request->role_id);
         $role->permissions()->sync($request->permissions);
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-        return redirect()->route('roles.index')->with('success_message', 'Se agregó permisos.');
+        return redirect()->route('roles.index',$role->empresa_id)->with('success_message', 'Se agregó permisos.');
     }
 
     private function permisos_ordenados(){

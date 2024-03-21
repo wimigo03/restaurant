@@ -134,7 +134,7 @@
                     @endcan
                     @can('roles.index')
                         <li>
-                            <a href="{{ route('roles.index') }}">
+                            <a href="{{ route('roles.indexAfter') }}">
                                 &nbsp;&nbsp;<i class="fas fa-user-shield fa-fw mr-2"></i>&nbsp;Roles
                             </a>
                         </li>
