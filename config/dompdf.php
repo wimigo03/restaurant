@@ -3,7 +3,7 @@
 return array(
 
     'show_warnings' => false,   // Throw an Exception on warnings from dompdf
-    'public_path' => null,  // Override the public path if needed
+    'public_path' => base_path(),  // Override the public path if needed
     'convert_entities' => true,
     'options' => array(
         "font_dir" => storage_path('fonts'), // advised by dompdf (https://github.com/dompdf/dompdf/pull/782)

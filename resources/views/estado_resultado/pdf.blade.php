@@ -25,6 +25,17 @@
         }
     </style>
     <body>
+        <table width="100%">
+            <tr>
+                <td align="center" valign="bottom">
+                    <font size="13px">
+                        <b>
+                            _*ESTADO DE RESULTADO*_
+                        </b>
+                    </font>
+                </td>
+            </tr>
+        </table>
         <br>
         <table width="100%" class="table">
             <tr style="border-bottom: 1px solid #000000;">
