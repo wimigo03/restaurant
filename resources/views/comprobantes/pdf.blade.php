@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>COMPROBANTE</title>
-        <style>
-            html {
-                margin: 20px 50px 30px 50px;
-            }
-            
-            body {
-                font-family: verdana,arial,helvetica;
-                font-size: 10px;
-            }
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>COMPROBANTE</title>
+    <style>
+        html {
+            margin: 20px 50px 30px 50px;
+        }
+        
+        body {
+            font-family: verdana,arial,helvetica;
+            font-size: 10px;
+        }
 
-            .table {
-                border-collapse: collapse;
-                border: 1px solid black;
-            }
+        .table {
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
 
-            .table td, th {
-                /*border: 1px solid black;*/
-                padding: 5px;
-            }
+        .table td, th {
+            /*border: 1px solid black;*/
+            padding: 5px;
+        }
 
-            .page_break{
-                page-break-before: always;
-            }
-        </style>
-    </head>
+        .page_break{
+            page-break-before: always;
+        }
+    </style>
     <body>
         <table width="100%">
             <tr>

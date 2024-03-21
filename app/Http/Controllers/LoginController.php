@@ -23,7 +23,6 @@ class LoginController extends Controller
         //$credentials = $request->only('username', 'password');
         $credentials['username'] = strtolower($request->username);
         $credentials['password'] = $request->password;
-    //dd($credentials);
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $dominio = $this->dominio($user);

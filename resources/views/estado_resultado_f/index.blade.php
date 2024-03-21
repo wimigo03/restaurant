@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 @section('content')
-    @include('estado_resultado.partials.search')
+    @include('estado_resultado_f.partials.search')
     @if ($show == '1')
-        @include('estado_resultado.partials.table')
+        @include('estado_resultado_f.partials.table')
     @endif
 @endsection
 @section('scripts')
@@ -50,7 +50,7 @@
             $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
-            var url = "{{ route('estado.resultado.search',':id') }}";
+            var url = "{{ route('estado.resultado.f.search',':id') }}";
             $("#form").attr('action', url);
             url = url.replace(':id',id);
             window.location.href = url;
@@ -61,14 +61,14 @@
             $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
-            var url = "{{ route('estado.resultado.index',':id') }}";
+            var url = "{{ route('estado.resultado.f.index',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
         }
 
         function excel(){
             var id = $("#empresa_id").val();
-            var url = "{{ route('estado.resultado.excel',':id') }}";
+            var url = "{{ route('estado.resultado.f.excel',':id') }}";
             $("#form").attr('action', url);
             url = url.replace(':id',id);
             window.location.href = url;
@@ -77,18 +77,18 @@
 
         function pdf(){
             var id = $("#empresa_id").val();
-            var url = "{{ route('estado.resultado.pdf',':id') }}";
+            var url = "{{ route('estado.resultado.f.pdf',':id') }}";
             $("#form").attr('action', url);
             url = url.replace(':id',id);
             window.location.href = url;
             $("#form").submit();
         }
 
-        function cambiarf(){
+        function cambiari(){
             $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
-            var url = "{{ route('estado.resultado.f.index',':id') }}";
+            var url = "{{ route('estado.resultado.index',':id') }}";
             url = url.replace(':id',id);
             window.location.href = url;
         }

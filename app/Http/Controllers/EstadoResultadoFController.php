@@ -6,30 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
 use App\Models\Empresa;
-use App\Models\Comprobante;
-use App\Models\ComprobanteDetalle;
+use App\Models\ComprobanteF;
+use App\Models\ComprobanteFDetalle;
 use App\Models\PlanCuenta;
 use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exportar\EstadoResultadoExcel;
+use App\Exportar\EstadoResultadoFExcel;
 use DB;
 use PDF;
 
-class EstadoResultadoController extends Controller
+class EstadoResultadoFController extends Controller
 {
     const ICONO = 'fa-solid fa-tag fa-fw';
     const INDEX = 'ESTADO DE RESULTADO';
-
-    public function indexAfter()
-    {
-        $empresas = Empresa::query()
-                            ->byCliente()
-                            ->pluck('nombre_comercial','id');
-        if(count($empresas) == 1 && Auth::user()->id != 1){
-            return redirect()->route('estado.resultado.index',Auth::user()->empresa_id);
-        }
-        return view('estado_resultado.indexAfter', compact('empresas'));
-    }
 
     public function index($empresa_id)
     {
@@ -37,7 +26,7 @@ class EstadoResultadoController extends Controller
         $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
         $show = '0';
-        return view('estado_resultado.index', compact('icono','header','empresa','show'));
+        return view('estado_resultado_f.index', compact('icono','header','empresa','show'));
     }
 
     public function search(Request $request)
@@ -68,7 +57,7 @@ class EstadoResultadoController extends Controller
                 $total = $estado_resultado['total'];
                 $totales = $estado_resultado['totales'];
                 $show = '1';
-                return view('estado_resultado.index', compact('icono','header','empresa','ingresos','costos','gastos','nroMaxColumna','total','totales','show'));
+                return view('estado_resultado_f.index', compact('icono','header','empresa','ingresos','costos','gastos','nroMaxColumna','total','totales','show'));
         } finally{
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
@@ -114,23 +103,23 @@ class EstadoResultadoController extends Controller
         $totalFinal = 0;
         $planCuenta = PlanCuenta::find($plan_cuenta_id);
         if($planCuenta->detalle == '1'){
-            $comprobantes = ComprobanteDetalle::join('comprobantes as c','c.id','comprobante_detalles.comprobante_id')
-                                                    ->where('comprobante_detalles.plan_cuenta_id',$plan_cuenta_id)
+            $comprobantes = ComprobanteFDetalle::join('comprobantesf as c','c.id','comprobantef_detalles.comprobantef_id')
+                                                    ->where('comprobantef_detalles.plan_cuenta_id',$plan_cuenta_id)
                                                     ->whereBetween('c.fecha',[$start_date,$end_date])
                                                     ->where('c.empresa_id',$empresa_id)
                                                     ->whereIn('c.estado',$status)
                                                     ->select('c.id',
                                                                 'c.fecha',
-                                                                'comprobante_detalles.plan_cuenta_id',
+                                                                'comprobantef_detalles.plan_cuenta_id',
                                                                 'c.nro_comprobante',
-                                                                'comprobante_detalles.glosa',
-                                                                'comprobante_detalles.debe',
-                                                                'comprobante_detalles.haber',
-                                                                'comprobante_detalles.plan_cuenta_id',
-                                                                'comprobante_detalles.nro_cheque',
-                                                                'comprobante_detalles.orden_cheque',
+                                                                'comprobantef_detalles.glosa',
+                                                                'comprobantef_detalles.debe',
+                                                                'comprobantef_detalles.haber',
+                                                                'comprobantef_detalles.plan_cuenta_id',
+                                                                'comprobantef_detalles.nro_cheque',
+                                                                'comprobantef_detalles.orden_cheque',
                                                                 'c.estado',
-                                                                'comprobante_detalles.plan_cuenta_auxiliar_id as cuentaAux')
+                                                                'comprobantef_detalles.plan_cuenta_auxiliar_id as cuentaAux')
                                                     ->get();
             $total = 0;
             foreach ($comprobantes as $comp) {
@@ -187,7 +176,7 @@ class EstadoResultadoController extends Controller
                 $nroMaxColumna = $estado_resultado['nroMaxColumna'];
                 $total = $estado_resultado['total'];
                 $totales = $estado_resultado['totales'];
-            return Excel::download(new EstadoResultadoExcel($empresa,$ingresos,$costos,$gastos,$nroMaxColumna,$total,$totales),'Estado_de_resultados.xlsx');
+            return Excel::download(new EstadoResultadoFExcel($empresa,$ingresos,$costos,$gastos,$nroMaxColumna,$total,$totales),'Estado_de_resultados.xlsx');
         } catch (\Throwable $th) {
             return view('errors.500');
         }finally{
@@ -222,7 +211,7 @@ class EstadoResultadoController extends Controller
                 $nroMaxColumna = $estado_resultado['nroMaxColumna'];
                 $total = $estado_resultado['total'];
                 $totales = $estado_resultado['totales'];
-                $pdf = PDF::loadView('estado_resultado.pdf',compact(['empresa','ingresos','costos','gastos','nroMaxColumna','total','totales']));
+                $pdf = PDF::loadView('estado_resultado_f.pdf',compact(['empresa','ingresos','costos','gastos','nroMaxColumna','total','totales']));
                 $pdf->setPaper('LETTER', 'portrait');
                 return $pdf->download('Estado_resultado.pdf');
         } catch (\Throwable $th) {

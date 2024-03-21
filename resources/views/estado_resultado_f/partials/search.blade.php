@@ -4,7 +4,7 @@
         <div class="col-md-3 px-0 pr-1">
             <br>
             <span class="tts:right tts-slideIn tts-custom" aria-label="Cambiar" style="cursor: pointer;">
-                <button class="btn btn-outline-secondary font-verdana" type="button" onclick="cambiarf();">
+                <button class="btn btn-outline-warning font-verdana" type="button" onclick="cambiari();">
                     <i class="fa-solid fa-file-invoice-dollar fa-fw"></i>
                 </button>
             </span>
