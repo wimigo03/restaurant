@@ -14,17 +14,65 @@
                     <span class="fa fa-arrow-circle-left float-right"></span>
                 </a>
                 <ul class="sub-menu collapse" id="dashboard_contabilidad">
-                    @can('estado.resultado.index')
-                        <li>
-                            <a href="{{ route('estado.resultado.indexAfter') }}">
-                                &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Estado de Resultado
-                            </a>
-                        </li>
-                    @endcan
                     @can('balance.apertura.index')
                         <li>
                             <a href="{{ route('balance.apertura.indexAfter') }}">
                                 &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Balance Apertura
+                            </a>
+                        </li>
+                    @endcan
+                    @canany(['estado.resultado.index'])
+                        <li>
+                            <a href="" data-toggle="collapse" data-target="#dashboard_reportes_contabilidad" class="active collapsed" aria-expanded="false">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw mr-1"></i>&nbsp;Reportes
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_reportes_contabilidad">
+                                @can('estado.resultado.index')
+                                    <li>
+                                        <a href="{{ route('estado.resultado.indexAfter') }}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Estado de Resultado
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('balance.general.index')
+                                    <li>
+                                        <a href="{{ route('balance.general.indexAfter') }}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Balance General
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+                    @canany(['libro.mayor.cuenta.general.index','libro.mayor.auxiliar.general.index'])
+                        <li>
+                            <a href="" data-toggle="collapse" data-target="#dashboard_libros_contabilidad" class="active collapsed" aria-expanded="false">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-list fa-fw mr-1"></i>&nbsp;Libros
+                                <span class="fa fa-arrow-circle-left float-right"></span>
+                            </a>
+                            <ul class="sub-menu collapse" id="dashboard_libros_contabilidad">
+                                @can('libro.mayor.cuenta.general.index')
+                                    <li>
+                                        <a href="{{ route('libro.mayor.cuenta.general.indexAfter') }}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor Por Cuenta-General
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('libro.mayor.auxiliar.general.index')
+                                    <li>
+                                        <a href="{{ route('libro.mayor.auxiliar.general.indexAfter') }}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor Por Auxiliar-General
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+                    @can('tipo.cambio.index')
+                        <li>
+                            <a href="{{ route('tipo.cambio.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fa-solid fa-circle-dollar-to-slot fa-fw mr-2"></i>&nbsp;Tipo de Cambio
                             </a>
                         </li>
                     @endcan
@@ -39,13 +87,6 @@
                         <li>
                             <a href="{{ route('plan_cuentas.auxiliar.indexAfter') }}">
                                 &nbsp;&nbsp;<i class="fas fa-user-friends fa-fw mr-2"></i>&nbsp;Auxiliares
-                            </a>
-                        </li>
-                    @endcan
-                    @can('tipo.cambio.index')
-                        <li>
-                            <a href="{{ route('tipo.cambio.indexAfter') }}">
-                                &nbsp;&nbsp;<i class="fa-solid fa-circle-dollar-to-slot fa-fw mr-2"></i>&nbsp;Tipo de Cambio
                             </a>
                         </li>
                     @endcan

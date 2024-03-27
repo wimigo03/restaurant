@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Pi-Resto | Home</title>
-    <link rel="icon" href="{{ asset('images/favicon.png') }}"> 
+    <link rel="icon" href="{{ asset('images/favicon.png') }}">
     {{--<link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">--}}
@@ -45,14 +45,14 @@
         <div class="toggle">
             <a href="#" class="burger js-menu-toggle" data-toggle="collapse" data-target="#main-navbar">
                 <span>
-                    
+
                 </span>
             </a>
         </div>
         <div class="side-inner">
             @include('layouts.partials.perfil')
             {{--@include('layouts.partials.subperfil')--}}
-            @include('layouts.partials.menu') 
+            @include('layouts.partials.menu')
         </div>
     </aside>
     <main>
@@ -67,9 +67,9 @@
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
     </main>
-    
+
     <script src="{{ asset('js/dashboard/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/dashboard/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/dashboard/popper.min.js') }}"></script>
@@ -90,10 +90,10 @@
         referrerpolicy="no-referrer"
     ></script>
     {{--<script src="http://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>--}}
-    
+
 
     @yield('scripts')
-    
+
     <script src="{{ asset('js/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/treeview/jstree.min.js') }}"></script>
     <script>

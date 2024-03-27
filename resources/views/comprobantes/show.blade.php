@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 <style>
-    
+
 </style>
 @section('content')
     <div class="form-group row">
@@ -21,13 +21,13 @@
         <div class="col-md-3 px-0 pl-1 font-roboto-13">
             <b>Estado.- </b>
             @if ($comprobante->estado == '1')
-                <span class="text-secondary"><b><u>{{ $comprobante->status }}</u></b></span>    
+                <span class="text-secondary"><b><u>{{ $comprobante->status }}</u></b></span>
             @endif
             @if ($comprobante->estado == '2')
-                <span class="text-success"><b><u>{{ $comprobante->status }}</u></b></span>    
+                <span class="text-success"><b><u>{{ $comprobante->status }}</u></b></span>
             @endif
             @if ($comprobante->estado == '3')
-                <span class="text-danger"><b><u>{{ $comprobante->status }}</u></b></span>    
+                <span class="text-danger"><b><u>{{ $comprobante->status }}</u></b></span>
             @endif
         </div>
     </div>
@@ -69,14 +69,14 @@
                 @can('comprobantef.show')
                     <span class="tts:right tts-slideIn tts-custom" aria-label="Ir" style="cursor: pointer;">
                         <a href="{{ route('comprobantef.show',$comprobantef->id) }}">
-                            <span class="badge-with-padding 
-                                @if($comprobantef->estado == "1") 
-                                    badge badge-secondary 
-                                @else 
-                                    @if($comprobantef->estado == "2") 
-                                        badge badge-success 
-                                    @else 
-                                        badge badge-danger 
+                            <span class="badge-with-padding
+                                @if($comprobantef->estado == "1")
+                                    badge badge-secondary
+                                @else
+                                    @if($comprobantef->estado == "2")
+                                        badge badge-success
+                                    @else
+                                        badge badge-danger
                                     @endif
                                 @endif">
                                 {{ $comprobantef->nro_comprobante }}
@@ -147,7 +147,7 @@
                 @can('comprobante.aprobar')
                     <button class="btn btn-outline-success font-verdana" type="button" onclick="procesar();">
                         <i class="fas fa-paper-plane"></i>&nbsp;Aprobar
-                    </button>    
+                    </button>
                 @endcan
                 @can('comprobante.aprobar')
                     <button class="btn btn-outline-warning font-verdana" type="button" onclick="anular();">
@@ -167,14 +167,14 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            
+
         });
 
         function alert(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});
         }
-        
+
         function procesar() {
             $('#modal_confirmacion').modal({
                 keyboard: false
@@ -182,7 +182,7 @@
         }
 
         function confirmar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#comprobante_id").val();
             var url = "{{ route('comprobante.aprobar',':id') }}";
@@ -191,7 +191,7 @@
         }
 
         function anular(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#comprobante_id").val();
             var url = "{{ route('comprobante.anular',':id') }}";
@@ -207,7 +207,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('comprobante.index',':id') }}";

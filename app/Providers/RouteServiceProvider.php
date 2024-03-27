@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         /*RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });*/
-        
+
         $this->configureRateLimiting();
         $this->mapApiRoutes();
         $this->mapWebRoutes();
@@ -63,6 +63,30 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::middleware('web')
             ->namespace($this->namespace)
+            ->group(base_path('routes/balance-general-f-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/balance-general-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/libro-mayor-cuenta-general-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/libro-mayor-cuenta-general-f-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/libro-mayor-auxiliar-general-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/libro-mayor-auxiliar-general-f-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
             ->group(base_path('routes/estado-resultado-route.php'));
 
         Route::middleware('web')
@@ -72,7 +96,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/configuracion-route.php'));
-            
+
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/clientes-route.php'));

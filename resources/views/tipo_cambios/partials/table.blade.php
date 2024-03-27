@@ -10,7 +10,7 @@
                     <td class="text-right p-1"><b>COMPRA</b></td>
                     <td class="text-right p-1"><b>VENTA</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
-                    @canany(['tipo.cuenta.editar'])
+                    @canany(['tipo.cambio.editar'])
                         <td class="text-center p-1"><b><i class="fas fa-bars"></i></b></td>
                     @endcanany
                 </tr>
@@ -31,9 +31,9 @@
                                 </span>
                             </span>
                         </td>
-                        @canany(['tipo.cuenta.editar'])
+                        @canany(['tipo.cambio.editar'])
                             <td class="text-center p-1">
-                                @can('tipo.cuenta.editar')
+                                @can('tipo.cambio.editar')
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
                                         <a href="{{ route('tipo.cambio.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
                                             <i class="fas fa-lg fa-edit text-white"></i>
