@@ -207,7 +207,7 @@ class EmpresaController extends Controller
                 'alias' => $request->alias
             ];
 
-            if(count($request->modulo_id) > 0){
+            if(isset($request->modulo_id)){
                 $cont = 0;
                 while($cont < count($request->modulo_id)){
                     $empresa_modulo = EmpresaModulo::create([

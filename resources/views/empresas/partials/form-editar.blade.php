@@ -39,7 +39,7 @@
     <div class="form-group row font-roboto-12 abs-center">
         <div class="col-md-3 px-0 pr-1">
             <label for="modulo" class="d-inline">Modulos</label>
-            <select name="modulo_id" id="modulo_id" class="form-control select2">
+            <select id="modulo_id" class="form-control select2">
                 <option value="">-</option>
                 @foreach ($modulos as $index => $value)
                     <option value="{{ $index }}" @if(old('modulo_id') == $index) selected @endif >{{ $value }}</option>

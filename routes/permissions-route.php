@@ -7,5 +7,5 @@ Route::prefix('permissions')->name('permissions.')->middleware(['auth:sanctum',c
     Route::get('/create/{empresa_id}', 'PermissionController@create')->name('create')->middleware('can:permissions.create');
     Route::post('/store', 'PermissionController@store')->name('store')->middleware('can:permissions.create');
     Route::get('/editar/{permission_id}', 'PermissionController@editar')->name('editar')->middleware('can:permissions.editar');
-    Route::post('/store', 'PermissionController@update')->name('update')->middleware('can:permissions.editar');
+    Route::post('/update', 'PermissionController@update')->name('update')->middleware('can:permissions.editar');
 });
