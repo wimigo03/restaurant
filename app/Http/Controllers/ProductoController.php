@@ -73,7 +73,7 @@ class ProductoController extends Controller
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         return view('productos.index', compact('icono','header','empresa','categorias_master','categorias','tipos','estados','productos'));
-        
+
     }
 
     public function create($id)
@@ -153,13 +153,13 @@ class ProductoController extends Controller
         $date = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$date)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         try{
             $foto_1 = isset($request->foto_1) ? 'prin_' . strtolower($request->nombre) . '_' . strtolower($request->nombre_factura) . '.' . pathinfo(strtolower($request->foto_1->getClientOriginalName()), PATHINFO_EXTENSION) : null;
             $foto_2 = isset($request->foto_2) ? 'alt(1)_' . strtolower($request->nombre) . '_' . strtolower($request->nombre_factura) . '.' . pathinfo(strtolower($request->foto_2->getClientOriginalName()), PATHINFO_EXTENSION) : null;
             $foto_3 = isset($request->foto_3) ? 'alt(2)_' . strtolower($request->nombre) . '_' . strtolower($request->nombre_factura) . '.' . pathinfo(strtolower($request->foto_3->getClientOriginalName()), PATHINFO_EXTENSION) : null;
-            
+
             $empresa = Empresa::find($request->empresa_id);
             if($request->categoria_id != null){
                 $categoria = Categoria::find($request->categoria_id);
@@ -216,7 +216,7 @@ class ProductoController extends Controller
                     'precio' => 0,
                     'estado' => '1'
                 ];
-    
+
                 $precio_producto = PrecioProducto::create($datosPrecioProducto);
             }
 

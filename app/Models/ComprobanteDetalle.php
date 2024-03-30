@@ -29,7 +29,6 @@ class ComprobanteDetalle extends Model
         'tipo_cambio_id',
         'user_id',
         'cargo_id',
-        'plan_cuenta_user_id',
         'moneda_id',
         'pais_id',
         'user_autorizado_id',
@@ -53,9 +52,9 @@ class ComprobanteDetalle extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }

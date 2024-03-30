@@ -30,7 +30,6 @@ class ComprobanteFDetalle extends Model
         'tipo_cambio_id',
         'user_id',
         'cargo_id',
-        'plan_cuenta_user_id',
         'moneda_id',
         'pais_id',
         'sucursal_id',
@@ -54,9 +53,9 @@ class ComprobanteFDetalle extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }
@@ -64,7 +63,7 @@ class ComprobanteFDetalle extends Model
     public function comprobante(){
         return $this->belongsTo(ComprobanteF::class,'comprobantef_id','id');
     }
-    
+
     public function empresa(){
         return $this->belongsTo(Empresa::class,'empresa_id','id');
     }
@@ -72,7 +71,7 @@ class ComprobanteFDetalle extends Model
     public function cliente(){
         return $this->belongsTo(Cliente::class,'cliente_id','id');
     }
-    
+
     public function plan_cuenta(){
         return $this->belongsTo(PlanCuenta::class,'plan_cuenta_id','id');
     }

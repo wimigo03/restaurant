@@ -85,7 +85,7 @@ class ComprobanteFController extends Controller
         $fecha = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         try{
             $empresa = Empresa::find($request->empresa_id);
@@ -273,7 +273,7 @@ class ComprobanteFController extends Controller
             $empresa = Empresa::where('id',$comprobante->empresa_id)->first();
             $tipo_cambio = TipoCambio::where('id',$comprobante->tipo_cambio_id)->first();
             if($tipo_cambio == null){
-                return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+                return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
             }
             $moneda = Moneda::where('id',$comprobante->moneda_id)->first();
             while($cont < count($request->sucursal_id)){
@@ -342,7 +342,6 @@ class ComprobanteFController extends Controller
                     'tipo_cambio_id' => $comprobante->tipo_cambio_id,
                     'user_id' => $comprobante->user_id,
                     'cargo_id' => $comprobante->cargo_id,
-                    'plan_cuenta_user_id' => $comprobante->plan_cuenta_user_id,
                     'moneda_id' => $comprobante->moneda_id,
                     'pais_id' => $comprobante->pais_id,
                     'nro' => $numero,
@@ -369,7 +368,6 @@ class ComprobanteFController extends Controller
                         'tipo_cambio_id' => $comprobante_detalle->tipo_cambio_id,
                         'user_id' => $comprobante_detalle->user_id,
                         'cargo_id' => $comprobante_detalle->cargo_id,
-                        'plan_cuenta_user_id' => $comprobante_detalle->plan_cuenta_user_id,
                         'moneda_id' => $comprobante_detalle->moneda_id,
                         'pais_id' => $comprobante_detalle->pais_id,
                         'sucursal_id' => $comprobante_detalle->sucursal_id,

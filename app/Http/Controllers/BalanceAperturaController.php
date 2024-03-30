@@ -62,7 +62,7 @@ class BalanceAperturaController extends Controller
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         $icono = self::ICONO;
         $header = self::INDEX;
@@ -88,7 +88,7 @@ class BalanceAperturaController extends Controller
         $empresa = Empresa::find($empresa_id);
         $inicioMesFiscal = InicioMesFiscal::select('inicio_gestion')->where('empresa_id',$empresa_id)->where('estado','1')->first();
         if($inicioMesFiscal == null){
-            return redirect()->back()->with('info_message', '[FALTA CONFIGURACION DE INICIO DE GESTION]');
+            return redirect()->back()->with('info_message', '[FALTA CONFIGURACION DE INICIO DE GESTION]')->withInput();
         }
         $anho = $inicioMesFiscal->inicio_gestion;
         for($i = $anho; $i <= $anho + 10; $i++){
@@ -116,7 +116,7 @@ class BalanceAperturaController extends Controller
         $date = $request->anho . '-' . $inicioMesFiscal->mes . '-01';
         $tipo_cambio = TipoCambio::where('fecha',$date)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA ' . $date . ']');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA ' . $date . ']')->withInput();
         }
 
         $comprobante_controller = new ComprobanteController;

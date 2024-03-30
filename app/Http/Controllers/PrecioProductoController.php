@@ -36,7 +36,7 @@ class PrecioProductoController extends Controller
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         $icono = self::ICONO;
         $header = self::INDEX;
@@ -53,7 +53,7 @@ class PrecioProductoController extends Controller
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         $icono = self::ICONO;
         $header = self::INDEX;
@@ -80,7 +80,7 @@ class PrecioProductoController extends Controller
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         $icono = self::ICONO;
         $header = self::INDEX;
@@ -107,7 +107,7 @@ class PrecioProductoController extends Controller
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         $icono = self::ICONO;
         $header = self::INDEX;
@@ -197,7 +197,7 @@ class PrecioProductoController extends Controller
                                 'estado' => '3'
                             ];
                             $precio_producto->update($datos_pproducto);
-    
+
                             $datos_precio_producto = [
                                 'producto_id' => $precio_producto->producto_id,
                                 'empresa_id' => $precio_producto->empresa_id,
@@ -217,7 +217,7 @@ class PrecioProductoController extends Controller
                                 'precio' => $precio_producto->precio + ($request->porcentaje_detalle[$cont] * $precio_producto->precio / 100),
                                 'estado' => '1'
                             ];
-    
+
                             $precioProductoUpdate = PrecioProducto::create($datos_precio_producto);
                         }
                     }

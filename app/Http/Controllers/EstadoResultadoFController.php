@@ -37,7 +37,7 @@ class EstadoResultadoFController extends Controller
         $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_f)));
 
         if($fecha_i > $fecha_f){
-            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]');
+            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]')->withInput();
         }
 
         if($request->estado == '_todos_'){
@@ -98,7 +98,7 @@ class EstadoResultadoFController extends Controller
             'totales' => $totales,
         ];
     }
-    
+
     public function sum_total_account_gestion($plan_cuenta_id,$start_date,$end_date,$status,$empresa_id,$tipoOperacion, &$totales, &$cuentas){
         $totalFinal = 0;
         $planCuenta = PlanCuenta::find($plan_cuenta_id);
@@ -156,7 +156,7 @@ class EstadoResultadoFController extends Controller
         $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_f)));
 
         if($fecha_i > $fecha_f){
-            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]');
+            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]')->withInput();
         }
 
         if($request->estado == '_todos_'){
@@ -191,7 +191,7 @@ class EstadoResultadoFController extends Controller
         $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_f)));
 
         if($fecha_i > $fecha_f){
-            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]');
+            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]')->withInput();
         }
 
         if($request->estado == '_todos_'){

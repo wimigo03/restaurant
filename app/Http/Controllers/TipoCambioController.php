@@ -113,7 +113,7 @@ class TipoCambioController extends Controller
         $tipo_cambio = TipoCambio::find($id);
         $comprobantes = Comprobante::select('id')->where('fecha',$tipo_cambio->fecha)->whereIn('estado',['1','2'])->first();
         if($comprobantes != null){
-            return redirect()->back()->with('info_message', '[ACCION NO PERMITIDA. EXISTEN COMPROBANTES PROCESADOS.]');
+            return redirect()->back()->with('info_message', '[ACCION NO PERMITIDA. EXISTEN COMPROBANTES PROCESADOS.]')->withInput();
         }
         $icono = self::ICONO;
         $header = self::EDITAR;

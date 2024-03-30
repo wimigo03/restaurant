@@ -64,10 +64,10 @@ class TipoPrecioController extends Controller
         $date = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$date)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         try{
-            
+
             $empresa = Empresa::find($request->empresa_id);
             $datos = [
                 'empresa_id' => $empresa->id,

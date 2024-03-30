@@ -191,7 +191,7 @@ class MesaController extends Controller
             $zona->update([
                 'mesas_disponibles' => $zona->mesas_disponibles + 1
             ]);
-            return redirect()->back()->with('info_message', 'Se Habilito una [MESA] seleccionada...');
+            return redirect()->back()->with('info_message', 'Se Habilito una [MESA] seleccionada...')->withInput();
         } catch (ValidationException $e) {
             return redirect()->route('mesas.index',$mesa->empresa_id)
                 ->withErrors($e->validator->errors())
@@ -211,7 +211,7 @@ class MesaController extends Controller
             $zona->update([
                 'mesas_disponibles' => $zona->mesas_disponibles - 1
             ]);
-            return redirect()->back()->with('info_message', 'Se Deshabilito una [MESA] seleccionada...');
+            return redirect()->back()->with('info_message', 'Se Deshabilito una [MESA] seleccionada...')->withInput();
         } catch (ValidationException $e) {
             return redirect()->route('mesas.index',$mesa->empresa_id)
                 ->withErrors($e->validator->errors())

@@ -48,7 +48,7 @@ class BalanceGeneralController extends Controller
         $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_f)));
 
         if($fecha_i > $fecha_f){
-            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]');
+            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]')->withInput();
         }
 
         if($request->estado == '_todos_'){
@@ -167,7 +167,7 @@ class BalanceGeneralController extends Controller
         $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_f)));
 
         if($fecha_i > $fecha_f){
-            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]');
+            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]')->withInput();
         }
 
         if($request->estado == '_todos_'){
@@ -202,7 +202,7 @@ class BalanceGeneralController extends Controller
         $fecha_f = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha_f)));
 
         if($fecha_i > $fecha_f){
-            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]');
+            return redirect()->back()->with('info_message', '[LA FECHA INICIAL NO PUEDE SER MAYOR A LA FECHA FINAL]')->withInput();
         }
 
         if($request->estado == '_todos_'){

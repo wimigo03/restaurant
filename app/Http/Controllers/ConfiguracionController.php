@@ -51,7 +51,7 @@ class ConfiguracionController extends Controller
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         $icono = self::ICONO;
         $header = self::INDEX;

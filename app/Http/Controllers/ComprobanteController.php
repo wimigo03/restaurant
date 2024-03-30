@@ -100,7 +100,7 @@ class ComprobanteController extends Controller
         $fecha = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio == null){
-            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         try{
             ini_set('memory_limit','-1');
@@ -355,7 +355,7 @@ class ComprobanteController extends Controller
             $empresa = Empresa::where('id',$comprobante->empresa_id)->first();
             $tipo_cambio = TipoCambio::where('id',$comprobante->tipo_cambio_id)->first();
             if($tipo_cambio == null){
-                return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...');
+                return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
             }
             $moneda = Moneda::where('id',$comprobante->moneda_id)->first();
             while($cont < count($request->sucursal_id)){
