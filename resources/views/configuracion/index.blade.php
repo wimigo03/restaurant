@@ -4,7 +4,7 @@
     {{--@include('precio_productos.partials.search')--}}
     <div class="form-group row">
         <div class="col-md-6 px-0 pr-1">
-            @can('productos.create')
+            @can('configuracion.create')
                 <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
                     &nbsp;<i class="fas fa-plus"></i>&nbsp;
                 </button>

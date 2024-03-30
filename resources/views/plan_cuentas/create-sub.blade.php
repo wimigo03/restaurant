@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 <style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 11px;
-    }
-    .select2-results__option {
-        font-size: 13px;
-    }
     .obligatorio {
         border: 1px solid red !important;
     }
@@ -30,6 +24,13 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
+            var checkbox_detalle = document.getElementById("detalle");
+            if (checkbox_detalle.checked) {
+                $('#cuenta_banco').show();
+            } else {
+                $('#cuenta_banco').hide();
+            }
+
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
@@ -37,6 +38,15 @@
             });
 
             obligatorio();
+        });
+
+        $('#detalle').change(function () {
+            var checkbox_detalle = document.getElementById("detalle");
+            if (checkbox_detalle.checked) {
+                $('#cuenta_banco').show();
+            } else {
+                $('#cuenta_banco').hide();
+            }
         });
 
         function obligatorio(){
@@ -53,7 +63,7 @@
                 event.preventDefault();
             }
         });
-        
+
         function procesar() {
             var url = "{{ route('plan_cuentas.store_sub') }}";
             $("#form").attr('action', url);

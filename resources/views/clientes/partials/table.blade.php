@@ -1,12 +1,11 @@
 <div class="form-group row">
-    <div class="col-md-12 table-responsive">
-        <table class="table display table-bordered responsive" style="width:100%;">
+    <div class="col-md-12">
+        <table class="table display responsive table-striped hover-orange">
             <thead>
-                <tr class="font-verdana-bg">
+                <tr class="font-roboto-12">
                     <td class="text-center p-1"><b>COD.</b></td>
                     <td class="text-center p-1"><b>PAIS</b></td>
                     <td class="text-center p-1"><b>INICIO</b></td>
-                    <td class="text-center p-1"><b>PAQUETE</b></td>
                     <td class="text-left p-1"><b>RAZON SOCIAL</b></td>
                     <td class="text-left p-1"><b>NOMBRE</b></td>
                     <td class="text-left p-1"><b>TELEFONO</b></td>
@@ -17,11 +16,10 @@
             </thead>
             <tbody>
                 @foreach ($clientes as $datos)
-                    <tr class="font-verdana-bg">
+                    <tr class="font-roboto-12">
                         <td class="text-center p-1">{{ $datos->id }}</td>
                         <td class="text-center p-1">{{ $datos->pais }}</td>
                         <td class="text-center p-1">{{ $datos->fecha_i }}</td>
-                        <td class="text-left p-1">{{ $datos->paquete->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->razon_social }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->telefono }}</td>
@@ -29,8 +27,8 @@
                         <td class="text-center p-1">{{ $datos->status }}</td>
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="Ir empresas" style="cursor: pointer;">
-                                <a href="{{ route('empresas.index',$datos->id) }}" class="text-primary">
-                                    &nbsp;<i class="fas fa-lg fa-list"></i>&nbsp;
+                                <a href="{{ route('empresas.index',$datos->id) }}" class="badge-with-padding badge badge-primary">
+                                    <i class="fas fa-list fa-fw"></i>
                                 </a>
                             </span>
                         </td>
@@ -38,7 +36,7 @@
                 @endforeach
             </tbody>
             <tfoot>
-                <tr class="font-verdana-bg">
+                <tr class="font-roboto-12">
                     <td colspan="12">
                         {{ $clientes->appends(Request::all())->links() }}
                         <p class="text-muted">Mostrando

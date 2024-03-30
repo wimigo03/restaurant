@@ -23,7 +23,6 @@ class Comprobante extends Model
         'tipo_cambio_id',
         'user_id',
         'cargo_id',
-        'plan_cuenta_user_id',
         'moneda_id',
         'pais_id',
         'user_autorizado_id',
@@ -62,13 +61,13 @@ class Comprobante extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "PENDIENTE";
-            case '2': 
+            case '2':
                 return "APROBADO";
-            case '3': 
+            case '3':
                 return "ANULADO";
-            case '4': 
+            case '4':
                 return "ELIMINADO";
         }
     }
@@ -90,7 +89,7 @@ class Comprobante extends Model
     }
 
     public function scopeByEmpresa($query, $empresa_id){
-        if($empresa_id)  
+        if($empresa_id)
             return $query->where('empresa_id', $empresa_id);
     }
 
@@ -106,32 +105,32 @@ class Comprobante extends Model
     }
 
     public function scopeByNroComprobante($query, $nro_comprobante){
-        if($nro_comprobante)  
+        if($nro_comprobante)
             return $query->where('nro_comprobante', $nro_comprobante);
     }
 
     public function scopeByConcepto($query, $concepto){
-        if($concepto)  
+        if($concepto)
             return $query->where('concepto', 'like', '%' . $concepto . '%');
     }
 
     public function scopeByTipo($query, $tipo){
-        if($tipo)  
+        if($tipo)
             return $query->where('tipo', $tipo);
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado)  
+        if($estado)
             return $query->where('estado', $estado);
     }
 
     public function scopeByMonto($query, $monto){
-        if($monto)  
+        if($monto)
             return $query->where('monto', 'like', '%' . $monto . '%');
     }
 
     public function scopeByCopia($query, $copia){
-        if($copia)  
+        if($copia)
             return $query->where('copia', $copia);
     }
 }

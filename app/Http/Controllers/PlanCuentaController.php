@@ -146,7 +146,7 @@ class PlanCuentaController extends Controller
                 'nivel' => $nivel,
                 'parent_id' => $request->parent_id,
                 'auxiliar' => isset($request->auxiliar) ? '1' : '0',
-                'cheque' => isset($request->cheque) ? '1' : '0',
+                'banco' => isset($request->banco) ? '1' : '0',
                 'detalle' => isset($request->detalle) ? '1' : '0',
                 'estado' => '1'
             ];
@@ -185,7 +185,7 @@ class PlanCuentaController extends Controller
                         ]);
                     }
                 }
-                
+
                 return redirect()->route('plan_cuentas.index', ['empresa_id' => $plan_de_cuenta->empresa_id,'status' => '[]','nodeId' => $plan_de_cuenta->id])->with('info_message', 'Plan de Cuenta Habilitado...');
         } catch (\Throwable $th) {
             return view('errors.500');
@@ -208,7 +208,7 @@ class PlanCuentaController extends Controller
                         'estado' => '2'
                     ]);
                 }
-                
+
                 return redirect()->route('plan_cuentas.index', ['empresa_id' => $plan_de_cuenta->empresa_id,'status' => '[]','nodeId' => $plan_de_cuenta->id])->with('info_message', 'Plan de Cuenta Deshabilitado...');
         } catch (\Throwable $th) {
             return view('errors.500');
@@ -221,7 +221,7 @@ class PlanCuentaController extends Controller
     public function editar($id)
     {
         $icono = self::ICONO;
-        $header = self::CREATE;
+        $header = self::EDITAR;
         $plan_cuenta = PlanCuenta::find($id);
         $empresa = Empresa::find($plan_cuenta->empresa_id);
         return view('plan_cuentas.editar-sub', compact('icono','header','plan_cuenta','empresa'));
@@ -240,7 +240,7 @@ class PlanCuentaController extends Controller
                 'moneda_id' => $request->moneda_id,
                 'nombre' => $request->nombre,
                 'auxiliar' => isset($request->auxiliar) ? '1' : '0',
-                'cheque' => isset($request->cheque) ? '1' : '0',
+                'banco' => isset($request->banco) ? '1' : '0',
                 'detalle' => isset($request->detalle) ? '1' : '0'
             ];
 

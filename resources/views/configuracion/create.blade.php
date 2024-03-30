@@ -19,7 +19,11 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
         });
 
         function alerta(mensaje){

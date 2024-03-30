@@ -1,29 +1,18 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card card-custom">
-            <div class="card-header font-verdana-bg bg-gradient-warning text-white">
-                <b>USUARIOS Y ROLES</b>
-            </div>
-            <div class="card-body">
-                @include('users.partials.form-asignar')
-                <div class="form-group row">
-                    <div class="col-md-12 text-right">
-                        <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                            <i class="fas fa-paper-plane"></i>&nbsp;Asignar Roles
-                        </button>
-                        <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                            &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-                        </button>
-                        <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                    </div>
-                </div>
-            </div>
+    @include('users.partials.form-asignar')
+    <div class="form-group row font-roboto-12 abs-center">
+        <div class="col-md-6 text-right">
+            <button class="btn btn-outline-primary font-roboto-12" type="button" onclick="procesar();">
+                <i class="fas fa-paper-plane"></i>&nbsp;Actualizar
+            </button>
+            <button class="btn btn-outline-danger font-roboto-12" type="button" onclick="cancelar();">
+                &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
+            </button>
+            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>
-</div>
 @endsection
 @section('scripts')
     @parent
@@ -46,9 +35,11 @@
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            window.location.href = "{{ route('users.index') }}";
+            localStorage.clear();
+            var id = $("#empresa_id").val();
+            var url = "{{ route('users.index',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
     </script>
 @stop

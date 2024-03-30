@@ -18,7 +18,7 @@ use App\Models\PlanCuentaAuxiliar;
 use Auth;
 use PDF;
 use Luecano\NumeroALetras\NumeroALetras;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Log;
 
@@ -75,7 +75,7 @@ class ComprobanteController extends Controller
                                     ->orderBy('id','desc')
                                     ->paginate(10);
         return view('comprobantes.index', compact('icono','header','empresa','estados','tipos','comprobantes'));
-        
+
     }
 
     public function create($empresa_id)
@@ -120,7 +120,7 @@ class ComprobanteController extends Controller
                     'cargo_id' => $user != null ? $user->cargo_id : null,
                     'moneda_id' => $moneda->id,
                     'pais_id' => $moneda->pais_id,
-                    'nro' => $ultimo_comprobante['numero'], 
+                    'nro' => $ultimo_comprobante['numero'],
                     'nro_comprobante' => $ultimo_comprobante['nro_comprobante'],
                     'tipo_cambio' => $tipo_cambio->dolar_oficial,
                     'ufv' => $tipo_cambio->ufv,
@@ -156,10 +156,10 @@ class ComprobanteController extends Controller
                     ];
 
                     $comprobante_detalle = ComprobanteDetalle::create($datos_detalle);
-                    
+
                     $cont++;
                 }
-                
+
                 if($copia == '1'){
                     $comprobante_controller = new ComprobanteFController;
                     $comprobantef = $comprobante_controller->copiar_comprobante($comprobante);
@@ -186,40 +186,30 @@ class ComprobanteController extends Controller
 
     public function crearEncabezadoComprobante($datos_comprobante)
     {
-        $fecha_comprobante = date('Y-m-d', strtotime(str_replace('/', '-', $datos_comprobante['fecha_comprobante'])));
-        $tipo_cambio = TipoCambio::where('fecha',date('Y-m-d'))->first();
-        $empresa = Empresa::find($datos_comprobante['empresa_id']);
-        $moneda = Moneda::where('id',$datos_comprobante['moneda_id'])->first();
-        $user = User::where('id',Auth::user()->id)->first();
+        $fecha_comprobante = date('Y-m-d', strtotime(str_replace('/', '-', $datos_comprobante['fecha'])));
         $ultimo_comprobante = $this->ultimoComprobante($datos_comprobante['tipo'], $datos_comprobante['empresa_id'], $fecha_comprobante);
-        $copia = isset($datos_comprobante['copia']) ? '1' : '2';
         $datos = [
-            'empresa_id' => $empresa->id,
-            'cliente_id' => $empresa->cliente_id,
-            'tipo_cambio_id' => $tipo_cambio != null ? $tipo_cambio->id : null,
-            'user_id' => $user != null ? $user->id : 1,
-            'cargo_id' => $user != null ? $user->cargo_id : null,
-            'moneda_id' => $moneda->id,
-            'pais_id' => $moneda->pais_id,
-            'nro' => $ultimo_comprobante['numero'], 
+            'empresa_id' => $datos_comprobante['empresa_id'],
+            'cliente_id' => $datos_comprobante['cliente_id'],
+            'tipo_cambio_id' => $datos_comprobante['tipo_cambio_id'],
+            'user_id' => $datos_comprobante['user_id'],
+            'cargo_id' => $datos_comprobante['cargo_id'],
+            'moneda_id' => $datos_comprobante['moneda_id'],
+            'pais_id' => $datos_comprobante['pais_id'],
+            'nro' => $ultimo_comprobante['numero'],
             'nro_comprobante' => $ultimo_comprobante['nro_comprobante'],
-            'tipo_cambio' => $tipo_cambio != null ? $tipo_cambio->dolar_oficial : null,
-            'ufv' => $tipo_cambio != null ? $tipo_cambio->ufv : null,
+            'tipo_cambio' => $datos_comprobante['tipo_cambio'],
+            'ufv' => $datos_comprobante['ufv'],
             'tipo' => $datos_comprobante['tipo'],
             'entregado_recibido' => $datos_comprobante['entregado_recibido'],
             'fecha' => $fecha_comprobante,
             'concepto' => $datos_comprobante['concepto'],
-            'monto' => $datos_comprobante['monto_total'],
-            'moneda' => $moneda->alias,
-            'copia' => $copia,
-            'estado' => '1',
+            'monto' => $datos_comprobante['monto'],
+            'moneda' => $datos_comprobante['moneda'],
+            'copia' => $datos_comprobante['copia'],
+            'estado' => $datos_comprobante['estado']
         ];
         $comprobante = Comprobante::create($datos);
-        
-        if($copia == '1'){
-            $comprobante_controller = new ComprobanteFController;
-            $comprobantef = $comprobante_controller->copiar_comprobante($comprobante);
-        }
         return $comprobante;
     }
 
@@ -252,7 +242,7 @@ class ComprobanteController extends Controller
                                         ->first();
         return $primer_comprobante;
     }
-    
+
     public function tieneAuxiliar($plan_cuenta_id)
     {
         $plan_cuenta = PlanCuenta::find($plan_cuenta_id);
@@ -327,7 +317,7 @@ class ComprobanteController extends Controller
     }
 
     public function editar($comprobante_id)
-    {   
+    {
         $icono = self::ICONO;
         $header = self::EDITAR;
         $comprobante = Comprobante::find($comprobante_id);
@@ -388,12 +378,12 @@ class ComprobanteController extends Controller
                 ];
 
                 $comprobante_detalle = ComprobanteDetalle::create($datos_detalle);
-                
+
                 $cont++;
             }
 
             $monto_total = ComprobanteDetalle::select('debe')->where('comprobante_id',$comprobante->id)->where('estado','1')->get()->sum('debe');
-            
+
             $datos = [
                 'user_id' => $user != null ? $user->id : 1,
                 'cargo_id' => $user != null ? $user->cargo_id : null,
@@ -402,7 +392,7 @@ class ComprobanteController extends Controller
                 'monto' => $monto_total,
             ];
             $comprobante->update($datos);
-            
+
             return redirect()->route('comprobante.index',['empresa_id' => $comprobante->empresa_id])->with('info_message', 'Se actualizo el comprobante Nro, ' . $comprobante->nro_comprobante . '...');
         } catch (ValidationException $e) {
             return redirect()->route('comprobante.index',$request->empresa_id)

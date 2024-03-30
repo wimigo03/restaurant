@@ -213,9 +213,9 @@
                     var precio_final = precio_base + (porcentaje * precio_base / 100);
                 }else{
                     if(tipo_movimiento === '2'){
-                        var precio_final = precio_base - (porcentaje * precio_base / 100);    
+                        var precio_final = precio_base - (porcentaje * precio_base / 100);
                     }else{
-                        var precio_final = precio_base;    
+                        var precio_final = precio_base;
                     }
                 }
                 var precio_final_sus = precio_final / tipo_cambio;

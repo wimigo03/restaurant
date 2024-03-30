@@ -35,20 +35,20 @@
     </div>
     <div class="form-group row">
         <div class="col-md-3 px-0 pr-1 font-roboto-12">
-            <label for="auxiliar" class="d-inline">¿Es Auxiliar?</label>
-            <input type="checkbox" id="auxiliar" class="ml-2" name="auxiliar" {{ old('auxiliar') ? 'checked' : '' }}>
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-md-3 px-0 pr-1 font-roboto-12">
-            <label for="cheque" class="d-inline">¿Es con Cheque?</label>
-            <input type="checkbox" id="cheque" class="ml-2" name="cheque" {{ old('cheque') ? 'checked' : '' }}>
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-md-3 px-0 pr-1 font-roboto-12">
             <label for="detalle" class="d-inline">¿Es Cuenta Detalle?</label>
             <input type="checkbox" id="detalle" class="ml-2" name="detalle" {{ old('detalle') ? 'checked' : '' }}>
+        </div>
+    </div>
+    <div class="form-group row" id="cuenta_banco">
+        <div class="col-md-3 px-0 pr-1 font-roboto-12">
+            <label for="banco" class="d-inline">¿Es una Cuenta de Banco?</label>
+            <input type="checkbox" id="banco" class="ml-2" name="banco" {{ old('banco') ? 'checked' : '' }}>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3 px-0 pr-1 font-roboto-12">
+            <label for="auxiliar" class="d-inline">¿Es Auxiliar?</label>
+            <input type="checkbox" id="auxiliar" class="ml-2" name="auxiliar" {{ old('auxiliar') ? 'checked' : '' }}>
         </div>
     </div>
 </form>

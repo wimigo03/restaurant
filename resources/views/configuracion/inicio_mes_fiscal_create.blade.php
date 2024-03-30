@@ -3,7 +3,7 @@
 @section('content')
     @include('configuracion.partials.FormInicioMesFiscal')
     @if (count($anteriores) > 0)
-        @include('configuracion.partials.TableInicioMesFiscal')    
+        @include('configuracion.partials.TableInicioMesFiscal')
     @endif
 @endsection
 @section('scripts')
@@ -11,38 +11,59 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
+            $("#fecha_otro_sistema").hide();
+            if($("#pregunta_1 >option:selected").val() === "1"){
+                $("#fecha_otro_sistema").show();
+            }else{
+                $("#fecha_otro_sistema").hide();
+                document.getElementById('fecha').value = '';
+            }
+
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
                 width: '100%'
             });
 
-            $('#dia').select2({
+            $('#mes').select2({
                 theme: "bootstrap4",
-                placeholder: "--Seleccionar dia--",
+                placeholder: "--Seleccionar--",
                 width: '100%'
             });
 
-            $('#mes').select2({
-                theme: "bootstrap4",
-                placeholder: "--Seleccionar mes--",
-                width: '100%'
+            var cleave = new Cleave('#anho', {
+                numeral: true,
+                numeralThousandsGroupStyle: 'none',
+                numeralDecimalMark: '',
+                numeralDecimalScale: 0,
+                numeralIntegerScale: 4,
+                rawValueTrimPrefix: true
             });
 
             $("#fecha").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true,
             });
 
-            var fechaInput = document.getElementById('fecha');
-            if(fechaInput != null){
-                var cleave = new Cleave(fechaInput, {
+            var date = document.getElementById('fecha');
+            if(date != null){
+                var cleave = new Cleave(date, {
                     date: true,
                     datePattern: ['d', 'm', 'Y']
                 });
             }
         });
+
+        $('#pregunta_1').on('change', function() {
+                if($("#pregunta_1 >option:selected").val() === "1"){
+                    $("#fecha_otro_sistema").show();
+                }else{
+                    $("#fecha_otro_sistema").hide();
+                    document.getElementById('fecha').value = '';
+                }
+            }
+        );
 
         function alert(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
@@ -55,7 +76,7 @@
                 event.preventDefault();
             }
         });
-        
+
         function procesar() {
             if(!validar()){
                 return false;
@@ -84,7 +105,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('configuracion.index',':id') }}";

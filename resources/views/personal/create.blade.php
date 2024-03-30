@@ -59,7 +59,7 @@
             }else{
                 $("#form_fecha_contrato_fijo").hide();
             }
-            
+
             $('#myTabs a').on('click', function (e) {
                 e.preventDefault()
                 $(this).tab('show')
@@ -72,8 +72,8 @@
             });
 
             $("#fecha_nac").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true,
                 onSelect: function() {
                     var date = document.getElementById("fecha_nac").value;
@@ -88,26 +88,26 @@
             });
 
             $("#fecha_ingreso_fiscal").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true
             });
 
             $("#fecha_ingreso_interna").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true
             });
 
             $("#fecha_ingreso_servicio").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true
             });
 
             $("#fecha_contrato_fijo").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true
             });
 
@@ -175,7 +175,7 @@
 
             verificarObligatorio();
         });
-        
+
         $('#checkboxOne').change(function () {
             if ($(this).prop('checked')) {
                 $('#collapseOne').collapse('show');
@@ -358,12 +358,12 @@
                         var entrada_2 = item.entrada_2 !== null && item.entrada_2 !== '' ? item.entrada_2 : '';
                         var salida_2 = item.salida_2 !== null && item.salida_2 !== '' ? item.salida_2 : '';
                         $('#tabla-datos-oficina tbody').append(
-                            '<tr class="font-verdana-bg">' + 
-                                '<td class="text-left p-1">' + dia + '</td>' + 
-                                '<td class="text-center p-1">' + entrada_1 + '</td>' + 
-                                '<td class="text-center p-1">' + salida_1 + '</td>' + 
-                                '<td class="text-center p-1">' + entrada_2 + '</td>' + 
-                                '<td class="text-center p-1">' + salida_2 + '</td>' + 
+                            '<tr class="font-verdana-bg">' +
+                                '<td class="text-left p-1">' + dia + '</td>' +
+                                '<td class="text-center p-1">' + entrada_1 + '</td>' +
+                                '<td class="text-center p-1">' + salida_1 + '</td>' +
+                                '<td class="text-center p-1">' + entrada_2 + '</td>' +
+                                '<td class="text-center p-1">' + salida_2 + '</td>' +
                             '</tr>');
                     });
                 },
@@ -383,7 +383,7 @@
                 return false;
             }
             cargarTablaFamiliar();
-        } 
+        }
 
         function validarFamiliar(){
             if($("#nombre_familiar_input").val() == ""){
@@ -427,7 +427,7 @@
             var telefono_familiar = $("#telefono_familiar_input").val();
             var ocupacion_familiar = $("#ocupacion_familiar_input >option:selected").val();
             var nivel_estudio_familiar = $("#nivel_estudio_familiar_input >option:selected").val();
-            var fila = "<tr class='font-verdana'>"+ 
+            var fila = "<tr class='font-verdana'>"+
                             "<td class='text-left p-1'>"+
                                 "<input type='hidden' name='nombre_familiar[]' value='" + nombre_familiar + "'>" + nombre_familiar +
                             "</td>"+
@@ -448,13 +448,13 @@
                                 "<input type='hidden' name='nivel_estudio_familiar[]' value='" + nivel_estudio_familiar + "'>" + nivel_estudio_familiar +
                             "</td>"+
                             "<td class='text-center p-1'>"+
-                                "<span class='badge-with-padding badge badge-danger' onclick='eliminarItem(this);'>" + 
-                                      "<i class='fas fa-trash fa-fw'></i>" +  
+                                "<span class='badge-with-padding badge badge-danger' onclick='eliminarItem(this);'>" +
+                                      "<i class='fas fa-trash fa-fw'></i>" +
                                  "</span>" +
                             "</td>"
                         "</tr>";
 
-            $("#detalle_tabla").append(fila); 
+            $("#detalle_tabla").append(fila);
             document.getElementById('nombre_familiar_input').value = '';
             $('#tipo_familiar_input').val('').trigger('change');
             document.getElementById('edad_familiar_input').value = '';
@@ -463,8 +463,8 @@
             $('#ocupacion_familiar_input').val('').trigger('change');
             $('#nivel_estudio_familiar_input').val('').trigger('change');
         }
-        
-        function eliminarItem(thiss){                  
+
+        function eliminarItem(thiss){
             var tr = $(thiss).parents("tr:eq(0)");
             tr.remove();
         }
@@ -810,7 +810,7 @@
                     $("#obligatorio_afp_id").removeClass('select2-container--obligatorio');
                 }else{
                     $("#obligatorio_afp_id").addClass('select2-container--obligatorio');
-                }   
+                }
             }
 
             if($('#checkboxTwo').prop('checked')) {
@@ -845,7 +845,7 @@
                 }
             }
         }
-        
+
         function confirmar(){
             var url = "{{ route('personal.store') }}";
             $("#form").attr('action', url);
@@ -855,7 +855,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('personal.index',':id') }}";

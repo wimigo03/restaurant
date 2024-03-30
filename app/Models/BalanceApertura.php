@@ -25,8 +25,12 @@ class BalanceApertura extends Model
         'cargo_id',
         'comprobante_id',
         'tipo_cambio_id',
+        'inicio_mes_fiscal_id',
+        'configuracion_id',
+        'moneda_id',
+        'pais_id',
+        'user_autorizado_id',
         'gestion',
-        'base',
         'estado'
     ];
 
@@ -36,18 +40,14 @@ class BalanceApertura extends Model
         '3' => 'ANULADO'
     ];
 
-    const BASES = [
-        '1' => 'I',
-        '2' => 'F'
-    ];
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "PENDIENTE";
-            case '2': 
+            case '2':
                 return "APROBADO";
-            case '3': 
+            case '3':
                 return "ANULADO";
         }
     }
@@ -77,46 +77,7 @@ class BalanceApertura extends Model
     }
 
     public function scopeByEmpresa($query, $empresa_id){
-        if($empresa_id)  
+        if($empresa_id)
             return $query->where('empresa_id', $empresa_id);
     }
-
-    public function getNroComprobanteAttribute(){
-        if($this->base == 1){
-            $comprobante = Comprobante::select('nro_comprobante')->where('id',$this->comprobante_id)->first();
-        }else{
-            $comprobante = ComprobanteF::select('nro_comprobante')->where('id',$this->comprobante_id)->first();
-        }
-        return $comprobante->nro_comprobante;
-    }
-
-    /*public function scopeByNroComprobante($query, $nro_comprobante){
-        if($nro_comprobante)  
-            return $query->where('nro_comprobante', $nro_comprobante);
-    }
-
-    public function scopeByConcepto($query, $concepto){
-        if($concepto)  
-            return $query->where('concepto', 'like', '%' . $concepto . '%');
-    }
-
-    public function scopeByTipo($query, $tipo){
-        if($tipo)  
-            return $query->where('tipo', $tipo);
-    }
-
-    public function scopeByEstado($query, $estado){
-        if($estado)  
-            return $query->where('estado', $estado);
-    }
-
-    public function scopeByMonto($query, $monto){
-        if($monto)  
-            return $query->where('monto', 'like', '%' . $monto . '%');
-    }
-
-    public function scopeByCopia($query, $copia){
-        if($copia)  
-            return $query->where('copia', $copia);
-    }*/
 }

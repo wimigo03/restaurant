@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 <style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 11px;
-    }
-    .select2-results__option {
-        font-size: 13px;
-    }
     .obligatorio {
         border: 1px solid red !important;
     }
@@ -37,9 +31,39 @@
     <script>
         $(document).ready(function() {
             $("#fecha").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
-                autoClose: true,
+                inline: false,
+                dateFormat: "dd/mm/yy",
+                maxDate: 0,
+                autoClose: true
+            });
+
+            var cleave = new Cleave('#fecha', {
+                date: true,
+                datePattern: ['d', 'm', 'Y']
+            });
+
+            var cleave = new Cleave('#ufv', {
+                numeral: true,
+                numeralDecimalScale: 4,
+                numeralThousandsGroupStyle: 'thousand'
+            });
+
+            var cleave = new Cleave('#oficial', {
+                numeral: true,
+                numeralDecimalScale: 2,
+                numeralThousandsGroupStyle: 'thousand'
+            });
+
+            var cleave = new Cleave('#compra', {
+                numeral: true,
+                numeralDecimalScale: 2,
+                numeralThousandsGroupStyle: 'thousand'
+            });
+
+            var cleave = new Cleave('#venta', {
+                numeral: true,
+                numeralDecimalScale: 2,
+                numeralThousandsGroupStyle: 'thousand'
             });
 
             obligatorio();
@@ -56,33 +80,6 @@
                 event.preventDefault();
             }
         });
-
-        function countChars(obj){
-            var cont = obj.value.length;
-            if(cont > 9){
-                var date = document.getElementById("fecha").value;
-                if(!validarFecha(date)){
-                    document.getElementById('fecha').value = '';
-                }
-            }
-        }
-
-        function validarFecha(date) {
-            var regexFecha = /^\d{2}\/\d{2}\/\d{4}$/;
-            if (regexFecha.test(date)) {
-                var partesFecha = date.split('/');
-                var dia = parseInt(partesFecha[0], 10);
-                var mes = parseInt(partesFecha[1], 10);
-                var anio = parseInt(partesFecha[2], 10);
-                if (dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && anio >= 1900) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
 
         function obligatorio(){
             if($("#fecha").val() !== ""){
@@ -170,7 +167,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('tipo.cambio.index',':id') }}";

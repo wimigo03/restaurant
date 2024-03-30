@@ -57,8 +57,18 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-roboto-12">
-            {!! $mesas->links() !!}
+        <div class="row font-roboto-12">
+            <div class="col-md-6">
+                <p class="text- muted">Mostrando
+                    <strong>{{$mesas->count()}}</strong> registros de
+                    <strong>{{$mesas->total()}}</strong> totales
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end">
+                    {{ $mesas->appends(Request::all())->links() }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

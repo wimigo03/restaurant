@@ -37,8 +37,8 @@
     <script>
         $(document).ready(function() {
             $("#fecha").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true,
             });
 
@@ -170,7 +170,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('tipo.cambio.index',':id') }}";

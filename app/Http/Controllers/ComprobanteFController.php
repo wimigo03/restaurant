@@ -17,7 +17,7 @@ use App\Models\PlanCuentaAuxiliar;
 use Auth;
 use PDF;
 use Luecano\NumeroALetras\NumeroALetras;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use DB;
 
 class ComprobanteFController extends Controller
@@ -60,7 +60,7 @@ class ComprobanteFController extends Controller
                                     ->orderBy('id','desc')
                                     ->paginate(10);
         return view('comprobantesf.index', compact('icono','header','empresa','estados','tipos','comprobantes'));
-        
+
     }
 
     public function create($empresa_id)
@@ -109,7 +109,7 @@ class ComprobanteFController extends Controller
                 'cargo_id' => $user != null ? $user->cargo_id : null,
                 'moneda_id' => $moneda->id,
                 'pais_id' => $moneda->pais_id,
-                'nro' => $numero, 
+                'nro' => $numero,
                 'nro_comprobante' => $nro_comprobante,
                 'tipo_cambio' => $tipo_cambio->dolar_oficial,
                 'ufv' => $tipo_cambio->ufv,
@@ -144,10 +144,10 @@ class ComprobanteFController extends Controller
                 ];
 
                 $comprobante_detalle = ComprobanteFDetalle::create($datos_detalle);
-                
+
                 $cont++;
             }
-            
+
             return redirect()->route('comprobantef.index',['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó el comprobante Nro, ' . $comprobante->nro_comprobante . '...');
         } catch (ValidationException $e) {
             return redirect()->route('comprobantef.create',$request->empresa_id)
@@ -235,7 +235,7 @@ class ComprobanteFController extends Controller
     }
 
     public function editar($comprobante_id)
-    {   
+    {
         $icono = self::ICONO;
         $header = self::EDITAR;
         $comprobante = ComprobanteF::find($comprobante_id);
@@ -297,12 +297,12 @@ class ComprobanteFController extends Controller
                 ];
 
                 $comprobante_detalle = ComprobanteFDetalle::create($datos_detalle);
-                
+
                 $cont++;
             }
 
             $monto_total = ComprobanteFDetalle::select('debe')->where('comprobantef_id',$comprobante->id)->where('estado','1')->get()->sum('debe');
-            
+
             $datos = [
                 'user_id' => $user != null ? $user->id : 1,
                 'cargo_id' => $user != null ? $user->cargo_id : null,
@@ -311,7 +311,7 @@ class ComprobanteFController extends Controller
                 'monto' => $monto_total,
             ];
             $comprobante->update($datos);
-            
+
             return redirect()->route('comprobantef.index',['empresa_id' => $comprobante->empresa_id])->with('info_message', 'Se actualizo el comprobante Nro, ' . $comprobante->nro_comprobante . '...');
         } catch (ValidationException $e) {
             return redirect()->route('comprobantef.index',$request->empresa_id)
@@ -396,5 +396,52 @@ class ComprobanteFController extends Controller
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
+    }
+
+    public function crearEncabezadoComprobante($datos_comprobante)
+    {
+        $fecha_comprobante = date('Y-m-d', strtotime(str_replace('/', '-', $datos_comprobante['fecha'])));
+        $ultimo_comprobante = $this->ultimoComprobante($datos_comprobante['tipo'], $datos_comprobante['empresa_id'], $fecha_comprobante);
+        $datos = [
+            'comprobante_id' => $datos_comprobante['comprobante_id'],
+            'empresa_id' => $datos_comprobante['empresa_id'],
+            'cliente_id' => $datos_comprobante['cliente_id'],
+            'tipo_cambio_id' => $datos_comprobante['tipo_cambio_id'],
+            'user_id' => $datos_comprobante['user_id'],
+            'cargo_id' => $datos_comprobante['cargo_id'],
+            'moneda_id' => $datos_comprobante['moneda_id'],
+            'pais_id' => $datos_comprobante['pais_id'],
+            'nro' => $ultimo_comprobante['numero'],
+            'nro_comprobante' => $ultimo_comprobante['nro_comprobante'],
+            'tipo_cambio' => $datos_comprobante['tipo_cambio'],
+            'ufv' => $datos_comprobante['ufv'],
+            'tipo' => $datos_comprobante['tipo'],
+            'entregado_recibido' => $datos_comprobante['entregado_recibido'],
+            'fecha' => $fecha_comprobante,
+            'concepto' => $datos_comprobante['concepto'],
+            'monto' => $datos_comprobante['monto'],
+            'moneda' => $datos_comprobante['moneda'],
+            'estado' => $datos_comprobante['estado']
+        ];
+        $comprobante = ComprobanteF::create($datos);
+        return $comprobante;
+    }
+
+    public function ultimoComprobante($tipo,$empresa_id,$fecha)
+    {
+        $ultimoComprobante = ComprobanteF::where('tipo',$tipo)
+                                        ->where('empresa_id',$empresa_id)
+                                        ->whereMonth('fecha', date('m', strtotime($fecha)))
+                                        ->whereYear('fecha', date('Y', strtotime($fecha)))
+                                        ->orderBy('nro','desc')
+                                        ->first();
+        $numero = intval($ultimoComprobante != null ? $ultimoComprobante->nro : 0) + 1;
+        $codigo = ComprobanteF::TIPOS_ALIAS[$tipo];
+        $date = substr(date("Y", strtotime($fecha)),2) . date("m", strtotime($fecha));
+        $nro_comprobante = $codigo . '-' . $date . '-' . (str_pad($numero,3,"0",STR_PAD_LEFT));
+         return [
+            'numero' => $numero,
+            'nro_comprobante' => $nro_comprobante
+         ];
     }
 }

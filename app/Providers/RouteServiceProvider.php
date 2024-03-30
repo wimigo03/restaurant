@@ -99,6 +99,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::middleware('web')
             ->namespace($this->namespace)
+            ->group(base_path('routes/inicio-mes-fiscal-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
             ->group(base_path('routes/clientes-route.php'));
 
         Route::middleware('web')
@@ -184,5 +188,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/balance-apertura-route.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/balance-apertura-f-route.php'));
     }
 }

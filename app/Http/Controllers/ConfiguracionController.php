@@ -75,13 +75,16 @@ class ConfiguracionController extends Controller
         $icono = self::ICONO;
         $header = self::CREATE;
         $empresa = Empresa::find($empresa_id);
-        return view('configuracion.create', compact('icono','header','empresa'));
+        $tipos = configuracion::TIPOS;
+        return view('configuracion.create', compact('icono','header','empresa','tipos'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required'
+            'tipo' => 'required',
+            'nombre' => 'required',
+            'detalle' => 'required'
         ]);
         try{
             $empresa = Empresa::find($request->empresa_id);
@@ -89,10 +92,10 @@ class ConfiguracionController extends Controller
             $datos = [
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $empresa->cliente_id,
-                'user_id' => $user->id,
                 'nombre' => $request->nombre,
+                'tipo' => $request->tipo,
                 'detalle' => $request->detalle,
-                'estado' => '2'
+                'estado' => '1'
             ];
             $configuracion = Configuracion::create($datos);
 
@@ -104,19 +107,12 @@ class ConfiguracionController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($configuracion_id)
     {
-        $configuracion = Configuracion::find($id);
-        switch ($id){
-            case '1':
-                $icono = self::ICONO;
-                $header = self::INICIOMESFISCAL;
-                $empresa = Empresa::find($configuracion->empresa_id);
-                $dias = InicioMesFiscal::DIAS;
-                $meses = InicioMesFiscal::MESES;
-                $anteriores = InicioMesFiscal::where('configuracion_id',$id)->orderBy('id','desc')->get();
-                
-                return view('configuracion.inicio_mes_fiscal_create', compact('configuracion','icono','header','empresa','dias','meses','anteriores'));
+        $configuracion = Configuracion::find($configuracion_id);
+        switch ($configuracion->nombre){
+            case 'INICIO_MES_FISCAL':
+                return redirect()->route('inicio.mes.fiscal.create',$configuracion_id);
                 break;
         }
 
@@ -140,7 +136,7 @@ class ConfiguracionController extends Controller
         if($comprobante != null){
             return redirect()->back()->with('error_message','[ERROR EN OPERACION. EL COMPROBANTE NRO 1 YA EXISTE EN EL MES SELECCIONADO]')->withInput();
         }*/
-        
+
 
         try{
             $function = DB::transaction(function () use ($request) {

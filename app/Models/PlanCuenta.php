@@ -23,7 +23,7 @@ class PlanCuenta extends Model
         'nivel',
         'parent_id',
         'auxiliar',
-        'cheque',
+        'banco',
         'detalle',
         'estado'
     ];
@@ -44,9 +44,9 @@ class PlanCuenta extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }

@@ -72,8 +72,18 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-roboto-12">
-            {!! $sucursales->links() !!}
+        <div class="row font-roboto-12">
+            <div class="col-md-6">
+                <p class="text- muted">Mostrando
+                    <strong>{{$sucursales->count()}}</strong> registros de
+                    <strong>{{$sucursales->total()}}</strong> totales
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end">
+                    {{ $sucursales->appends(Request::all())->links() }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -68,8 +68,18 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-roboto-12">
-            {!! $productos->links() !!}
+        <div class="row font-roboto-12">
+            <div class="col-md-6">
+                <p class="text- muted">Mostrando
+                    <strong>{{$productos->count()}}</strong> registros de
+                    <strong>{{$productos->total()}}</strong> totales
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end">
+                    {{ $productos->appends(Request::all())->links() }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 <style>
-    .jstree li > a > .jstree-icon {  
-        display:none !important; 
+    .jstree li > a > .jstree-icon {
+        display:none !important;
     }
 
     #treeview {
-        min-height: 200px;            
+        min-height: 200px;
     }
     #contenido {
         min-height: 200px;
@@ -85,7 +85,7 @@
                 }
             });
         });
-        
+
         function datosPlanCuenta(id){
             $.ajax({
                 type: 'GET',
@@ -112,14 +112,16 @@
                         $("#btn_modificar").hide();
                     }
                     if(json.detalle === '1'){
+                        $("#btn_sub_master").hide();
                         $('#detalle').text('SI ES CUENTA DETALLE');
                     }else{
+                        $("#btn_sub_master").show();
                         $('#detalle').text('NO ES CUENTA DETALLE');
                     }
-                    if(json.cheque === '1'){
-                        $('#cheque').text('SI TIENE CHEQUE');
+                    if(json.banco === '1'){
+                        $('#banco').text('SI ES UNA CUENTA DE BANCO');
                     }else{
-                        $('#cheque').text('NO TIENE CHEQUE');
+                        $('#banco').text('NO ES UNA CUENTA DE BANCO');
                     }
                     if(json.auxiliar === '1'){
                         $('#auxiliar').text('SI TIENE AUXILIAR');

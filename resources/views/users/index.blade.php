@@ -9,76 +9,42 @@
     }
 </style>
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="card card-custom">
-            <div class="card-header font-verdana-bg bg-gradient-secondary text-white">
-                <b>USUARIOS</b>
-            </div>
-            <div class="card-body">
-                <form action="#" method="get" id="form">
-                    @include('users.partials.search')
-                </form>
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        {{--<span class="tts:right tts-slideIn tts-custom" aria-label="Registrar" style="cursor: pointer;">
-                            <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
-                                &nbsp;<i class="fas fa-plus"></i>&nbsp;
-                            </button>
-                        <span class="tts:left tts-slideIn tts-custom" aria-label="Ir empresas" style="cursor: pointer;">
-                        <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>--}}
-                    </div>
-                    <div class="col-md-6 pl-1 text-right">
-                        <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
-                            &nbsp;<i class="fas fa-search"></i>&nbsp;Buscar
-                        </button>
-                        <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
-                            &nbsp;<i class="fas fa-eraser"></i>&nbsp;Limpiar
-                        </button>
-                        <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                    </div>
-                </div>
-                @include('users.partials.table')
-            </div>
+    @include('users.partials.search')
+    <div class="form-group row">
+        <div class="col-md-12 px-0 pl-1 text-right">
+            <button class="btn btn-outline-primary font-verdana" type="button" onclick="search();">
+                &nbsp;<i class="fas fa-search"></i>&nbsp;Buscar
+            </button>
+            <button class="btn btn-outline-danger font-verdana" type="button" onclick="limpiar();">
+                &nbsp;<i class="fas fa-eraser"></i>&nbsp;Limpiar
+            </button>
+            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
         </div>
     </div>
-</div>
+    @include('users.partials.table')
 @endsection
 @section('scripts')
     @parent
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            $('#empresa_id').select2({
-                theme: "bootstrap4",
-                placeholder: "--Empresa--", 
-                width: '100%'
-            });
-
             $('#cargo_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Cargo--", 
+                placeholder: "--Cargo--",
                 width: '100%'
             });
 
             $('#role_id').select2({
                 theme: "bootstrap4",
-                placeholder: "--Role--", 
+                placeholder: "--Role--",
                 width: '100%'
             });
 
             $('#estado').select2({
                 theme: "bootstrap4",
-                placeholder: "--Estado--", 
+                placeholder: "--Estado--",
                 width: '100%'
             });
-
-            if($("#empresa_id >option:selected").val() != ''){
-                var id = $("#empresa_id >option:selected").val();
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                getCargos(id,CSRF_TOKEN);
-                getRoles(id,CSRF_TOKEN);
-            }
         });
 
         $('.intro').on('keypress', function(event) {
@@ -87,23 +53,25 @@
                 event.preventDefault();
             }
         });
-     
+
         function search(){
-            var url = "{{ route('users.search') }}";
+            var id = $("#empresa_id").val();
+            var url = "{{ route('users.search',':id') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn-send").show();
+            url = url.replace(':id',id);
+            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
             localStorage.clear();
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            window.location.href = "{{ route('users.index') }}";
+            var id = $("#empresa_id").val();
+            var url = "{{ route('users.index',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
 
-        $('#empresa_id').change(function() {
+        /*$('#empresa_id').change(function() {
             var id = $(this).val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             getCargos(id,CSRF_TOKEN);
@@ -174,6 +142,6 @@
                     console.log(xhr.responseText);
                 }
             });
-        }
+        }*/
     </script>
 @stop

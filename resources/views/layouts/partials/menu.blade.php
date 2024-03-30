@@ -1,5 +1,43 @@
 <div class="nav-menu font-roboto-15">
     <ul>
+        @canany(['clientes.index','users.index','roles.index','permissions.index'])
+            <li>
+                <a href="" data-toggle="collapse" data-target="#dashboard_setting" class="active collapsed" aria-expanded="false">
+                    <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Administracion
+                    <span class="fa fa-arrow-circle-left float-right"></span>
+                </a>
+                <ul class="sub-menu collapse" id="dashboard_setting">
+                    @can('clientes.index')
+                        <li>
+                            <a href="{{ route('clientes.index') }}">
+                                &nbsp;&nbsp;<i class="fas fa-address-card fa-fw mr-2"></i>&nbsp;Clientes
+                            </a>
+                        </li>
+                    @endcan
+                    @can('users.index')
+                        <li>
+                            <a href="{{ route('users.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fas fa-users fa-fw mr-2"></i>&nbsp;Usuarios
+                            </a>
+                        </li>
+                    @endcan
+                    @can('roles.index')
+                        <li>
+                            <a href="{{ route('roles.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fas fa-user-shield fa-fw mr-2"></i>&nbsp;Roles
+                            </a>
+                        </li>
+                    @endcan
+                    @can('permissions.index')
+                        <li>
+                            <a href="{{ route('permissions.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fas fa-user-cog fa-fw mr-2"></i>&nbsp;Permisos
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcanany
         @can('configuracion.index')
             <li>
                 <a href="{{ route('configuracion.indexAfter') }}">
@@ -14,6 +52,13 @@
                     <span class="fa fa-arrow-circle-left float-right"></span>
                 </a>
                 <ul class="sub-menu collapse" id="dashboard_contabilidad">
+                    @can('comprobante.index')
+                        <li>
+                            <a href="{{ route('comprobante.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fa-solid fa-file-invoice-dollar fa-fw mr-2"></i>&nbsp;Comprobantes
+                            </a>
+                        </li>
+                    @endcan
                     @can('balance.apertura.index')
                         <li>
                             <a href="{{ route('balance.apertura.indexAfter') }}">
@@ -90,13 +135,6 @@
                             </a>
                         </li>
                     @endcan
-                    @can('comprobante.index')
-                        <li>
-                            <a href="{{ route('comprobante.indexAfter') }}">
-                                &nbsp;&nbsp;<i class="fa-solid fa-file-invoice-dollar fa-fw mr-2"></i>&nbsp;Comprobantes
-                            </a>
-                        </li>
-                    @endcan
                 </ul>
             </li>
         @endcanany
@@ -146,44 +184,6 @@
                         <li>
                             <a href="{{ route('personal.indexAfter') }}">
                                 &nbsp;&nbsp;<i class="fas fa-user-friends fa-fw mr-2"></i>&nbsp;Personal
-                            </a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcanany
-        @canany(['clientes.index','users.index','roles.index','permissions.index'])
-            <li>
-                <a href="" data-toggle="collapse" data-target="#dashboard_setting" class="active collapsed" aria-expanded="false">
-                    <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Administrar
-                    <span class="fa fa-arrow-circle-left float-right"></span>
-                </a>
-                <ul class="sub-menu collapse" id="dashboard_setting">
-                    @can('clientes.index')
-                        <li>
-                            <a href="{{ route('clientes.index') }}">
-                                &nbsp;&nbsp;<i class="fas fa-address-card fa-fw mr-2"></i>&nbsp;Clientes
-                            </a>
-                        </li>
-                    @endcan
-                    @can('users.index')
-                        <li>
-                            <a href="{{ route('users.index') }}">
-                                &nbsp;&nbsp;<i class="fas fa-users fa-fw mr-2"></i>&nbsp;Listar
-                            </a>
-                        </li>
-                    @endcan
-                    @can('roles.index')
-                        <li>
-                            <a href="{{ route('roles.indexAfter') }}">
-                                &nbsp;&nbsp;<i class="fas fa-user-shield fa-fw mr-2"></i>&nbsp;Roles
-                            </a>
-                        </li>
-                    @endcan
-                    @can('permissions.index')
-                        <li>
-                            <a href="{{ route('permissions.index') }}">
-                                &nbsp;&nbsp;<i class="fas fa-user-cog fa-fw mr-2"></i>&nbsp;Permisos
                             </a>
                         </li>
                     @endcan

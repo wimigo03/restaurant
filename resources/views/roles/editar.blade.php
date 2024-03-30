@@ -31,6 +31,19 @@
             }
         }
 
+        $('#modulo_id').change(function() {
+            var id = $(this).val();
+            search(id);
+        });
+
+        function search(){
+            var id = $("#empresa_id").val();
+            var url = "{{ route('roles.editar',':id') }}";
+            $("#form_search").attr('action', url);
+            url = url.replace(':id',id);
+            window.location.href = url;
+            $("#form_search").submit();
+        }
         function procesar() {
             var url = "{{ route('roles.update') }}";
             $("#form").attr('action', url);
@@ -40,8 +53,6 @@
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('roles.index',':id') }}";
             url = url.replace(':id',id);

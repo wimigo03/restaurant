@@ -74,8 +74,8 @@
             });
 
             $("#fecha").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true,
             });
 
@@ -320,42 +320,42 @@
             var debe = $("#debe").val() != '' ? $("#debe").val() : 0;
             var haber = $("#haber").val() != '' ? $("#haber").val() : 0;
             var glosa = $("#glosa").val();
-            var fila = "<tr class='font-roboto-11'>"+ 
+            var fila = "<tr class='font-roboto-11'>"+
                             "<td class='text-left p-1'>"+
                                     rowCount +
                             "</td>"+
                             "<td class='text-left p-1'>"+
-                                "<input type='hidden' name='sucursal_id[]' value='" + sucursal_id + "'>" + 
+                                "<input type='hidden' name='sucursal_id[]' value='" + sucursal_id + "'>" +
                                     sucursal +
                             "</td>"+
                             "<td class='text-left p-1'>"+
-                                "<input type='hidden' name='plan_cuenta_id[]' value='" + plan_cuenta_id + "'>" + 
+                                "<input type='hidden' name='plan_cuenta_id[]' value='" + plan_cuenta_id + "'>" +
                                     plan_cuenta +
                             "</td>"+
                             "<td class='text-left p-1'>"+
-                                "<input type='hidden' name='auxiliar_id[]' value='" + auxiliar_id + "'>" + 
+                                "<input type='hidden' name='auxiliar_id[]' value='" + auxiliar_id + "'>" +
                                     auxiliar +
                             "</td>"+
                             "<td class='text-left p-1'>"+
-                                "<input type='hidden' name='glosa[]' value='" + glosa + "'>" + 
+                                "<input type='hidden' name='glosa[]' value='" + glosa + "'>" +
                                     glosa +
                             "</td>"+
                             "<td class='text-right p-1'>"+
-                                "<input type='hidden' name='debe[]' value='" + debe + "'>" + 
+                                "<input type='hidden' name='debe[]' value='" + debe + "'>" +
                                     debe +
                             "</td>"+
                             "<td class='text-right p-1'>"+
-                                "<input type='hidden' name='haber[]' value='" + haber + "'>" + 
+                                "<input type='hidden' name='haber[]' value='" + haber + "'>" +
                                     haber +
                             "</td>"+
                             "<td class='text-center p-1'>"+
-                                "<span class='badge-with-padding badge badge-danger' onclick='eliminarItem(this);'>" + 
-                                      "<i class='fas fa-trash fa-fw'></i>" +  
+                                "<span class='badge-with-padding badge badge-danger' onclick='eliminarItem(this);'>" +
+                                      "<i class='fas fa-trash fa-fw'></i>" +
                                  "</span>" +
                             "</td>"
                         "</tr>";
 
-            $("#tabla_comprobante_detalle").append(fila); 
+            $("#tabla_comprobante_detalle").append(fila);
             document.getElementById("tfoot").style.display = "table-footer-group";
             $('#sucursal_id').val('').trigger('change');
             $('#plan_cuenta_id').val('').trigger('change');
@@ -369,7 +369,7 @@
             sumar_haber();
         }
 
-        function eliminarItem(thiss){                  
+        function eliminarItem(thiss){
             var tr = $(thiss).parents("tr:eq(0)");
             tr.remove();
             sumar_debe();
@@ -407,7 +407,7 @@
             }
             return true;
         }
-        
+
         function procesar() {
             if(!validar()){
                 return false;
@@ -506,7 +506,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('comprobantef.index',':id') }}";

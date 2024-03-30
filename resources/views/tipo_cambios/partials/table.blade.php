@@ -26,7 +26,7 @@
                         <td class="text-right p-1">{{ $datos->dolar_venta }}</td>
                         <td class="text-center p-1">
                             <span class="tts:left tts-slideIn tts-custom" aria-label="@if($datos->status == "H") HABILITADO @else DESHABILITADO @endif" style="cursor: pointer;">
-                                <span class="badge-with-padding @if($datos->status == "H") badge badge-success @else badge badge-danger @endif">
+                                <span class="badge-with-padding @if($datos->status == "HABILITADO") badge badge-success @else badge badge-danger @endif">
                                     &nbsp;{{ $datos->status }}&nbsp;
                                 </span>
                             </span>
@@ -46,8 +46,18 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-roboto-12">
-            {!! $tipo_cambios->links() !!}
+        <div class="row font-roboto-12">
+            <div class="col-md-6">
+                <p class="text- muted">Mostrando
+                    <strong>{{$tipo_cambios->count()}}</strong> registros de
+                    <strong>{{$tipo_cambios->total()}}</strong> totales
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end">
+                    {{ $tipo_cambios->appends(Request::all())->links() }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

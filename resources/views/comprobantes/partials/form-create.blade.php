@@ -18,11 +18,13 @@
             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
             <input type="text" value="{{ Auth::user()->username }}" id="username" class="form-control font-roboto-12" disabled>
         </div>
-        <div class="col-md-3 px-0 pl-1 font-roboto-12 text-center">
-            <br>
-            <label for="copia" class="d-inline">¿Con Copia?</label>
-            <input type="checkbox" id="copia" class="ml-2" name="copia" {{ old('copia') ? 'checked' : '' }}>
-        </div>
+        @can('comprobantef.create')
+            <div class="col-md-3 px-0 pl-1 font-roboto-12 text-center">
+                <br>
+                <label for="copia" class="d-inline">¿Con Copia?</label>
+                <input type="checkbox" id="copia" class="ml-2" name="copia" {{ old('copia') ? 'checked' : '' }}>
+            </div>
+        @endcan
     </div>
     <div class="form-group row">
         <div class="col-md-2 px-0 pr-1 font-roboto-12">
@@ -163,7 +165,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
                 <tfoot id="tfoot">
                     <tr class="font-roboto-11">

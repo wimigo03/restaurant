@@ -34,14 +34,14 @@
             });
 
             $("#fecha_i").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true,
             });
 
             $("#fecha_f").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true,
             });
         });

@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
-<style>
-
-</style>
 @section('content')
     <div class="form-group row">
         <div class="col-md-2 px-0 pr-1 font-roboto-13">
@@ -65,26 +62,28 @@
     </div>
     <div class="form-group row">
         <div class="col-md-6 px-0 pr-1 font-verdana-bg">
-            @if ($comprobantef != null)
-                @can('comprobantef.show')
-                    <span class="tts:right tts-slideIn tts-custom" aria-label="Ir" style="cursor: pointer;">
-                        <a href="{{ route('comprobantef.show',$comprobantef->id) }}">
-                            <span class="badge-with-padding
-                                @if($comprobantef->estado == "1")
-                                    badge badge-secondary
-                                @else
-                                    @if($comprobantef->estado == "2")
-                                        badge badge-success
+            @can('comprobantef.show')
+                @if ($comprobantef != null)
+                    @can('comprobantef.show')
+                        <span class="tts:right tts-slideIn tts-custom" aria-label="Ir" style="cursor: pointer;">
+                            <a href="{{ route('comprobantef.show',$comprobantef->id) }}">
+                                <span class="badge-with-padding
+                                    @if($comprobantef->estado == "1")
+                                        badge badge-secondary
                                     @else
-                                        badge badge-danger
-                                    @endif
-                                @endif">
-                                {{ $comprobantef->nro_comprobante }}
-                            </span>
-                        </a>
-                    </span>
-                @endcan
-            @endif
+                                        @if($comprobantef->estado == "2")
+                                            badge badge-success
+                                        @else
+                                            badge badge-danger
+                                        @endif
+                                    @endif">
+                                    {{ $comprobantef->nro_comprobante }}
+                                </span>
+                            </a>
+                        </span>
+                    @endcan
+                @endif
+            @endcan
         </div>
         <div class="col-md-6 px-0 pl-1 font-verdana-bg text-right">
             @can('comprobante.pdf')
@@ -207,8 +206,6 @@
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('comprobante.index',':id') }}";
             url = url.replace(':id',id);

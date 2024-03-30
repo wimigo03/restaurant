@@ -2,12 +2,14 @@
     <div class="form-group row font-roboto-12 abs-center">
         <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_id">
         <div class="col-md-1 px-0 pr-1">
-            <br>
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Cambiar" style="cursor: pointer;">
-                <button class="btn btn-outline-warning font-verdana" type="button" onclick="cambiari();">
-                    <i class="fa-solid fa-file-invoice-dollar fa-fw"></i>
-                </button>
-            </span>
+            @can('libro.mayor.cuenta.general.index')
+                <br>
+                <span class="tts:right tts-slideIn tts-custom" aria-label="Cambiar" style="cursor: pointer;">
+                    <button class="btn btn-outline-secondary font-roboto-12" type="button" onclick="cambiari();">
+                        <i class="fa-solid fa-file-invoice-dollar fa-fw"></i>
+                    </button>
+                </span>
+            @endcan
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="fecha_i" class="d-inline">Fecha Inicial</label>

@@ -13,14 +13,19 @@ use App\Models\Categoria;
 use App\Models\Horario;
 use App\Models\HorarioDetalle;
 use App\Models\PlanCuenta;
+use App\Models\Modulo;
+use App\Models\EmpresaModulo;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use DB;
 use Auth;
 
 class EmpresaController extends Controller
 {
-    public function index($id)
+    public function index($empresa_id)
     {
-        $empresas = Empresa::where('cliente_id',$id)->paginate(10);
-        $cliente = Cliente::find($id);
+        $empresas = Empresa::where('cliente_id',$empresa_id)->paginate(10);
+        $cliente = Cliente::find($empresa_id);
         $estados = Empresa::ESTADOS;
         return view('empresas.index', compact('empresas','cliente','estados'));
     }
@@ -28,16 +33,13 @@ class EmpresaController extends Controller
     public function search(Request $request)
     {
         dd($request->all());
-        //$empresas = Empresa::where('cliente_id',$id)->paginate(10);
-        //$cliente = Cliente::find($id);
-        //$estados = Empresa::ESTADOS;
-        //return view('empresas.index', compact('empresas','cliente','estados'));
     }
 
-    public function create($id)
+    public function create($cliente_id)
     {
-        $cliente = Cliente::find($id);
-        return view('empresas.create', compact('cliente'));
+        $cliente = Cliente::find($cliente_id);
+        $modulos = Modulo::where('estado','1')->pluck('nombre','id');
+        return view('empresas.create', compact('cliente','modulos'));
     }
 
     public function store(Request $request)
@@ -72,6 +74,19 @@ class EmpresaController extends Controller
                 'url_cover' => 'uploads/empresas/' . $empresa->id . '/logos/' . $cover
             ]);
 
+            $cont = 0;
+            while($cont < count($request->modulo_id)){
+                $empresa_modulo = EmpresaModulo::create([
+                    'empresa_id' => $empresa->id,
+                    'cliente_id' => $request->cliente_id,
+                    'modulo_id' => $request->modulo_id[$cont],
+                    'fecha_registro' => date('Y-m-d'),
+                    'estado' => '1'
+                ]);
+
+                $cont++;
+            }
+
             $cargo = Cargo::create([
                 'empresa_id' => $empresa->id,
                 'cliente_id' => $request->cliente_id,
@@ -86,7 +101,7 @@ class EmpresaController extends Controller
                 'tipo' => '2',
                 'estado' => '1'
             ]);
-            
+
             $username = substr($request->nombre_comercial, 0, 5);
             $username_minus = strtolower($username);
             $user = User::create([
@@ -165,9 +180,11 @@ class EmpresaController extends Controller
 
     public function editar($empresa_id)
     {
-        $empresa = Empresa::find($empresa_id);
-        $cliente = Cliente::find($empresa->cliente_id);
-        return view('empresas.editar', compact('empresa','cliente'));
+        $empresa_cliente = Empresa::find($empresa_id);
+        $cliente = Cliente::find($empresa_cliente->cliente_id);
+        $modulos = Modulo::where('estado','1')->pluck('nombre','id');
+        $modulos_empresas = EmpresaModulo::where('empresa_id',$empresa_id)->get();
+        return view('empresas.editar', compact('empresa_cliente','cliente','modulos','modulos_empresas'));
     }
 
     public function update(Request $request)
@@ -182,20 +199,103 @@ class EmpresaController extends Controller
             $logo = isset($request->logo) ? 'logo.'.pathinfo($request->logo->getClientOriginalName(), PATHINFO_EXTENSION) : null;
             $cover = isset($request->cover) ? 'cover.'.pathinfo($request->cover->getClientOriginalName(), PATHINFO_EXTENSION) : null;
             $empresa = Empresa::find($request->empresa_id);
-            $empresa->update([
+            $datos = [
                 'cliente_id' => $request->cliente_id,
                 'nombre_comercial' => $request->nombre_comercial,
-                'url_logo' => $logo,
                 'direccion' => $request->direccion,
                 'telefono' => $request->telefono,
-                'url_cover' => $cover,
-                'estado' => '1'
+                'alias' => $request->alias
+            ];
+
+            if(count($request->modulo_id) > 0){
+                $cont = 0;
+                while($cont < count($request->modulo_id)){
+                    $empresa_modulo = EmpresaModulo::create([
+                        'empresa_id' => $empresa->id,
+                        'cliente_id' => $request->cliente_id,
+                        'modulo_id' => $request->modulo_id[$cont],
+                        'fecha_registro' => date('Y-m-d'),
+                        'estado' => '1'
+                    ]);
+
+                    $cont++;
+                }
+            }
+            $empresa->update($datos);
+            if($logo != null){
+                $empresa->update([
+                    'url_logo' => 'uploads/empresas/' . $empresa->id . '/logos/' . $logo,
                 ]);
-            $logo = isset($request->logo) ? $request->logo->move(public_path('uploads/empresas/' . $empresa->id . '/img/'), $logo) : null;
-            $cover = isset($request->cover) ? $request->cover->move(public_path('uploads/empresas/' . $empresa->id . '/img/'), $cover) : null;
+            }
+
+            if($cover != null){
+                $empresa->update([
+                    'url_cover' => 'uploads/empresas/' . $empresa->id . '/logos/' . $cover,
+                ]);
+            }
+
+            $logo = isset($request->logo) ? $request->logo->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $logo) : null;
+            $cover = isset($request->cover) ? $request->cover->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $cover) : null;
             return redirect()->route('empresas.index',$request->cliente_id)->with('success_message', 'Se modifico una empresa correctamente.');
         } catch (ValidationException $e) {
             return redirect()->route('empresas.update',$request->cliente_id)
+                ->withErrors($e->validator->errors())
+                ->withInput();
+        }
+    }
+
+    public function modulo_habilitar($empresa_modulo_id)
+    {
+        try{
+            $empresa_modulo = EmpresaModulo::find($empresa_modulo_id);
+            $empresa_modulo->update([
+                'estado' => '1'
+            ]);
+            return redirect()->route('empresas.editar',$empresa_modulo->empresa_id)->with('success_message', '[MODULO HABILITADO].');
+        } catch (ValidationException $e) {
+            return redirect()->route('empresas.editar',$empresa_modulo->empresa_id)
+                ->withErrors($e->validator->errors())
+                ->withInput();
+        }
+    }
+
+    public function modulo_deshabilitar($empresa_modulo_id)
+    {
+        try{
+            $empresa_modulo = EmpresaModulo::find($empresa_modulo_id);
+            $empresa_modulo->update([
+                'estado' => '2'
+            ]);
+
+            $roles_permissions = DB::table('role_has_permissions')
+                                        ->where('empresa_id',$empresa_modulo->empresa_id)
+                                        ->where('modulo_id',$empresa_modulo->modulo_id)
+                                        ->select('role_id')
+                                        ->groupBy('role_id')
+                                        ->get();
+            if($roles_permissions != null){
+                foreach ($roles_permissions as $role_permission) {
+                    $role = Role::find($role_permission->role_id);
+                    $roles_permissions = DB::table('role_has_permissions')
+                                        ->where('role_id',$role_permission->role_id)
+                                        ->where('empresa_id',$empresa_modulo->empresa_id)
+                                        ->where('modulo_id','!=',$empresa_modulo->modulo_id)
+                                        ->get();
+                    if(count($roles_permissions) > 0){
+                        foreach($roles_permissions as $datos){
+                            $permission[] = $datos->permission_id;
+                        }
+                        $role->permissions()->sync($permission);
+                    }else{
+                        $role->permissions()->sync(null);
+                    }
+                }
+            }
+            app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+            return redirect()->route('empresas.editar',$empresa_modulo->empresa_id)->with('success_message', '[MODULO DESHABILITADO].');
+        } catch (ValidationException $e) {
+            return redirect()->route('empresas.editar',$empresa_modulo->empresa_id)
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }

@@ -1,9 +1,8 @@
 <div class="form-group row">
-    <div class="col-md-12 table-responsive">
-        <table class="table display table-bordered responsive" style="width:100%;">
+    <div class="col-md-12">
+        <table class="table display responsive table-striped hover-orange">
             <thead>
-                <tr class="font-verdana-bg">
-                    <td class="text-left p-1"><b>EMPRESA</b></td>
+                <tr class="font-roboto-12">
                     <td class="text-left p-1"><b>CARGO</b></td>
                     <td class="text-left p-1"><b>ROLES</b></td>
                     <td class="text-left p-1"><b>NOMBRE</b></td>
@@ -17,8 +16,7 @@
             </thead>
             <tbody>
                 @foreach ($users as $datos)
-                    <tr class="font-verdana-bg">
-                        <td class="text-left p-1">{{ $datos->empresa->alias }}</td>
+                    <tr class="font-roboto-12">
                         <td class="text-left p-1">{{ $datos->cargo != null ? $datos->cargo->nombre : '#' }}</td>
                         <td class="text-left p-1">
                             @php
@@ -38,30 +36,30 @@
                             <td class="text-center p-1">
                                 @can('users.editar')
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">
-                                        <a href="{{ route('users.editar',$datos->id) }}" class="text-warning">
-                                            <i class="fas fa-lg fa-edit"></i>
+                                        <a href="{{ route('users.editar',$datos->id) }}" class="badge-with-padding badge badge-warning">
+                                            <i class="fas fa-edit fa-fw"></i>
                                         </a>
                                     </span>
                                 @endcan
                                 @can('users.habilitar')
                                     @if (App\Models\User::ESTADOS[$datos->estado] == 'HABILITADO')
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Dehabilitar" style="cursor: pointer;">
-                                            <a href="{{ route('users.deshabilitar',$datos->id) }}" class="text-danger">
-                                                <i class="fas fa-lg fa-arrow-alt-circle-down"></i>
+                                            <a href="{{ route('users.deshabilitar',$datos->id) }}" class="badge-with-padding badge badge-danger">
+                                                <i class="fas fa-arrow-alt-circle-down fa-fw"></i>
                                             </a>
                                         </span>
                                     @else
                                         <span class="tts:left tts-slideIn tts-custom" aria-label="Habilitar" style="cursor: pointer;">
-                                            <a href="{{ route('users.habilitar',$datos->id) }}" class="text-success">
-                                                <i class="fas fa-lg fa-arrow-alt-circle-up"></i>
+                                            <a href="{{ route('users.habilitar',$datos->id) }}" class="badge-with-padding badge badge-success">
+                                                <i class="fas fa-arrow-alt-circle-up fa-fw"></i>
                                             </a>
                                         </span>
                                     @endif
                                 @endcan
                                 @can('users.asignar')
-                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Asignar Roles" style="cursor: pointer;">
-                                        <a href="{{ route('users.asignar',$datos->id) }}" class="text-primary">
-                                            <i class="fas fa-lg fa-users"></i>
+                                    <span class="tts:left tts-slideIn tts-custom" aria-label="Actualizar Roles" style="cursor: pointer;">
+                                        <a href="{{ route('users.asignar',$datos->id) }}" class="badge-with-padding badge badge-primary">
+                                            <i class="fas fa-users fa-fw"></i>
                                         </a>
                                     </span>
                                 @endcan
@@ -71,8 +69,18 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-verdana-bg">
-            {!! $users->links() !!}
+        <div class="row font-roboto-12">
+            <div class="col-md-6">
+                <p class="text- muted">Mostrando
+                    <strong>{{$users->count()}}</strong> registros de
+                    <strong>{{$users->total()}}</strong> totales
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end">
+                    {{ $users->appends(Request::all())->links() }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ Route::prefix('roles')->name('roles.')->middleware(['auth:sanctum',config('jetst
     Route::get('/get_datos_by_empresa', 'RoleController@getDatosByEmpresa')->name('get.datos.by.empresa');
     Route::get('/create/{empresa_id}', 'RoleController@create')->name('create')->middleware('can:roles.create');
     Route::post('/store', 'RoleController@store')->name('store')->middleware('can:roles.create');
-    Route::get('/editar/{id}', 'RoleController@editar')->name('editar')->middleware('can:roles.editar');
+    Route::get('/editar_index/{id}', 'RoleController@editar_index')->name('editar_index')->middleware('can:roles.editar');
+    Route::get('/editar/{empresa_id}', 'RoleController@editar')->name('editar')->middleware('can:roles.editar');
     Route::post('/update', 'RoleController@update')->name('update')->middleware('can:roles.editar');
 });

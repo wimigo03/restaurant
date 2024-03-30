@@ -28,7 +28,7 @@
                 <form action="#" method="post" id="form">
                     @csrf
                     <input type="hidden" name="personal_laboral_id" value="{{ $personal_laboral->id }}" id="personal_laboral_id">
-                    <input type="hidden" name="personal_id" value="{{ $personal->id }}" id="personal_id"> 
+                    <input type="hidden" name="personal_id" value="{{ $personal->id }}" id="personal_id">
                     <input type="hidden" name="tipo" value="{{ $tipo }}" id="tipo">
                     <input type="hidden" value="{{ $empresa->id }}" id="empresa_id">
                     <div class="form-group row pr-1 abs-center font-verdana-bg">
@@ -83,8 +83,8 @@
     <script>
         $(document).ready(function() {
             $("#fecha_retiro").datepicker({
-                inline: false, 
-                dateFormat: "dd/mm/yyyy",
+                inline: false,
+                dateFormat: "dd/mm/yy",
                 autoClose: true
             });
         });
@@ -135,7 +135,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('personal.index',':id') }}";

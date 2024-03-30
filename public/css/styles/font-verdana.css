@@ -4,7 +4,7 @@
 .datepicker{
 	z-index:9999 !important
 	}
-	  
+
 .bg-gradient-warning {
 	background-color: #f6c23e;
 	background-image: linear-gradient(180deg,#f6c23e 10%,#dda20a 100%);
@@ -39,18 +39,27 @@
 .font-roboto-13 {font-size: 13px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
 .font-roboto-14 {font-size: 14px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
 .font-roboto-15 {font-size: 15px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-16 {font-size: 16px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-17 {font-size: 17px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-18 {font-size: 18px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-19 {font-size: 19px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
+.font-roboto-20 {font-size: 20px; font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";}
 
 .abs-center {
 	display: flex;
 	justify-content: center;
-	}
-.select2-container {
-	font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-	font-size: 12px;
-	width: 150px;
-	height: 30px;
-	padding-right: 0px;
 }
+
+/**SELECT2 CONTENIDO*/
+.select2 + .select2-container .select2-selection__rendered {
+    font-size: 11px;
+  }
+
+  .select2-results__option {
+    font-size: 11px;
+  }
+/***/
+
 /*Ondular los laterales*/
 .tts-custom {
 	--tts-shadow: 0 5px 10px rgb(0 0 0 / 20%);

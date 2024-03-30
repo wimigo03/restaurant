@@ -52,7 +52,7 @@ class TipoCambioController extends Controller
                                 ->orderBy('id','desc')
                                 ->paginate(10);
         return view('tipo_cambios.index', compact('icono','header','empresa','estados','tipo_cambios'));
-        
+
     }
 
     public function create($empresa_id)
@@ -60,7 +60,12 @@ class TipoCambioController extends Controller
         $icono = self::ICONO;
         $header = self::CREATE;
         $empresa = Empresa::find($empresa_id);
-        return view('tipo_cambios.create', compact('icono','header','empresa'));
+        $cambio_anterior = TipoCambio::where('fecha','<',date('Y-m-d'))
+                                        ->where('empresa_id',$empresa_id)
+                                        ->where('estado','1')
+                                        ->orderBy('fecha','desc')
+                                        ->first();
+        return view('tipo_cambios.create', compact('icono','header','empresa','cambio_anterior'));
     }
 
     public function store(Request $request)
@@ -72,10 +77,14 @@ class TipoCambioController extends Controller
             'compra' => 'required',
             'venta' => 'required'
         ]);
+
         $fecha = date('Y-m-d', strtotime(str_replace('/', '-', $request->fecha)));
+        if($fecha > date('Y-m-d')){
+            return redirect()->back()->with('info_message', 'La fecha introducida es mayor a la fecha actual.')->withInput();
+        }
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
         if($tipo_cambio != null){
-            return redirect()->back()->with('info_message', 'Ya existe un tipo de cambio para la [FECHA] seleccionada...');
+            return redirect()->back()->with('info_message', 'Ya existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
         try{
             $empresa = Empresa::find($request->empresa_id);
@@ -83,10 +92,10 @@ class TipoCambioController extends Controller
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $empresa->cliente_id,
                 'fecha' => $fecha,
-                'ufv' => $request->ufv,
-                'dolar_oficial' => $request->oficial,
-                'dolar_compra' => $request->compra,
-                'dolar_venta' => $request->venta,
+                'ufv' => floatval(str_replace(",", "", $request->ufv)),
+                'dolar_oficial' => floatval(str_replace(",", "", $request->oficial)),
+                'dolar_compra' => floatval(str_replace(",", "", $request->compra)),
+                'dolar_venta' => floatval(str_replace(",", "", $request->venta)),
                 'estado' => '1'
             ];
             $cambio = TipoCambio::create($datos);

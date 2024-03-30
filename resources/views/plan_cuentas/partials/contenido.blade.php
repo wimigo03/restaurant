@@ -32,10 +32,10 @@
 </div>
 <div class="form-group row">
     <div class="col-md-4 pr-1 font-roboto-12 text-right">
-        <label for="cheque" class="d-inline">¿Tiene Cheque? </label>
+        <label for="banco" class="d-inline">¿Es Cuenta de Banco? </label>
     </div>
     <div class="col-md-8 pl-1 font-roboto-12">
-        <span class="font-roboto-12" id="cheque"></span>
+        <span class="font-roboto-12" id="banco"></span>
     </div>
 </div>
 <div class="form-group row">

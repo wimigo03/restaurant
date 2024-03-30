@@ -32,12 +32,17 @@
         });
 
         function search(){
-            
+
+        }
+
+        function cambiarf(){
+            var id = $("#empresa_id").val();
+            var url = "{{ route('balance.apertura.f.index',':id') }}";
+            url = url.replace(':id',id);
+            window.location.href = url;
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('balance.apertura.index',':id') }}";
             url = url.replace(':id',id);
@@ -45,8 +50,6 @@
         }
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val()
             var url = "{{ route('balance.apertura.create',':id') }}";
             url = url.replace(':id',id);

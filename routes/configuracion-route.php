@@ -7,5 +7,5 @@ Route::prefix('configuracion')->name('configuracion.')->middleware(['auth:sanctu
     Route::get('/create/{empresa_id}', 'ConfiguracionController@create')->name('create')->middleware('can:configuracion.create');
     Route::post('/store', 'ConfiguracionController@store')->name('store')->middleware('can:configuracion.create');
     Route::get('/show/{configuracion_id}', 'ConfiguracionController@show')->name('show')->middleware('can:configuracion.show');
-    Route::post('/inicio_mes_fiscal_create_store', 'ConfiguracionController@inicioMesFiscalCreateStore')->name('inicio.mes.fiscal.store')->middleware('can:configuracion.show');
+    //Route::post('/inicio_mes_fiscal_create_store', 'ConfiguracionController@inicioMesFiscalCreateStore')->name('inicio.mes.fiscal.store')->middleware('can:configuracion.show');
 });

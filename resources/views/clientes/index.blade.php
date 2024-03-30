@@ -1,35 +1,31 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="card card-custom">
-            <div class="card-header font-verdana-bg">
-                <b>CLIENTES</b>
-            </div>
-            <div class="card-body">
-                {{--@can('clientes.create')
-                    <div class="form-group row">
-                        <div class="col-md-12 text-right">
-                            <button class="btn btn-outline-success font-verdana" type="button" onclick="create();">
-                                &nbsp;<i class="fas fa-plus"></i>&nbsp;Registrar
-                            </button>
-                            <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-                        </div>
+    <div class="form-group row">
+        <div class="col-md-12">
+            <div class="card-header header">
+                <div class="row">
+                    <div class="col-md-10 font-roboto-17" style="display: flex; align-items: flex-end;">
+                        <span class="btn btn-sm btn-outline-dark font-roboto-12" id="toggleSubMenu" style="cursor: pointer;">
+                            <i class="fas fa-address-card fa-fw fa-beat"></i>
+                        </span>&nbsp;
+                        <b>CLIENTES</b>
                     </div>
-                @endcan--}}
-                @include('clientes.partials.table')
+                    <div class="col-md-2">
+                        &nbsp;
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    @include('clientes.partials.table')
 @endsection
 @section('scripts')
     @parent
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            
+
         });
 
         function create(){

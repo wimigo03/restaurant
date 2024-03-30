@@ -23,14 +23,14 @@
                         <td class="text-center p-1">{{ $datos->empresa->alias }}</td>
                         <td class="text-right p-1">{{ number_format($datos->monto,2,'.',',') }}</td>
                         <td class="text-center p-1">
-                            <span class="badge-with-padding 
-                                @if($datos->status == "PENDIENTE") 
-                                    badge badge-secondary 
-                                @else 
-                                    @if($datos->status == "APROBADO") 
-                                        badge badge-success 
-                                    @else 
-                                        badge badge-danger 
+                            <span class="badge-with-padding
+                                @if($datos->status == "PENDIENTE")
+                                    badge badge-secondary
+                                @else
+                                    @if($datos->status == "APROBADO")
+                                        badge badge-success
+                                    @else
+                                        badge badge-danger
                                     @endif
                                 @endif">
                                 {{ $datos->status }}
@@ -59,7 +59,7 @@
                                                 <i class="fas fa-edit fa-fw"></i>
                                             </a>
                                         </span>
-                                    @endcan    
+                                    @endcan
                                 @else
                                     <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar No Permitido" style="cursor: pointer;">
                                         <a href="#" class="badge-with-padding badge badge-secondary">
@@ -73,8 +73,18 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-end font-roboto-12">
-            {!! $comprobantes->links() !!}
+        <div class="row font-roboto-12">
+            <div class="col-md-6">
+                <p class="text- muted">Mostrando
+                    <strong>{{$comprobantes->count()}}</strong> registros de
+                    <strong>{{$comprobantes->total()}}</strong> totales
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end">
+                    {{ $comprobantes->appends(Request::all())->links() }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
