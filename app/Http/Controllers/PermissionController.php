@@ -92,7 +92,7 @@ class PermissionController extends Controller
             'descripcion' => 'required',
         ]);
         try{
-            $titulo = $request->titulo = '_NUEVO_' ? $request->nuevo_titulo : $request->titulo;
+            $titulo = $request->titulo == '_NUEVO_' ? $request->nuevo_titulo : $request->titulo;
             $empresa = Empresa::find($request->empresa_id);
             $permission = Permission::create([
                 'empresa_id' => $empresa->id,

@@ -13,18 +13,18 @@
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="fecha_i" class="d-inline">Fecha Inicial</label>
-            <input type="text" name="fecha_i" value="{{ request('fecha_i') }}" id="fecha_i" placeholder="(desde) - dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
+            <input type="text" name="fecha_i" value="{{ request('fecha_i') }}" id="fecha_i" placeholder="dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="fecha_f" class="d-inline">Fecha Final</label>
-            <input type="text" name="fecha_f" value="{{ request('fecha_f') }}" id="fecha_f" placeholder="(hasta) - dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
+            <input type="text" name="fecha_f" value="{{ request('fecha_f') }}" id="fecha_f" placeholder="dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="estado" class="d-inline">Estado</label>
             <select name="estado" id="estado" class="form-control select2">
-                <option value='_todos_' @if(request('estado') == '_todos_') selected @endif>Todos</option>
-                <option value='2' @if(request('estado') == '2') selected @endif>Solo Aprobados</option>
-                <option value="1" @if(request('estado') == '1') selected @endif>Solo Pendientes</option>
+                <option value='_todos_' @if(request('estado') == '_todos_') selected @endif>TODOS</option>
+                <option value='2' @if(request('estado') == '2') selected @endif>SOLO APROBADOS</option>
+                <option value="1" @if(request('estado') == '1') selected @endif>SOLO PENDIENTES</option>
             </select>
         </div>
         <div class="col-md-3 px-0 pl-1 text-right">

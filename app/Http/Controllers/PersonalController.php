@@ -73,7 +73,7 @@ class PersonalController extends Controller
                                                 ->orderBy('id','desc')
                                                 ->paginate(10);
         return view('personal.index', compact('icono','header','empresa','cargos','estados','personal_laborales'));
-        
+
     }
 
     public function create($id)
@@ -94,7 +94,7 @@ class PersonalController extends Controller
         $tipo_familiares = Familiar::TIPO_FAMILIARES;
         $ocupaciones = Familiar::OCUPACIONES;
         $niveles_estudio = Familiar::NIVELES_ESTUDIO;
-        return view('personal.create', 
+        return view('personal.create',
                 compact('icono',
                         'header',
                         'empresa',
@@ -344,7 +344,7 @@ class PersonalController extends Controller
             ]);
 
             $personal_laboral = PersonalLaboral::create($datos_personal_laboral);
-            
+
             if($request->fiscal != null){
                 $datos_personal_fiscal = ([
                     'personal_id' => $personal->id,
@@ -403,7 +403,10 @@ class PersonalController extends Controller
             $datos_auxiliar = ([
                 'empresa_id' => $request->empresa_id,
                 'cliente_id' => $empresa->cliente_id,
+                'user_id' => $user->id,
                 'nombre' => $personal->primer_nombre . ' ' . $personal->apellido_paterno . ' ' . $personal->apellido_materno,
+                'class_name' => Personal::class,
+                'class_name_id' => $personal->id,
                 'tipo' => '1',
                 'estado' => '1'
             ]);
@@ -432,7 +435,7 @@ class PersonalController extends Controller
         $tipo_familiares = Familiar::TIPO_FAMILIARES;
         $ocupaciones = Familiar::OCUPACIONES;
         $niveles_estudio = Familiar::NIVELES_ESTUDIO;
-        return view('personal.editar', 
+        return view('personal.editar',
                 compact('icono',
                         'header',
                         'personal',
@@ -519,7 +522,7 @@ class PersonalController extends Controller
         ]);
         try{
             $personal_laboral = PersonalLaboral::find($request->personal_laboral_id);
-            $personal = Personal::find($request->personal_id); 
+            $personal = Personal::find($request->personal_id);
             $empresa = Empresa::find($personal->empresa_id);
             $contrato_id = PersonalContrato::where('personal_id',$request->personal_id)->where('tipo',$request->tipo)->where('codigo_retiro',null)->first()->id;
             $personal_contrato = PersonalContrato::find($contrato_id);

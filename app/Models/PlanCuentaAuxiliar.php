@@ -15,6 +15,7 @@ class PlanCuentaAuxiliar extends Model
     protected $fillable = [
         'empresa_id',
         'cliente_id',
+        'user_id',
         'nombre',
         'class_name',
         'class_name_id',
@@ -34,18 +35,18 @@ class PlanCuentaAuxiliar extends Model
 
     public function getStatusAttribute(){
         switch ($this->estado) {
-            case '1': 
+            case '1':
                 return "HABILITADO";
-            case '2': 
+            case '2':
                 return "NO HABILITADO";
         }
     }
 
     public function getTipusAttribute(){
         switch ($this->tipo) {
-            case '1': 
+            case '1':
                 return "AUTOMATICO";
-            case '2': 
+            case '2':
                 return "MANUAL";
         }
     }
@@ -59,22 +60,22 @@ class PlanCuentaAuxiliar extends Model
     }
 
     public function scopeByEmpresa($query, $empresa_id){
-        if($empresa_id)  
+        if($empresa_id)
             return $query->where('empresa_id', $empresa_id);
     }
 
     public function scopeByNombre($query, $nombre){
-        if($nombre)  
+        if($nombre)
             return $query->where('nombre', 'like', '%'.$nombre.'%');
     }
 
     public function scopeByTipo($query, $tipo){
-        if($tipo)  
+        if($tipo)
             return $query->where('tipo', $tipo);
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado)  
+        if($estado)
             return $query->where('estado', $estado);
     }
 }

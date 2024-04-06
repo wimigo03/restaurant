@@ -10,15 +10,13 @@
         <div class="col-md-12">
             <div class="card-header header">
                 <div class="row">
-                    <div class="col-md-4 font-roboto-14" style="display: flex; align-items: flex-end;">
+                    <div class="col-md-8 font-roboto-17" style="display: flex; align-items: flex-end;">
+                        <span class="btn btn-sm btn-outline-dark font-roboto-12" id="toggleSubMenu" style="cursor: pointer;">
+                            <i class="fas fa-user-friends fa-fw fa-beat"></i>
+                        </span>&nbsp;
                         <b>PLAN CUENTAS AUXILIARES</b>
                     </div>
-                    <div class="col-md-4 text-center">
-                        <span class="btns btn btn-sm btn-outline-dark font-verdana" id="toggleSubMenu" style="cursor: pointer;">
-                            <i class="fas fa-user-friends fa-fw fa-beat"></i>
-                        </span>
-                    </div>
-                    <div class="col-md-4 empresa-id-select-container">
+                    <div class="col-md-4 empresa-id-select-container font-roboto-12">
                         <form action="#" method="get" id="form_estructura">
                             <select name="empresa_id" id="empresa_id" class="form-control">
                                 <option value="">-</option>

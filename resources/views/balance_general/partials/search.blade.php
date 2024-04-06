@@ -13,11 +13,11 @@
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="fecha_i" class="d-inline">Fecha Inicial</label>
-            <input type="text" name="fecha_i" value="{{ request('fecha_i') }}" id="fecha_i" placeholder="(desde) - dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
+            <input type="text" name="fecha_i" value="{{ request('fecha_i') }}" id="fecha_i" placeholder="dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="fecha_f" class="d-inline">Fecha Final</label>
-            <input type="text" name="fecha_f" value="{{ request('fecha_f') }}" id="fecha_f" placeholder="(hasta) - dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
+            <input type="text" name="fecha_f" value="{{ request('fecha_f') }}" id="fecha_f" placeholder="dd/mm/aaaa" class="form-control font-roboto-12" data-language="es">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <label for="estado" class="d-inline">Estado</label>
