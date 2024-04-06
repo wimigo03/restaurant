@@ -1,13 +1,5 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
-<style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 13px;
-    }
-    .select2-results__option {
-        font-size: 13px;
-    }
-</style>
 @section('content')
     @include('comprobantesf.partials.search')
     <div class="form-group row">
@@ -133,8 +125,6 @@
         });
 
         function comprobantes(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val()
             var url = "{{ route('comprobante.index',':id') }}";
             url = url.replace(':id',id);
@@ -142,8 +132,6 @@
         }
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val()
             var url = "{{ route('comprobantef.create',':id') }}";
             url = url.replace(':id',id);
@@ -151,8 +139,6 @@
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('comprobantef.search',':id') }}";
             $("#form").attr('action', url);
@@ -162,8 +148,6 @@
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('comprobantef.index',':id') }}";
             url = url.replace(':id',id);

@@ -3,6 +3,7 @@
     <input type="hidden" name="fecha_i" value="{{ request('fecha_i') }}">
     <input type="hidden" name="fecha_f" value="{{ request('fecha_f') }}">
     <input type="hidden" name="plan_cuenta_id" value="{{ request('plan_cuenta_id') }}">
+    <input type="hidden" name="estado" value="{{ request('estado') }}">
 </form>
 <div class="form-group row font-roboto-12">
     <div class="col-md-1 px-0 pr-1">

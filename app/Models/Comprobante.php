@@ -47,6 +47,11 @@ class Comprobante extends Model
         '4' => 'ELIMINADO',
     ];
 
+    const ESTADOS_SEARCH = [
+        '1' => 'PENDIENTES',
+        '2' => 'APROBADOS'
+    ];
+
     const TIPOS = [
         '1' => 'INGRESO',
         '2' => 'EGRESO',

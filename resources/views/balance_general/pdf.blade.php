@@ -1,54 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>REPORTE::PI-RESTO</title>
     <style>
-        html {
-            margin: 20px 50px 30px 50px;
-        }
-
-        body {
-            font-family: verdana,arial,helvetica;
-            font-size: 10px;
-        }
-
-        .table {
-            border-collapse: collapse;
-            border: 1px solid black;
-        }
-
-        .table td, th {
-            padding: 5px;
-        }
-
-        .page_break{
-            page-break-before: always;
-        }
+        <?php echo file_get_contents(public_path('css/styles/font-verdana-pdf.css')); ?>
     </style>
     <body>
-        <table width="100%">
+        <table>
             <tr>
-                <td align="center" valign="bottom">
-                    <font size="13px">
-                        <b>
-                            _*BALANCE GENERAL*_
-                            <br>
-                            AL {{ \Carbon\Carbon::parse($fecha_f)->format('d/m/Y') }}
-                        </b>
-                    </font>
+                <td width="25%" class="font-verdana-6 align-center">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($empresa->url_cover))) }}" class="logo-callejx" alt="#"/>
+                    <br>
+                    {{ $empresa->nombre_comercial }}
+                    <br>
+                    {{ $empresa->direccion }} - NIT {{ $empresa->nit }}
+                </td>
+                <td class="font-verdana-15 align-center align-middle align-inferior">
+                    <b>
+                        _*BALANCE GENERAL*_
+                        <br>
+                        AL {{ \Carbon\Carbon::parse($fecha_f)->format('d/m/Y') }}
+                    </b>
+                </td>
+                <td width="25%" class="font-verdana-9 align-center align-superior">
+                    &nbsp;
                 </td>
             </tr>
         </table>
-        <br>
-        <table width="100%" class="table">
-            <tr style="border-bottom: 1px solid #000000;">
-                <td><font size="9px"><b>CODIGO</b></font></td>
-                <td><font size="9px"><b>CUENTA</b></font></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
+        <table class="font-verdana-9">
+            <thead class="linea-inferior">
+                <tr>
+                    <th>CODIGO</th>
+                    <th>CUENTA</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
             @foreach ($ingresos as $ing)
                 @php
                     $nroPuntos = 1;
@@ -59,28 +49,14 @@
                     }
                     $nroColumna = $nroMaxColumna - $nroPuntos;
                 @endphp
-                <tr style="border-bottom: 1px solid #ccc;">
-                    <td>
-                        <font size="9px">
-                            <b>
-                                {{ $ing->codigo }}
-                            </b>
-                        </font>
-                    </td>
-                    <td>
-                        <font size="9px">
-                            <b>
-                                {{ $ing->nombre  }}
-                            </b>
-                        </font>
-                    </td>
+                <tr class="sub-linea-inferior">
+                    <td>{{ $ing->codigo }}</td>
+                    <td>{{ $ing->nombre }}</td>
                     @for ($i = 0; $i < $nroColumna; $i++)
                         <td></td>
                     @endfor
-                    <td align="right">
-                        <font size="9px">
-                            {{ number_format($totales[$ing->id],2,'.',',') }}
-                        </font>
+                    <td class="align-right">
+                        {{ number_format($totales[$ing->id],2,'.',',') }}
                     </td>
                     @php
                         $nroColumna = $nroMaxColumna - $nroColumna -1;
@@ -100,28 +76,14 @@
                     }
                     $nroColumna = $nroMaxColumna - $nroPuntos;
                 @endphp
-                <tr style="border-bottom: 1px solid #ccc;">
-                    <td>
-                        <font size="9px">
-                            <b>
-                                {{ $costo->codigo }}
-                            </b>
-                        </font>
-                    </td>
-                    <td>
-                        <font size="9px">
-                            <b>
-                                {{ $costo->nombre  }}
-                            </b>
-                        </font>
-                    </td>
+                <tr class="sub-linea-inferior">
+                    <td>{{ $costo->codigo }}</td>
+                    <td>{{ $costo->nombre }}</td>
                     @for ($i = 0; $i < $nroColumna; $i++)
                         <td></td>
                     @endfor
-                    <td align="right">
-                        <font size="9px">
-                            {{ number_format($totales[$costo->id],2,'.',',') }}
-                        </font>
+                    <td class="align-right">
+                        {{ number_format($totales[$costo->id],2,'.',',') }}
                     </td>
                     @php
                         $nroColumna = $nroMaxColumna - $nroColumna - 1;
@@ -141,28 +103,14 @@
                     }
                     $nroColumna = $nroMaxColumna - $nroPuntos;
                 @endphp
-                <tr style="border-bottom: 1px solid #ccc;">
-                    <td>
-                        <font size="9px">
-                            <b>
-                                {{ $gasto->codigo }}
-                            </b>
-                        </font>
-                    </td>
-                    <td>
-                        <font size="9px">
-                            <b>
-                                {{ $gasto->nombre  }}
-                            </b>
-                        </font>
-                    </td>
+                <tr class="sub-linea-inferior">
+                    <td>{{ $gasto->codigo }}</td>
+                    <td>{{ $gasto->nombre }}</td>
                     @for ($i = 0; $i < $nroColumna; $i++)
                         <td></td>
                     @endfor
-                    <td align="right">
-                        <font size="9px">
-                            {{ number_format($totales[$gasto->id],2,'.',',') }}
-                        </font>
+                    <td class="align-right">
+                        {{ number_format($totales[$gasto->id],2,'.',',') }}
                     </td>
                     @php
                         $nroColumna = $nroMaxColumna - $nroColumna - 1;
@@ -178,8 +126,8 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td><font size="9px"><b>TOTAL</b></font></td>
-                <td align="right"><font size="9px"><b>{{ number_format($total,2,'.',',') }}</b></font></td>
+                <td><b>TOTAL</b></td>
+                <td class="align-right">{{ number_format($total,2,'.',',') }}</td>
             </tr>
         </table>
     </body>

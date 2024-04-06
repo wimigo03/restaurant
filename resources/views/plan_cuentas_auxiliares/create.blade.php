@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 <style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 11px;
-    }
-    .select2-results__option {
-        font-size: 13px;
-    }
     .obligatorio {
         border: 1px solid red !important;
     }
@@ -48,6 +42,13 @@
             $('#modal-alert').modal({keyboard: false});
         }
 
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                procesar();
+                event.preventDefault();
+            }
+        });
+
         function procesar() {
             if(!validar()){
                 return false;
@@ -74,7 +75,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('plan_cuentas.auxiliar.index',':id') }}";

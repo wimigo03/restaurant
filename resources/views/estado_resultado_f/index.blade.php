@@ -47,8 +47,6 @@
         });
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('estado.resultado.f.search',':id') }}";
             $("#form").attr('action', url);
@@ -58,8 +56,6 @@
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('estado.resultado.f.index',':id') }}";
             url = url.replace(':id',id);

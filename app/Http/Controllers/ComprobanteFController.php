@@ -75,7 +75,11 @@ class ComprobanteFController extends Controller
         $monedas = Moneda::where('estado','1')->orderBy('id','desc')->pluck('nombre','id');
         $tipos = ComprobanteF::TIPOS;
         $sucursales = Sucursal::where('empresa_id',$empresa_id)->pluck('nombre','id');
-        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')->where('detalle','1')->where('estado','1')->pluck('cuenta_contable','id');
+        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->where('empresa_id',$empresa_id)
+                                        ->pluck('cuenta_contable','id');
         $plan_cuentas_auxiliares = PlanCuentaAuxiliar::where('estado','1')->pluck('nombre','id');
         return view('comprobantesf.create', compact('icono','header','empresa','tipo_cambio','monedas','tipos','sucursales','plan_cuentas','plan_cuentas_auxiliares'));
     }
@@ -244,7 +248,11 @@ class ComprobanteFController extends Controller
         $total_haber = $comprobante_detalles->sum('haber');
         $empresa = Empresa::find($comprobante->empresa_id);
         $sucursales = Sucursal::where('empresa_id',$comprobante->empresa_id)->pluck('nombre','id');
-        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')->where('detalle','1')->where('estado','1')->pluck('cuenta_contable','id');
+        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->where('empresa_id',$comprobante->empresa_id)
+                                        ->pluck('cuenta_contable','id');
         $plan_cuentas_auxiliares = PlanCuentaAuxiliar::where('estado','1')->pluck('nombre','id');
         return view('comprobantesf.editar', compact('icono','header','comprobante','comprobante_detalles','total_debe','total_haber','empresa','sucursales','plan_cuentas','plan_cuentas_auxiliares'));
     }

@@ -90,7 +90,11 @@ class ComprobanteController extends Controller
         $monedas = Moneda::where('estado','1')->orderBy('id','desc')->pluck('nombre','id');
         $tipos = Comprobante::TIPOS;
         $sucursales = Sucursal::where('empresa_id',$empresa_id)->pluck('nombre','id');
-        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')->where('detalle','1')->where('estado','1')->pluck('cuenta_contable','id');
+        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->where('empresa_id',$empresa_id)
+                                        ->pluck('cuenta_contable','id');
         $plan_cuentas_auxiliares = PlanCuentaAuxiliar::where('estado','1')->pluck('nombre','id');
         return view('comprobantes.create', compact('icono','header','empresa','tipo_cambio','monedas','tipos','sucursales','plan_cuentas','plan_cuentas_auxiliares'));
     }
@@ -306,7 +310,11 @@ class ComprobanteController extends Controller
     public function pdf($comprobante_id)
     {
         $comprobante = Comprobante::find($comprobante_id);
-        $comprobante_detalles = ComprobanteDetalle::where('comprobante_id',$comprobante_id)->where('estado','1')->orderBy('id','desc')->get();
+        $comprobante_detalles = ComprobanteDetalle::where('comprobante_id',$comprobante_id)
+                                                    ->where('estado','1')
+                                                    ->orderBy('debe','desc')
+                                                    ->orderBy('plan_cuenta_id','asc')
+                                                    ->get();
         $total_debe = $comprobante_detalles->sum('debe');
         $total_haber = $comprobante_detalles->sum('haber');
         $numero_letras = new NumeroALetras();
@@ -326,7 +334,11 @@ class ComprobanteController extends Controller
         $total_haber = $comprobante_detalles->sum('haber');
         $empresa = Empresa::find($comprobante->empresa_id);
         $sucursales = Sucursal::where('empresa_id',$comprobante->empresa_id)->pluck('nombre','id');
-        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')->where('detalle','1')->where('estado','1')->pluck('cuenta_contable','id');
+        $plan_cuentas = PlanCuenta::select(DB::raw('concat(codigo," ",nombre) as cuenta_contable'),'id')
+                                        ->where('detalle','1')
+                                        ->where('estado','1')
+                                        ->where('empresa_id',$comprobante->empresa_id)
+                                        ->pluck('cuenta_contable','id');
         $plan_cuentas_auxiliares = PlanCuentaAuxiliar::where('estado','1')->pluck('nombre','id');
         return view('comprobantes.editar', compact('icono','header','comprobante','comprobante_detalles','total_debe','total_haber','empresa','sucursales','plan_cuentas','plan_cuentas_auxiliares'));
     }

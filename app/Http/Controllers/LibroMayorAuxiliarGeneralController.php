@@ -38,7 +38,8 @@ class LibroMayorAuxiliarGeneralController extends Controller
         $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
         $auxiliares = PlanCuentaAuxiliar::where('estado','1')->pluck('nombre','id');
-        return view('libro_mayor_auxiliar_general.index', compact('icono','header','empresa','auxiliares'));
+        $estados_comprobantes = Comprobante::ESTADOS_SEARCH;
+        return view('libro_mayor_auxiliar_general.index', compact('icono','header','empresa','auxiliares','estados_comprobantes'));
     }
 
     public function search(Request $request)
@@ -49,11 +50,11 @@ class LibroMayorAuxiliarGeneralController extends Controller
         $fecha_i = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->fecha_i)));
         $fecha_f = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $request->fecha_f)));
         $plan_cuenta_auxiliar_id = $request->plan_cuenta_auxiliar_id;
-
+        $estados = $request->estado == '_TODOS_' ? ['1','2'] : [$request->estado];
         try{
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $libro_mayor_auxiliar_general = $this->procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id);
+                $libro_mayor_auxiliar_general = $this->procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id,$estados);
                 $comprobantes = $libro_mayor_auxiliar_general['comprobantes'];
                 $empresa = $libro_mayor_auxiliar_general['empresa'];
                 $plan_cuenta_auxiliar = $libro_mayor_auxiliar_general['plan_cuenta_auxiliar'];
@@ -70,7 +71,7 @@ class LibroMayorAuxiliarGeneralController extends Controller
         }
     }
 
-    public function procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id){
+    public function procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id,$estados){
         $comprobantes = DB::table('comprobante_detalles as a')
                                 ->join('comprobantes as b','b.id','a.comprobante_id')
                                 ->join('plan_cuentas as c','c.id','a.plan_cuenta_id')
@@ -79,6 +80,7 @@ class LibroMayorAuxiliarGeneralController extends Controller
                                 ->where('a.plan_cuenta_auxiliar_id',$plan_cuenta_auxiliar_id)
                                 ->where('b.empresa_id',$empresa_id)
                                 ->where('a.estado','1')
+                                ->whereIn('b.estado',$estados)
                                 ->select(
                                         DB::raw("DATE_FORMAT(b.fecha,'%d/%m/%Y') as fecha"),
                                         'b.nro_comprobante',
@@ -104,7 +106,7 @@ class LibroMayorAuxiliarGeneralController extends Controller
 
         $empresa = Empresa::find($empresa_id);
         $plan_cuenta_auxiliar = PlanCuentaAuxiliar::find($plan_cuenta_auxiliar_id);
-        $saldo = $this->obtenerSaldoPorAuxiliar($fecha_i, $plan_cuenta_auxiliar_id, $empresa_id);
+        $saldo = $this->obtenerSaldoPorAuxiliar($fecha_i,$plan_cuenta_auxiliar_id,$empresa_id,$estados);
         $saldo_final = $saldo;
         $total_debe = $comprobantes->sum('debe');
         $total_haber = $comprobantes->sum('haber');
@@ -120,12 +122,12 @@ class LibroMayorAuxiliarGeneralController extends Controller
         ];
     }
 
-    public function obtenerSaldoPorAuxiliar($fecha_i, $plan_cuenta_auxiliar_id, $empresa_id){
+    public function obtenerSaldoPorAuxiliar($fecha_i,$plan_cuenta_auxiliar_id,$empresa_id,$estados){
         $saldo = 0;
-        $inicio_mes_fiscal = InicioMesFiscal::select('dia','mes')->where('empresa_id',$empresa_id)->where('estado','1')->first();
+        $inicio_mes_fiscal = InicioMesFiscal::select('mes')->where('empresa_id',$empresa_id)->where('estado','1')->first();
         $anho = date("Y", strtotime($fecha_i));
         $mes = $inicio_mes_fiscal->mes;
-        $dia = $inicio_mes_fiscal->dia;
+        $dia = '01';
         $inicio_gestion = $anho . '-' . $mes .'-'. $dia . ' 00:00:00';
         $fecha_final = date('Y-m-d 23:59:59', strtotime($fecha_i) - 86400);
         if($fecha_final <= $inicio_gestion){
@@ -140,7 +142,7 @@ class LibroMayorAuxiliarGeneralController extends Controller
                                 ->whereBetween('b.fecha',[$fecha_inicial,$fecha_final])
                                 ->where('b.empresa_id',$empresa_id)
                                 ->where('a.estado','1')
-                                //->where('b.estado','2')
+                                ->whereIn('b.estado',$estados)
                                 ->select('a.debe','a.haber')
                                 ->get();
         $saldo = $sumar_restar->sum('debe') - $sumar_restar->sum('haber');
@@ -152,11 +154,11 @@ class LibroMayorAuxiliarGeneralController extends Controller
         $fecha_i = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->fecha_i)));
         $fecha_f = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $request->fecha_f)));
         $plan_cuenta_auxiliar_id = $request->plan_cuenta_auxiliar_id;
-
+        $estados = $request->estado == '_TODOS_' ? ['1','2'] : [$request->estado];
         try {
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $libro_mayor_auxiliar_general = $this->procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id);
+                $libro_mayor_auxiliar_general = $this->procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id,$estados);
                 $comprobantes = $libro_mayor_auxiliar_general['comprobantes'];
                 $empresa = $libro_mayor_auxiliar_general['empresa'];
                 $plan_cuenta_auxiliar = $libro_mayor_auxiliar_general['plan_cuenta_auxiliar'];
@@ -181,11 +183,11 @@ class LibroMayorAuxiliarGeneralController extends Controller
         $fecha_i = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $request->fecha_i)));
         $fecha_f = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $request->fecha_f)));
         $plan_cuenta_auxiliar_id = $request->plan_cuenta_auxiliar_id;
-
+        $estados = $request->estado == '_TODOS_' ? ['1','2'] : [$request->estado];
         try {
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
-                $libro_mayor_auxiliar_general = $this->procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id);
+                $libro_mayor_auxiliar_general = $this->procesarLibroMayorAuxiliarGeneral($empresa_id,$fecha_i,$fecha_f,$plan_cuenta_auxiliar_id,$estados);
                 $comprobantes = $libro_mayor_auxiliar_general['comprobantes'];
                 $empresa = $libro_mayor_auxiliar_general['empresa'];
                 $plan_cuenta_auxiliar = $libro_mayor_auxiliar_general['plan_cuenta_auxiliar'];

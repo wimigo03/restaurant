@@ -1,175 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>REPORTE::PI-RESTO</title>
     <style>
-        html {
-            margin: 20px 50px 30px 50px;
-        }
-
-        body {
-            font-family: verdana,arial,helvetica;
-            font-size: 10px;
-        }
-
-        .table {
-            border-collapse: collapse;
-            border: 1px solid black;
-        }
-
-        .table td, th {
-            padding: 5px;
-        }
-
-        .page_break{
-            page-break-before: always;
-        }
+        <?php echo file_get_contents(public_path('css/styles/font-verdana-pdf.css')); ?>
     </style>
     <body>
-        <table width="100%">
+        <table>
             <tr>
-                <td align="center" valign="bottom">
-                    <font size="13px">
-                        <b>
-                            _*LIBRO MAYOR POR AUXILIAR - GENERAL*_
-                        </b>
-                    </font>
+                <td width="25%" class="font-verdana-6 align-center">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($empresa->url_cover))) }}" class="logo-callejx" alt="#"/>
+                    <br>
+                    {{ $empresa->nombre_comercial }}
+                    <br>
+                    {{ $empresa->direccion }} - NIT {{ $empresa->nit }}
+                </td>
+                <td class="font-verdana-15 align-center align-middle align-inferior">
+                    <b>
+                        _*LIBRO MAYOR POR AUXILIAR - GENERAL*_
+                    </b>
+                </td>
+                <td width="25%" class="font-verdana-9 align-center align-superior">
+                    &nbsp;
                 </td>
             </tr>
         </table>
         <br>
-        <table width="100%">
+        <table class="font-verdana-9">
             <tr>
-                <td>
-                    <font size="9px">
-                        <b>Auxiliar:</b>&nbsp;
-                    </font>
-                </td>
-                <td colspan="8">
-                    <font size="9px">
-                        {{ $plan_cuenta_auxiliar->nombre }}
-                    </font>
-                </td>
+                <td><b>AUXILIAR:</b>&nbsp;</td>
+                <td colspan="5">{{ $plan_cuenta_auxiliar->nombre }}</td>
             </tr>
             <tr>
-                <td>
-                    <font size="9px">
-                        <b>Desde:</b>&nbsp;
-                    </font>
-                </td>
-                <td colspan="2">
-                    <font size="9px">
-                        {{ $fecha_i }}
-                    </font>
-                </td>
-                <td>
-                    <font size="9px">
-                        <b>Saldo Inicial:</b>&nbsp;
-                    </font>
-                </td>
-                <td colspan="2">
-                    <font size="9px">
-                        Bs. {{ number_format($saldo,2,'.',',') }}
-                    </font>
-                </td>
-                <td>
-                    <font size="9px">
-                        <b>Total Debe:</b>&nbsp;
-                    </font>
-                </td>
-                <td colspan="2">
-                    <font size="9px">
-                        Bs. {{ number_format($total_debe,2,'.',',') }}
-                    </font>
-                </td>
+                <td><b>DESDE:</b>&nbsp;</td>
+                <td>{{ $fecha_i }}</td>
+                <td><b>SALDO INICIAL:</b>&nbsp;</td>
+                <td>Bs. {{ number_format($saldo,2,'.',',') }}</td>
+                <td><b>TOTAL DEBE:</b>&nbsp;</td>
+                <td>Bs. {{ number_format($total_debe,2,'.',',') }}</td>
             </tr>
             <tr>
-                <td>
-                    <font size="9px">
-                        <b>Hasta:</b>&nbsp;
-                    </font>
-                </td>
-                <td colspan="2">
-                    <font size="9px">
-                        {{ $fecha_f }}
-                    </font>
-                </td>
-                <td>
-                    <font size="9px">
-                        <b>Saldo Final:</b>&nbsp;
-                    </font>
-                </td>
-                <td colspan="2">
-                    <font size="9px">
-                        Bs. {{ number_format($saldo_final,2,'.',',') }}
-                    </font>
-                </td>
-                <td>
-                    <font size="9px">
-                        <b>Total Haber:</b>&nbsp;
-                    </font>
-                </td>
-                <td colspan="2">
-                    <font size="9px">
-                        Bs. {{ number_format($total_haber,2,'.',',') }}
-                    </font>
-                </td>
+                <td><b>HASTA:</b>&nbsp;</td>
+                <td>{{ $fecha_f }}</td>
+                <td><b>SALDO FINAL:</b>&nbsp;</td>
+                <td>Bs. {{ number_format($saldo_final,2,'.',',') }}</td>
+                <td><b>TOTAL HABER:</b>&nbsp;</td>
+                <td>Bs. {{ number_format($total_haber,2,'.',',') }}</td>
             </tr>
         </table>
         <br>
-        <table width="100%" class="table">
-            <tr style="border-bottom: 1px solid #000000;">
-                <td align="center"><font size="9px"><b>FECHA</b></font></td>
-                <td align="center"><font size="9px"><b>COMPROBANTE</b></font></td>
-                <td align="center"><font size="9px"><b>CUENTA CONTABLE</b></font></td>
-                <td align="center"><font size="9px"><b>PROYECTO</b></font></td>
-                <td align="center"><font size="9px"><b>CHEQUE</b></font></td>
-                <td align="center"><font size="9px"><b>GLOSA</b></font></td>
-                <td align="center"><font size="9px"><b>DEBE</b></font></td>
-                <td align="center"><font size="9px"><b>HABER</b></font></td>
-                <td align="center"><font size="9px"><b>SALDO</b></font></td>
-            </tr>
+        <table class="font-verdana-9">
+            <thead class="linea-inferior">
+                <tr>
+                    <th>FECHA</th>
+                    <th>COMPROBANTE</th>
+                    <th>CUENTA CONTABLE</th>
+                    <th>PROYECTO</th>
+                    <th>CHEQUE</th>
+                    <th>GLOSA</th>
+                    <th>DEBE</th>
+                    <th>HABER</th>
+                    <th>SALDO</th>
+                </tr>
+            </thead>
             @foreach ($comprobantes as $datos)
-                <tr style="border-bottom: 1px solid #ccc;">
-                    <td align="center">
-                        <font size="9px">
-                            {{ $datos->fecha }}
-                        </font>
-                    </td>
-                    <td align="center">
-                        <font size="9px">
-                            {{ $datos->nro_comprobante }}&nbsp;<b>{{ $datos->estado_abreviado}}</b>
-                        </font>
-                    </td>
-                    <td align="left">
-                        <font size="9px">
-                            {{ $datos->codigo . ' ' . $datos->plan_cuenta }}
-                        </font>
-                    </td>
-                    <td align="center">
-                        <font size="9px">
-                            {{ $datos->proyecto }}
-                        </font>
-                    </td>
-                    <td align="center">
-                        <font size="9px">
-                            {{ $datos->nro_cheque }}
-                        </font>
-                    </td>
-                    <td align="left">
-                        <font size="9px">
-                            {{ $datos->glosa }}
-                        </font>
-                    </td>
-                    <td align="right">
-                        <font size="9px">
-                            {{ number_format($datos->debe,2,'.',',')  }}
-                        </font>
-                    </td>
-                    <td align="right">
-                        <font size="9px">
-                            {{ number_format($datos->haber,2,'.',',')  }}
-                        </font>
-                    </td>
+                <tr>
+                    <td class="align-center">{{ $datos->fecha }}</td>
+                    <td class="align-center">{{ $datos->nro_comprobante }}&nbsp;<b>{{ $datos->estado_abreviado }}</b></td>
+                    <td class="align-center">{{ $datos->codigo . ' ' . $datos->plan_cuenta }}</td>
+                    <td class="align-center">{{ $datos->proyecto }}</td>
+                    <td>{{ $datos->nro_cheque }}</td>
+                    <td>{{ $datos->glosa }}</td>
+                    <td class="align-right">{{ number_format($datos->debe,2,'.',',') }}</td>
+                    <td class="align-right">{{ number_format($datos->haber,2,'.',',') }}</td>
                     @php
                         if($datos->debe > 0){
                             $saldo += $datos->debe;
@@ -177,11 +80,7 @@
                             $saldo -= $datos->haber;
                         }
                     @endphp
-                    <td align="right">
-                        <font size="9px">
-                            {{ number_format($saldo,2,'.',',')  }}
-                        </font>
-                    </td>
+                    <td class="align-right">{{ number_format($saldo,2,'.',',') }}</td>
                 </tr>
             @endforeach
         </table>

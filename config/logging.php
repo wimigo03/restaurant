@@ -138,6 +138,18 @@ return [
             'path' => storage_path('logs/configuraciones.log'),
             'level' => 'debug',
         ],
+
+        'asientos_automaticos' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/asientos_automaticos.log'),
+            'level' => 'debug',
+        ],
+
+        'aperturas_cierres' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/aperturas_cierres.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

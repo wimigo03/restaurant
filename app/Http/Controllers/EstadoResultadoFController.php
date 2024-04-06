@@ -211,7 +211,7 @@ class EstadoResultadoFController extends Controller
                 $nroMaxColumna = $estado_resultado['nroMaxColumna'];
                 $total = $estado_resultado['total'];
                 $totales = $estado_resultado['totales'];
-                $pdf = PDF::loadView('estado_resultado_f.pdf',compact(['empresa','ingresos','costos','gastos','nroMaxColumna','total','totales']));
+                $pdf = PDF::loadView('estado_resultado_f.pdf',compact(['empresa','ingresos','costos','gastos','nroMaxColumna','total','totales','fecha_i','fecha_f']));
                 $pdf->setPaper('LETTER', 'portrait');
                 return $pdf->download('Estado_resultado.pdf');
         } catch (\Throwable $th) {

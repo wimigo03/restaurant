@@ -48,6 +48,34 @@
             });
         });
 
+        function Modal(mensaje){
+            $("#modal-alert .modal-body").html(mensaje);
+            $('#modal-alert').modal({keyboard: false});
+        }
+
+        function procesar() {
+            if(!validar()){
+                return false;
+            }
+            search();
+        }
+
+        function validar(){
+            if($("#fecha_i").val() == ""){
+                Modal("[FECHA INICIAL REQUERIDA]");
+                return false;
+            }
+            if($("#fecha_f").val() == ""){
+                Modal("[FECHA FINAL REQUERIDA]");
+                return false;
+            }
+            if($("#plan_cuenta_id >option:selected").val() == ""){
+                Modal("[PLAN DE CUENTA NO SELECCIONADO.]");
+                return false;
+            }
+            return true;
+        }
+
         function search(){
             $(".btn").hide();
             $(".spinner-btn").show();

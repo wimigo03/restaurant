@@ -135,6 +135,20 @@
                             </a>
                         </li>
                     @endcan
+                    @can('apertura.cierre.index')
+                        <li>
+                            <a href="{{ route('apertura.cierre.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Apertura Cierre Caja
+                            </a>
+                        </li>
+                    @endcan
+                    @can('asiento.automatico.index')
+                        <li>
+                            <a href="{{ route('asiento.automatico.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Asientos Automaticos
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             </li>
         @endcanany

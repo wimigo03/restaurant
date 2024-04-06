@@ -1,9 +1,10 @@
 .hover-orange tbody tr:hover{
 	background: #ffd54f !important;
-	}
+}
+
 .datepicker{
 	z-index:9999 !important
-	}
+}
 
 .bg-gradient-warning {
 	background-color: #f6c23e;

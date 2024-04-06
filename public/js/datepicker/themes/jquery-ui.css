@@ -270,7 +270,8 @@
 ----------------------------------*/
 .ui-widget {
 	font-family: Helvetica,Arial,sans-serif;
-	font-size: 1.1em;
+	/*font-size: 1.1em;dilson*/
+	font-size: 0.9em;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;

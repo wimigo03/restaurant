@@ -1,0 +1,83 @@
+html {
+    margin: 40px 50px 50px 50px;
+}
+
+table {
+    width: 100%;;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 5px;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-inferior {
+    vertical-align: bottom;
+}
+
+.align-middle {
+    vertical-align: middle;;
+}
+
+.align-superior {
+    vertical-align: top;
+}
+
+.linea-superior {
+    border-top: 1px solid #000000;
+}
+
+.linea-inferior {
+    border-bottom: 1px solid #000000;
+}
+
+.sub-linea-inferior {
+    border-bottom: 1px solid #ccc;
+}
+
+.page_break{
+    page-break-before: always;
+}
+
+.logo-callejx{
+    width: 100px;
+    height:auto;
+    border-radius: 10%;
+    overflow: hidden;
+    opacity: 0.8;
+}
+
+.bg-gradient-warning {
+	background-color: #f6c23e;
+	background-image: linear-gradient(180deg,#f6c23e 10%,#dda20a 100%);
+	background-size: cover;
+    color: #ffffff;
+}
+
+.bg-gradient-secondary {
+	background-color: #6c757d;
+	background-image: linear-gradient(180deg,#6c757d 10%,#807e7e 100%);
+	background-size: cover;
+    color: #ffffff;
+}
+
+/*Verdana*/
+.font-verdana-5 {font-size: 5px; font-family: verdana,arial,helvetica;}
+.font-verdana-6 {font-size: 6px; font-family: verdana,arial,helvetica;}
+.font-verdana-7 {font-size: 7px; font-family: verdana,arial,helvetica;}
+.font-verdana-8 {font-size: 8px; font-family: verdana,arial,helvetica;}
+.font-verdana-9 {font-size: 9px; font-family: verdana,arial,helvetica;}
+.font-verdana-10 {font-size: 10px; font-family: verdana,arial,helvetica;}
+.font-verdana-11 {font-size: 11px; font-family: verdana,arial,helvetica;}
+.font-verdana-12 {font-size: 12px; font-family: verdana,arial,helvetica;}
+.font-verdana-13 {font-size: 12px; font-family: verdana,arial,helvetica;}
+.font-verdana-14 {font-size: 12px; font-family: verdana,arial,helvetica;}
+.font-verdana-15 {font-size: 15px; font-family: verdana,arial,helvetica;}

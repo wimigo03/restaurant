@@ -1,109 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>COMPROBANTE</title>
-        <style>
-            html {
-                margin: 20px 50px 30px 50px;
-            }
-            
-            body {
-                font-family: verdana,arial,helvetica;
-                font-size: 10px;
-            }
-
-            .table {
-                border-collapse: collapse;
-                border: 1px solid black;
-            }
-
-            .table td, th {
-                /*border: 1px solid black;*/
-                padding: 5px;
-            }
-
-            .page_break{
-                page-break-before: always;
-            }
-        </style>
-    </head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>COMPROBANTE</title>
+    <style>
+        <?php echo file_get_contents(public_path('css/styles/font-verdana-pdf.css')); ?>
+    </style>
     <body>
-        <table width="100%">
+        <table>
             <tr>
-                <td align="center" width="25%" valign="top">
-                    <img src={{ public_path($comprobante->empresa->url_cover) }} alt="#" style="width: 100px; height:auto;"/>
+                <td width="25%" class="font-verdana-6 align-center">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path($comprobante->empresa->url_cover))) }}" class="logo-callejx" alt="#"/>
                     <br>
-                    <font size="5px">
-                        {{ $comprobante->empresa->nombre_comercial }}
-                        <br>
-                        {{ $comprobante->empresa->direccion }} - NIT {{ $comprobante->empresa->nit }}
-                    </font>
-                </td>
-                <td align="center" valign="bottom">
-                    <font size="15px">
-                        <b>
-                            COMPROBANTE DE {{ App\Models\Comprobante::TIPOS[$comprobante->tipo] }}
-                        </b>
-                    </font>
+                    {{ $comprobante->empresa->nombre_comercial }}
                     <br>
-                    <font size="13px"><b>{{ $comprobante->status }}</b></font>
+                    {{ $comprobante->empresa->direccion }} - NIT {{ $comprobante->empresa->nit }}
                 </td>
-                <td align="center" width="25%" valign="top">
-                    <font size="9px">
-                        <table border="1" width="100%">
-                            <tr>
-                                <td><b>Nro.-</b></td>
-                                <td>{{ $comprobante->nro_comprobante }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Fecha.-</b></td>
-                                <td>{{ date('d/m/Y', strtotime($comprobante->fecha)) }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Taza Cambio.-</b></td>
-                                <td>{{ $comprobante->tipo_cambio }}</td>
-                            </tr>
-                            <tr>
-                                <td><b>UFV.-</b></td>
-                                <td>{{ $comprobante->ufv }}</td>
-                            </tr>
-                        </table>
-                    </font>
+                <td class="font-verdana-15 align-center align-inferior">
+                    <b>
+                        COMPROBANTE DE {{ App\Models\Comprobante::TIPOS[$comprobante->tipo] }}
+                    </b>
+                    <br>
+                    <b>{{ $comprobante->status }}</b>
+                </td>
+                <td width="25%" class="font-verdana-9 align-center align-superior">
+                    <table border="1">
+                        <tr>
+                            <td style="padding: 3px;"><b>Nro.-</b></td>
+                            <td style="padding: 3px;">{{ $comprobante->nro_comprobante }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 3px;"><b>Fecha.-</b></td>
+                            <td style="padding: 3px;">{{ date('d/m/Y', strtotime($comprobante->fecha)) }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 3px;"><b>Taza Cambio.-</b></td>
+                            <td style="padding: 3px;">{{ $comprobante->tipo_cambio }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 3px;"><b>UFV.-</b></td>
+                            <td style="padding: 3px;">{{ $comprobante->ufv }}</td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
-        <br>
-        <font size="9px">
-            <table width="100%" class="table">
+        <table class="font-verdana-10 align-superior">
+            <tr>
+                <td width="80%">
+                    &nbsp;
+                </td>
+                <td width="20%">
+                    <table border="0">
+                        <tr>
+                            <td style="padding: 2px;"><b>Gestion.-</b></td>
+                            <td style="padding: 2px;">{{ date('Y', strtotime($comprobante->fecha)) }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 2px;"><b>Mes.-</b></td>
+                            <td style="padding: 2px;">{{ date('m', strtotime($comprobante->fecha)) }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 2px;"><b>N° Pag..-</b></td>
+                            <td style="padding: 2px;">1</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="font-verdana-9">
+            @if ($comprobante->tipo == '1')
                 <tr>
-                    <td colspan="3"><b>Por Concepto de.- </b>{{ $comprobante->concepto }}</td>
+                    <td colspan="3">
+                        <b>Hemos Recibido de.- </b>{{ $comprobante->entregado_recibido }}
+                    </td>
                 </tr>
+            @endif
+            @if ($comprobante->tipo == '2')
                 <tr>
-                    <td><b>Tipo de Moneda.- </b>{{ $comprobante->moneda }}</td>
-                    <td><b>Cheques.-</b></td>
-                    <td><b>Bancos.-</b></td>
+                    <td colspan="3">
+                        <b>Hemos Entregado a.- </b>{{ $comprobante->entregado_recibido }}
+                    </td>
                 </tr>
-            </table>
-        </font>
+            @endif
+            <tr>
+                <td colspan="3"><b>Por Concepto de.- </b>{{ $comprobante->concepto }}</td>
+            </tr>
+            <tr class="linea-inferior">
+                <td><b>Tipo de Moneda.- </b>{{ $comprobante->moneda }}</td>
+                <td><b>Cheques.-</b></td>
+                <td><b>Bancos.-</b></td>
+            </tr>
+        </table>
         <br>
-        <table width="100%" class="table">
-            <thead style="border-bottom: 1px solid #000000;">
-                <tr bgcolor="#FFC107">
-                    <td><font color="#ffffff" size="9px"><b>N</b></font></td>
-                    <td><font color="#ffffff" size="9px"><b>CODIGO</b></font></td>
-                    <td><font color="#ffffff" size="9px"><b>DESCRIPCION / GLOSA</b></font></td>
-                    <td align="center"><font color="#ffffff" size="9px"><b>PROY</b></font></td>
-                    <td align="right"><font color="#ffffff" size="9px"><b>DEBE(BS.)</b></font></td>
-                    <td align="right"><font color="#ffffff" size="9px"><b>HABER(BS.)</b></font></td>
-                    <td align="right"><font color="#ffffff" size="9px"><b>DEBE($U$)</b></font></td>
-                    <td align="right"><font color="#ffffff" size="9px"><b>HABER($U$)</b></font></td>
+        <table class="font-verdana-9">
+            <thead class="linea-inferior">
+                <tr class="bg-gradient-warning">
+                    <th>N</th>
+                    <th>CODIGO</th>
+                    <th>DESCRIPCION / GLOSA</th>
+                    <th>PROY</th>
+                    <th>DEBE(BS.)</th>
+                    <th>HABER(BS.)</th>
+                    <th>DEBE($U$)</th>
+                    <th>HABER($U$)</th>
                 </tr>
             </thead>
             @php
                 $cont = 1;
             @endphp
-            <tbody>
+            <tbody class="linea-inferior">
                 @foreach ($comprobante_detalles as $datos)
                     <?php
                         if($cont % 2 == 0){
@@ -113,94 +118,42 @@
                         }
                     ?>
                     <tr bgcolor="{{ $color }}">
-                        <td valign="top">
-                            <font size="8px">{{ $cont++ }}</font>
+                        <td class="align-superior">{{ $cont++ }}</td>
+                        <td class="align-superior">{{ $datos->plan_cuenta->codigo }}</td>
+                        <td class="align-superior">
+                            <u>
+                                {{ $datos->plan_cuenta->nombre }}
+                                @if ($datos->plan_cuenta_auxiliar_id != null)
+                                    {{ $datos->plan_cuenta_auxiliar->nombre }}
+                                @endif
+                            </u><br>
+                            {{ $datos->glosa }}
                         </td>
-                        <td valign="top">
-                            <font size="8px">{{ $datos->plan_cuenta->codigo }}</font>
-                        </td>
-                        <td valign="top">
-                            @if($datos->haber != 0)
-                                <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                                    <tr>
-                                        <td width="10%">&nbsp;</td>
-                                        <td>
-                                            <font size="8px">
-                                                <u>
-                                                    {{ $datos->plan_cuenta->nombre }}
-                                                    @if ($datos->plan_cuenta_auxiliar_id != null)
-                                                        {{ $datos->plan_cuenta_auxiliar->nombre }}
-                                                    @endif
-                                                </u><br>
-                                                {{ $datos->glosa }}
-                                            </font>
-                                        </td>
-                                    </tr>
-                                </table>
-                            @else
-                                <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                                    <tr>
-                                        <td width="90%">
-                                            <font size="8px">
-                                                <u>
-                                                    {{ $datos->plan_cuenta->nombre }}
-                                                    @if ($datos->plan_cuenta_auxiliar_id != null)
-                                                        {{ $datos->plan_cuenta_auxiliar->nombre }}
-                                                    @endif
-                                                </u><br>
-                                                {{ $datos->glosa }}
-                                            </font>
-                                        </td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                </table>
-                            @endif                        
-                        </td>
-                        <td align="center" valign="top">
-                            <font size="8px">{{ $datos->sucursal->nombre }}</font>
-                        </td>
-                        <td align="right" valign="top">
-                            <font size="8px">{{ number_format($datos->debe,2,'.',',') }}</font>
-                        </td>
-                        <td align="right" valign="top">
-                            <font size="8px">{{ number_format($datos->haber,2,'.',',') }}</font>
-                        </td>
-                        <td align="right" valign="top">
-                            <font size="8px">{{ number_format($datos->debe * $comprobante->tipo_cambio,2,'.',',') }}</font>
-                        </td>
-                        <td align="right" valign="top">
-                            <font size="8px">{{ number_format($datos->haber * $comprobante->tipo_cambio,2,'.',',') }}</font>
-                        </td>
+                        <td class="align-center align-superior">{{ $datos->sucursal->nombre }}</td>
+                        <td class="align-right align-superior">{{ number_format($datos->debe,2,'.',',') }}</td>
+                        <td class="align-right align-superior">{{ number_format($datos->haber,2,'.',',') }}</td>
+                        <td class="align-right align-superior">{{ number_format($datos->debe * $comprobante->tipo_cambio,2,'.',',') }}</td>
+                        <td class="align-right align-superior">{{ number_format($datos->haber * $comprobante->tipo_cambio,2,'.',',') }}</td>
                     </tr>
-                @endforeach
-                <tr>
-                    <td align="right" colspan="4">
-                        <font size="8px"><b>TOTALES</b></font>
-                    </td>
-                    <td align="right">
-                        <font size="8px"><b>{{ number_format($total_debe,2,'.',',') }}</b></font>
-                    </td>
-                    <td align="right">
-                        <font size="8px"><b>{{ number_format($total_haber,2,'.',',') }}</b></font>
-                    </td>
-                    <td align="right">
-                        <font size="8px"><b>{{ number_format($total_debe * $comprobante->tipo_cambio,2,'.',',') }}</b></font>
-                    </td>
-                    <td align="right">
-                        <font size="8px"><b>{{ number_format($total_haber * $comprobante->tipo_cambio,2,'.',',') }}</b></font>
-                    </td>
-                </tr>
+            @endforeach
+            <tr class="font-verdana-9">
+                <td class="align-superior" colspan="4"><b>TOTALES</b></td>
+                <td class="align-right align-superior"><b>{{ number_format($total_debe,2,'.',',') }}</b></td>
+                <td class="align-right align-superior"><b>{{ number_format($total_haber,2,'.',',') }}</b></td>
+                <td class="align-right align-superior"><b>{{ number_format($total_debe * $comprobante->tipo_cambio,2,'.',',') }}</b></td>
+                <td class="align-right align-superior"><b>{{ number_format($total_haber * $comprobante->tipo_cambio,2,'.',',') }}</b></td>
+            </tr>
             </tbody>
         </table>
         <br>
         <table>
-            <tr>
+            <tr class="font-verdana-9">
                 <td>
-                    <font size="8px"><b>SON: {{ $comprobante->monto . ' (' . $total_en_letras . ')' }}</b></font>
+                    <b>SON: {{ number_format($comprobante->monto,2,'.',',') . ' (' . $total_en_letras . ')' }}</b>
                 </td>
             </tr>
         </table>
-        <table border="0" align="center" width="100%">
+        <table class="font-verdana-9">
             <tr>
                 <td colspan="5">&nbsp;</td>
             </tr>
@@ -213,22 +166,19 @@
             <tr>
                 <td colspan="5">&nbsp;</td>
             </tr>
-            <tr>
-                <td colspan="5">&nbsp;</td>
-            </tr>
-            <tr align="center">
+            <tr class="align-center">
                 <td><b>_________________________</b></td>
                 <td>&nbsp;</td>
                 <td><b>_________________________</b></td>
                 <td>&nbsp;</td>
                 <td><b>_________________________</b></td>
             </tr>
-            <tr align="center">
-                <td><font size="9px"><b>Elaborado por</b></font></td>
+            <tr class="align-center">
+                <td><b>Elaborado por</b></td>
                 <td>&nbsp;</td>
-                <td><font size="9px"><b>Revisado por</b></font></td>
+                <td><b>Revisado por</b></td>
                 <td>&nbsp;</td>
-                <td><font size="9px"><b>Aprobado por</b></font></td>
+                <td><b>Aprobado por</b></td>
             </tr>
         </table>
     </body>
@@ -237,8 +187,8 @@
     if ( isset($pdf) ) {
         $pdf->page_script('
             $font = $fontMetrics->get_font("verdana");
-            $pdf->text(40, 765, "{{ date('d/m/Y H:i') }} - {{ Auth()->user()->username }}", $font, 6);
-            $pdf->text(530, 765, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 6); 
+            $pdf->text(40, 765, "{{ date('d/m/Y H:i') }} - {{ Auth()->user()->username }}", $font, 7);
+            $pdf->text(530, 765, "Pagina $PAGE_NUM de $PAGE_COUNT", $font, 7);
         ');
     }
 </script>
