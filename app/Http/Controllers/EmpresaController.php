@@ -55,117 +55,46 @@ class EmpresaController extends Controller
             ini_set('memory_limit','-1');
             ini_set('max_execution_time','-1');
 
-            $logo = isset($request->logo) ? 'logo.'.pathinfo($request->logo->getClientOriginalName(), PATHINFO_EXTENSION) : null;
-            $cover = isset($request->cover) ? 'cover.'.pathinfo($request->cover->getClientOriginalName(), PATHINFO_EXTENSION) : null;
-            $empresa = Empresa::create([
-                'cliente_id' => $request->cliente_id,
-                'nombre_comercial' => $request->nombre_comercial,
-                'alias' => $request->alias,
-                'url_logo' => $logo,
-                'direccion' => $request->direccion,
-                'telefono' => $request->telefono,
-                'url_cover' => $cover,
-                'estado' => '1'
-                ]);
+            $empresa = $this->crear_empresa(
+                $request->logo,
+                $request->cover,
+                $request->cliente_id,
+                $request->nombre_comercial,
+                $request->alias,
+                $request->direccion,
+                $request->telefono
+            );            
 
-            $empresa_logo = Empresa::find($empresa->id);
-            $empresa_logo->update([
-                'url_logo' => 'uploads/empresas/' . $empresa->id . '/logos/' . $logo,
-                'url_cover' => 'uploads/empresas/' . $empresa->id . '/logos/' . $cover
-            ]);
+            $empresas_modulos = $this->crear_modulos(
+                $request->modulo_id,
+                $empresa,
+                $request->cliente_id
+            );
 
-            $cont = 0;
-            while($cont < count($request->modulo_id)){
-                $empresa_modulo = EmpresaModulo::create([
-                    'empresa_id' => $empresa->id,
-                    'cliente_id' => $request->cliente_id,
-                    'modulo_id' => $request->modulo_id[$cont],
-                    'fecha_registro' => date('Y-m-d'),
-                    'estado' => '1'
-                ]);
+            $cargo = $this->crear_cargo_gerente(
+                $empresa,
+                $request->cliente_id,
+                $request->nombre_comercial
+            );
 
-                $cont++;
-            }
+            $user = $this->crear_usuario_gerente(
+                $request->nombre_comercial,
+                $cargo,
+                $empresa,
+                $request->cliente_id
+            );
 
-            $cargo = Cargo::create([
-                'empresa_id' => $empresa->id,
-                'cliente_id' => $request->cliente_id,
-                'plan_cuenta_id'=> null,
-                'nombre' => 'GERENTE GENERAL',
-                'codigo' => '1',
-                'nivel' => '0',
-                'parent_id' => null,
-                'email' => null,
-                'descripcion' => $request->nombre_comercial,
-                'alias' => 'GRAL',
-                'tipo' => '2',
-                'estado' => '1'
-            ]);
+            $personal = $this->crear_registro_gerente(
+                $user,
+                $cargo,
+                $empresa,
+                $request->cliente_id
+            );
 
-            $username = substr($request->nombre_comercial, 0, 5);
-            $username_minus = strtolower($username);
-            $user = User::create([
-                'cargo_id' => $cargo->id,
-                'empresa_id' => $empresa->id,
-                'cliente_id' => $request->cliente_id,
-                'name' => $request->nombre_comercial,
-                'username' => $username_minus,
-                'password' => bcrypt('123456654321'),
-                'estado' => '1'
-            ]);
-
-            $personal = Personal::create([
-                'user_id' => $user->id,
-                'cargo_id' => $cargo->id,
-                'empresa_id' => $empresa->id,
-                'cliente_id' => $request->cliente_id,
-                'estado' => '1'
-            ]);
-
-            $gestion = substr(date('Y'), 2, 4);
-            $nro_contrato = count(PersonalLaboral::where('empresa_id',$empresa->id)->get()) + 1;
-            $nro_contrato = str_pad($nro_contrato, 3, '0', STR_PAD_LEFT);
-            $codigo_ingreso = $empresa->alias . '-' . $gestion . '-' . $nro_contrato;
-
-            $personal_laboral = PersonalLaboral::create([
-                'personal_id' => $personal->id,
-                'user_id' => $user->id,
-                'cargo_id' => $cargo->id,
-                'empresa_id' => $empresa->id,
-                'cliente_id' => $request->cliente_id,
-                'horario_id' => NULL,
-                'codigo_ingreso' => $codigo_ingreso,
-                'biometrico_id' => NULL,
-                'tipo_contrato' => NULL,
-                'fecha_contrato_fijo' => NULL,
-                'profesion_ocupacion' => NULL,
-                'banco' => NULL,
-                'nro_cuenta' => NULL,
-                'estado' => '1'
-            ]);
-
-            $cuentas = PlanCuenta::CUENTAS;
-            $cont = 1;
-            while($cont <= count($cuentas)){
-                $plan_de_cuenta = PlanCuenta::create([
-                    'empresa_id' => $empresa->id,
-                    'cliente_id' => $request->cliente_id,
-                    'moneda_id' => 2,
-                    'nombre' => $cuentas[$cont],
-                    'codigo' => $cont,
-                    'nivel' => '0',
-                    'parent_id' => null,
-                    'auxiliar' => '0',
-                    'cheque' => '0',
-                    'detalle' => '0',
-                    'estado' => '1'
-                ]);
-
-                $cont++;
-            }
-
-            $logo = isset($request->logo) ? $request->logo->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $logo) : null;
-            $cover = isset($request->cover) ? $request->cover->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $cover) : null;
+            $plan_cuenta = $this->crear_plan_cuentas(
+                $empresa,
+                $request->cliente_id
+            );
 
             return redirect()->route('empresas.index',$request->cliente_id)->with('success_message', 'Se agregó una empresa correctamente.');
         } catch (ValidationException $e) {
@@ -176,6 +105,149 @@ class EmpresaController extends Controller
             ini_restore('memory_limit');
             ini_restore('max_execution_time');
         }
+    }
+
+    public function crear_empresa($logo,$cover,$cliente_id,$nombre_comercial,$alias,$direccion,$telefono)
+    {
+        $logo = isset($logo) ? 'logo.'.pathinfo($logo->getClientOriginalName(), PATHINFO_EXTENSION) : null;
+        $cover = isset($cover) ? 'cover.'.pathinfo($cover->getClientOriginalName(), PATHINFO_EXTENSION) : null;
+        $empresa = Empresa::create([
+            'cliente_id' => $cliente_id,
+            'nombre_comercial' => $nombre_comercial,
+            'alias' => $alias,
+            'url_logo' => $logo,
+            'direccion' => $direccion,
+            'telefono' => $telefono,
+            'url_cover' => $cover,
+            'estado' => '1'
+            ]);
+
+        $empresa_logo = Empresa::find($empresa->id);
+        $empresa_logo->update([
+            'url_logo' => 'uploads/empresas/' . $empresa->id . '/logos/' . $logo,
+            'url_cover' => 'uploads/empresas/' . $empresa->id . '/logos/' . $cover
+        ]);
+
+        $logo = isset($request->logo) ? $request->logo->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $logo) : null;
+        $cover = isset($request->cover) ? $request->cover->move(public_path('uploads/empresas/' . $empresa->id . '/logos/'), $cover) : null;
+
+        return $empresa;
+    }
+
+    public function crear_modulos($modulo_id,$empresa,$cliente_id)
+    {
+        $cont = 0;
+        while($cont < count($modulo_id)){
+            $empresa_modulo = EmpresaModulo::create([
+                'empresa_id' => $empresa->id,
+                'cliente_id' => $cliente_id,
+                'modulo_id' => $modulo_id[$cont],
+                'fecha_registro' => date('Y-m-d'),
+                'estado' => '1'
+            ]);
+
+            $cont++;
+        }
+
+        return $empresa_modulo;
+    }
+
+    public function crear_cargo_gerente($empresa,$cliente_id,$nombre_comercial)
+    {
+        $cargo = Cargo::create([
+            'empresa_id' => $empresa->id,
+            'cliente_id' => $cliente_id,
+            'plan_cuenta_id'=> null,
+            'nombre' => 'GERENTE GENERAL',
+            'codigo' => '1',
+            'nivel' => '0',
+            'parent_id' => null,
+            'email' => null,
+            'descripcion' => $nombre_comercial,
+            'alias' => 'GRAL',
+            'tipo' => '2',
+            'estado' => '1'
+        ]);
+
+        return $cargo;
+    }
+
+    public function crear_usuario_gerente($nombre_comercial,$cargo,$empresa,$cliente_id)
+    {
+        $username = substr($nombre_comercial, 0, 5);
+        $username_minus = strtolower($username);
+        $user = User::create([
+            'cargo_id' => $cargo->id,
+            'empresa_id' => $empresa->id,
+            'cliente_id' => $cliente_id,
+            'name' => $nombre_comercial,
+            'username' => $username_minus,
+            'password' => bcrypt('123456'),
+            'estado' => '1'
+        ]);
+
+        return $user;
+    }
+
+    public function crear_registro_gerente($user,$cargo,$empresa,$cliente_id)
+    {
+        $personal = Personal::create([
+            'user_id' => $user->id,
+            'cargo_id' => $cargo->id,
+            'empresa_id' => $empresa->id,
+            'cliente_id' => $cliente_id,
+            'estado' => '1'
+        ]);
+
+        $gestion = substr(date('Y'), 2, 4);
+        $nro_contrato = count(PersonalLaboral::where('empresa_id',$empresa->id)->get()) + 1;
+        $nro_contrato = str_pad($nro_contrato, 3, '0', STR_PAD_LEFT);
+        $codigo_ingreso = $empresa->alias . '-' . $gestion . '-' . $nro_contrato;
+
+        $personal_laboral = PersonalLaboral::create([
+            'personal_id' => $personal->id,
+            'user_id' => $user->id,
+            'cargo_id' => $cargo->id,
+            'empresa_id' => $empresa->id,
+            'cliente_id' => $cliente_id,
+            'horario_id' => NULL,
+            'codigo_ingreso' => $codigo_ingreso,
+            'biometrico_id' => NULL,
+            'tipo_contrato' => NULL,
+            'fecha_contrato_fijo' => NULL,
+            'profesion_ocupacion' => NULL,
+            'banco' => NULL,
+            'nro_cuenta' => NULL,
+            'estado' => '1'
+        ]);
+
+        return $personal;
+    }
+
+    public function crear_plan_cuentas($empresa,$cliente_id)
+    {
+        $cuentas = PlanCuenta::CUENTAS;
+        $cont = 1;
+        while($cont <= count($cuentas)){
+            $plan_de_cuenta = PlanCuenta::create([
+                'empresa_id' => $empresa->id,
+                'cliente_id' => $cliente_id,
+                'moneda_id' => 2,
+                'pais_id' => 1,
+                'nombre' => $cuentas[$cont],
+                'codigo' => $cont,
+                'nivel' => '0',
+                'parent_id' => null,
+                'auxiliar' => '0',
+                'banco' => '0',
+                'detalle' => '0',
+                'estado' => '1'
+            ]);
+
+            $cont++;
+        }
+
+        return $plan_de_cuenta;
     }
 
     public function editar($empresa_id)

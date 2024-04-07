@@ -1,6 +1,6 @@
 <form action="#" method="get" id="form">
     <input type="hidden" name="empresa_id" value="{{ $empresa->id }}">
-    <div class="form-group row">
+    <div class="form-group row font-roboto-12">
         <div class="col-md-3 px-0 pr-1">
             <select name="cargo_id" id="cargo_id" class="form-control select2">
                 <option value="">-</option>
@@ -24,7 +24,7 @@
             <input type="text" name="username" placeholder="--Usuario--" value="{{ request('username') }}" class="form-control font-roboto-12 intro">
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row font-roboto-12">
         <div class="col-md-4 px-0 pr-1">
             <input type="text" name="email" placeholder="--Correo Electronico--" value="{{ request('email') }}" class="form-control font-roboto-12 intro">
         </div>

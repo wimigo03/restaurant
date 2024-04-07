@@ -1,13 +1,5 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
-<style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 13px;
-    }
-    .select2-results__option {
-        font-size: 13px;
-    }
-</style>
 @section('content')
     @include('users.partials.search')
     <div class="form-group row">
