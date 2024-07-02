@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 @section('content')
-    @include('asientos_automaticos.partials.search')
+    {{--@include('asientos_automaticos.partials.search')--}}
     <div class="form-group row">
         <div class="col-md-6 px-0 pr-1">
             @can('asiento.automatico.create')

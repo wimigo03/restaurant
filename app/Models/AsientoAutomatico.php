@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Empresa;
 use App\Models\Cliente;
 use App\Models\Modulo;
-use App\Models\PlanCuenta;
-use App\Models\Moneda;
-use App\Models\Pais;
 use Carbon\Carbon;
 
 class AsientoAutomatico extends Model
@@ -21,14 +18,7 @@ class AsientoAutomatico extends Model
         'empresa_id',
         'cliente_id',
         'modulo_id',
-        'plan_cuenta_id',
-        'moneda_id',
-        'pais_id',
         'nombre',
-        'concepto',
-        'tipo',
-        'glosa',
-        'copia',
         'estado'
     ];
 
@@ -37,26 +27,12 @@ class AsientoAutomatico extends Model
         '2' => 'NO HABILITADO'
     ];
 
-    const TIPOS = [
-        '1' => 'DEBE',
-        '2' => 'HABER'
-    ];
-
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
                 return "HABILITADO";
             case '2':
                 return "NO HABILITADO";
-        }
-    }
-
-    public function getTiposAttribute(){
-        switch ($this->tipo) {
-            case '1':
-                return "DEBE";
-            case '2':
-                return "HABER";
         }
     }
 
@@ -81,18 +57,6 @@ class AsientoAutomatico extends Model
         return $this->belongsTo(Modulo::class,'modulo_id','id');
     }
 
-    public function plan_cuenta(){
-        return $this->belongsTo(PlanCuenta::class,'plan_cuenta_id','id');
-    }
-
-    public function datos_moneda(){
-        return $this->belongsTo(Moneda::class,'moneda_id','id');
-    }
-
-    public function pais(){
-        return $this->belongsTo(Pais::class,'pais_id','id');
-    }
-
     public function scopeByEmpresa($query, $empresa_id){
         if($empresa_id){
             return $query->where('empresa_id', $empresa_id);
@@ -105,39 +69,9 @@ class AsientoAutomatico extends Model
         }
     }
 
-    public function scopeByPlanCuenta($query, $plan_cuenta_id){
-        if($plan_cuenta_id){
-            return $query->where('plan_cuenta_id', $plan_cuenta_id);
-        }
-    }
-
-    public function scopeByConcepto($query, $concepto){
-        if($concepto){
-            return $query->where('concepto', 'like', '%' . $concepto . '%');
-        }
-    }
-
-    public function scopeByTipo($query, $tipo){
-        if($tipo){
-            return $query->where('tipo', $tipo);
-        }
-    }
-
-    public function scopeByGlosa($query, $glosa){
-        if($glosa){
-            return $query->where('glosa', 'like', '%' . $glosa . '%');
-        }
-    }
-
     public function scopeByEstado($query, $estado){
         if($estado){
             return $query->where('estado', $estado);
-        }
-    }
-
-    public function scopeByCopia($query, $copia){
-        if($copia){
-            return $query->where('copia', $copia);
         }
     }
 }

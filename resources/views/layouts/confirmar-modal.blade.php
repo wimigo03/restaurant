@@ -10,7 +10,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        Estas por <span class="text-success"><b>[Confirmar]</b></span> este proceso.<br>
+        Estas por <span class="text-success"><b>[Confirmar]</b></span> este proceso.
         <b>¿Estas seguro que desea continuar?</b>
       </div>
       <div class="modal-footer">

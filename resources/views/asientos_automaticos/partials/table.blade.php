@@ -1,15 +1,12 @@
-<div class="form-group row">
-    <div class="col-md-12">
+<div class="form-group row abs-center">
+    <div class="col-md-8">
         <table class="table display responsive table-striped hover-orange">
             <thead>
                 <tr class="font-roboto-12 bg-secondary text-white">
                     <td class="text-center p-1"><b>MODULO</b></td>
-                    <td class="text-center p-1"><b>CUENTA</b></td>
-                    <td class="text-center p-1"><b>CONCEPTO</b></td>
-                    <td class="text-center p-1"><b>TIPO</b></td>
-                    <td class="text-center p-1"><b>GLOSA</b></td>
+                    <td class="text-center p-1"><b>NOMBRE DEL ASIENTO AUTOMATICO</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
-                    @canany(['asiento.automatico.editar'])
+                    @canany(['asiento.automatico.show','asiento.automatico.editar'])
                         <td class="text-center p-1"><b><i class="fas fa-bars"></i></b></td>
                     @endcanany
                 </tr>
@@ -18,10 +15,7 @@
                 @foreach ($asientos_automaticos as $datos)
                     <tr class="font-roboto-12">
                         <td class="text-center p-1">{{ $datos->modulo->nombre }}</td>
-                        <td class="text-left p-1">{{ $datos->plan_cuenta->codigo  . ' - ' . $datos->plan_cuenta->nombre}}</td>
-                        <td class="text-left p-1">{{ $datos->concepto }}</td>
-                        <td class="text-center p-1">{{ $datos->tipos }}</td>
-                        <td class="text-left p-1">{{ $datos->glosa }}</td>
+                        <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-center p-1">
                             <span class="{{ $datos->color_badge_status}}">
                                 {{ $datos->status }}
@@ -30,6 +24,14 @@
                         @canany(['asiento.automatico.editar','asiento.automatico.habilitar'])
                             <td class="text-center p-1">
                                 <div class="d-flex justify-content-center">
+                                    @can('asiento.automatico.show')
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Ir a detalle" style="cursor: pointer;">
+                                            <a href="{{ route('asiento.automatico.show',$datos->id) }}" class="badge-with-padding badge badge-primary">
+                                                <i class="fas fa-list fa-fw"></i>
+                                            </a>
+                                        </span>
+                                    @endcan
+                                    &nbsp;
                                     @if ($datos->estado == '1')
                                         @can('asiento.automatico.editar')
                                             <span class="tts:left tts-slideIn tts-custom" aria-label="Modificar" style="cursor: pointer;">

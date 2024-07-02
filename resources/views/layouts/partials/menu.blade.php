@@ -135,10 +135,10 @@
                             </a>
                         </li>
                     @endcan
-                    @can('apertura.cierre.index')
+                    @can('caja.venta.index')
                         <li>
-                            <a href="{{ route('apertura.cierre.indexAfter') }}">
-                                &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Apertura Cierre Caja
+                            <a href="{{ route('caja.venta.indexAfter') }}">
+                                &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Cajas Ventas
                             </a>
                         </li>
                     @endcan
