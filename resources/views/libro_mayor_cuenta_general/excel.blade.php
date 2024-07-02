@@ -6,7 +6,7 @@
     </tr>
     <tr>
         <td colspan="3">
-            <b>Desde:</b>&nbsp;{{ $fecha_i }}
+            <b>Desde:</b>&nbsp;{{ \Carbon\Carbon::parse($fecha_i)->format('d-m-Y') }}
         </td>
         <td colspan="3">
             <b>Saldo Inicial:</b>&nbsp;{{ $saldo }}
@@ -17,7 +17,7 @@
     </tr>
     <tr>
         <td colspan="3">
-            <b>Hasta:</b>&nbsp;{{ $fecha_f }}
+            <b>Hasta:</b>&nbsp;{{ \Carbon\Carbon::parse($fecha_f)->format('d-m-Y') }}
         </td>
         <td colspan="3">
             <b>Saldo Final:</b>&nbsp;{{ $saldo_final }}
@@ -31,7 +31,8 @@
     <tr>
         <td align="center"><b>FECHA</b></td>
         <td align="center"><b>COMPROBANTE</b></td>
-        <td align="center"><b>PROYECTO</b></td>
+        <td align="center"><b>CENTRO</b></td>
+        <td align="center"><b>SUBCENTRO</b></td>
         <td align="center"><b>AUXILIAR</b></td>
         <td align="center"><b>CHEQUE</b></td>
         <td align="center"><b>GLOSA</b></td>
@@ -48,7 +49,10 @@
                 {{ $datos->nro_comprobante }}&nbsp;<b>{{ $datos->estado_abreviado}}</b>
             </td>
             <td align="center">
-                {{ $datos->proyecto }}
+                {{ $datos->centro }}
+            </td>
+            <td align="center">
+                {{ $datos->subcentro }}
             </td>
             <td align="center">
                 {{ $datos->auxiliar }}

@@ -2,7 +2,7 @@
 @extends('layouts.dashboard')
 <style>
     #treeview {
-        min-height: 200px;            
+        min-height: 200px;
     }
     #contenido {
         min-height: 200px;
@@ -18,7 +18,7 @@
 @section('content')
     @if (isset($cargos))
         <div class="form-group row">
-            <div class="col-md-12">
+            <div class="col-md-12 px-1">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card card-body">
@@ -28,10 +28,10 @@
                     <div class="col-md-6">
                         <div class="card card-body">
                             <div id="contenido">
-                                <input type="hidden" value="{{ $cargos[0]->id }}" name="cargo_id" id="cargo_id">    
+                                <input type="hidden" value="{{ $cargos[0]->id }}" name="cargo_id" id="cargo_id">
                                 @include('cargos.partials.contenido')
                                 <div class="form-group row">
-                                    <div class="col-md-12 text-right">
+                                    <div class="col-md-12 px-1 text-right">
                                         @can('cargos.habilitar')
                                             <button class="btn btn-outline-danger font-verdana" type="button" onclick="deshabilitar();" id="btn_deshabilitar">
                                                 <i class="fas fa-times"></i>&nbsp;Deshabilitar

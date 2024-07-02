@@ -29,7 +29,7 @@ class RoleController extends Controller
                 $permiso = Permission::find($permissionId);
                 $role->permissions()->updateExistingPivot($permissionId, [
                     'empresa_id' => $permiso->empresa_id,
-                    'cliente_id' => $permiso->cliente_id,
+                    'pi_cliente_id' => $permiso->pi_cliente_id,
                     'modulo_id' => $permiso->modulo_id
                 ]);
             }
@@ -40,13 +40,12 @@ class RoleController extends Controller
     public function indexAfter()
     {
         /////***/$this->completar_datos_roles();
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresas = Empresa::query()
-                            ->byCliente()
-                            ->pluck('nombre_comercial','id');
-        if(count($empresas) == 1 && Auth::user()->id != 1){
-            return redirect()->route('role.index.index',Auth::user()->empresa_id);
-        }
-        return view('roles.indexAfter', compact('empresas'));
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->pluck('nombre_comercial','id');
+        return view('roles.indexAfter', compact('icono','header','empresas'));
     }
 
     public function index($empresa_id)
@@ -105,7 +104,7 @@ class RoleController extends Controller
         try{
             $empresa = Empresa::find($request->empresa_id);
             $role = Role::create([
-                'cliente_id' => $empresa->cliente_id,
+                'pi_cliente_id' => $empresa->pi_cliente_id,
                 'empresa_id' => $request->empresa_id,
                 'name' => $request->nombre
             ]);
@@ -176,7 +175,7 @@ class RoleController extends Controller
                 $permiso = Permission::find($permissionId);
                 $role->permissions()->updateExistingPivot($permissionId, [
                     'empresa_id' => $permiso->empresa_id,
-                    'cliente_id' => $permiso->cliente_id,
+                    'pi_cliente_id' => $permiso->pi_cliente_id,
                     'modulo_id' => $permiso->modulo_id,
                 ]);
             }

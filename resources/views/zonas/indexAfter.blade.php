@@ -34,7 +34,7 @@
     </div>
     <div class="form-group row">
         <div class="col-md-12 text-center">
-            <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-pi-resto">
+            <img src="/images/pi-agropec.jpg" alt="pi-agropec" class="imagen-pi-resto">
         </div>
     </div>
 @endsection
@@ -47,7 +47,7 @@
                 var id = $("#empresa_id >option:selected").val();
                 cargosByEmpresa(id);
             }
-            
+
             $('#empresa_id').select2({
                 theme: "bootstrap4",
                 placeholder: "--Empresa--",

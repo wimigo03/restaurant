@@ -19,9 +19,7 @@ class CargoController extends Controller
 
     public function indexAfter()
     {
-        $empresas = Empresa::query()
-                            ->byCliente()
-                            ->pluck('nombre_comercial','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         if(count($empresas) == 1 && Auth::user()->id != 1){
             return redirect()->route('cargos.index',['empresa_id' => Auth::user()->empresa_id]);
         }
@@ -33,9 +31,7 @@ class CargoController extends Controller
         $icono = self::ICONO;
         $header = self::INDEX;
         $empresa = Empresa::find($empresa_id);
-        $empresas = Empresa::query()
-                            ->byCliente()
-                            ->pluck('nombre_comercial','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $cargos = Cargo::where('empresa_id',$empresa_id)->get();
         if(count($cargos) > 0){
             $tree = $this->buildTree($cargos);
@@ -98,7 +94,7 @@ class CargoController extends Controller
         $cargo = Cargo::find($id);
         $empresa = Empresa::find($cargo->empresa_id);
         $tipos = Cargo::TIPOS;
-        $cuentas_contables = PlanCuenta::where('empresa_id',$cargo->empresa_id)->pluck('nombre','id');
+        $cuentas_contables = PlanCuenta::where('empresa_id',$cargo->empresa_id)->where('detalle','1')->pluck('nombre','id');
         return view('cargos.create', compact('icono','header','cargo','empresa','tipos','cuentas_contables'));
     }
 
@@ -113,10 +109,10 @@ class CargoController extends Controller
             $parent = Cargo::select('codigo','nivel')->find($request->parent_id);
             $nivel = $parent->nivel + 1;
             $codigo = $parent->codigo . '.' . (Cargo::where('estado','1')->where('parent_id',$request->parent_id)->get()->count() + 1);
-            
+
             $cargo = Cargo::create([
                 'empresa_id' => $request->empresa_id,
-                'cliente_id' => $request->cliente_id,
+                'pi_cliente_id' => $request->pi_cliente_id,
                 'nombre' => $request->cargo,
                 'codigo' => $codigo,
                 'nivel' => $nivel,
@@ -153,7 +149,7 @@ class CargoController extends Controller
             $cargo = Cargo::find($request->cargo_id);
             $cargo->update([
                 'empresa_id' => $request->empresa_id,
-                'cliente_id' => $request->cliente_id,
+                'pi_cliente_id' => $request->pi_cliente_id,
                 'nombre' => $request->cargo,
                 'parent_id' => $request->parent_id,
                 'email' => $request->email,

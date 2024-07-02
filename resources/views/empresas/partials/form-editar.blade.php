@@ -1,6 +1,6 @@
 <form action="#" method="post" id="form" enctype="multipart/form-data">
     @csrf
-    <input type="hidden" name="cliente_id" value="{{ $cliente->id }}" id="cliente_id">
+    <input type="hidden" name="pi_cliente_id" value="{{ $cliente->id }}" id="pi_cliente_id">
     <input type="hidden" name="empresa_id" value="{{ $empresa_cliente->id }}">
     <div class="form-group row">
         <div class="col-md-6 px-0 pr-1 font-roboto-12">
@@ -66,7 +66,7 @@
                 <tbody>
                     @foreach ($modulos_empresas as $datos)
                         <tr class="font-roboto-11">
-                            <input type='hidden' class='modulo_id' value='{{ $datos->id }}'>
+                            <input type='hidden' class='modulo_id' value='{{ $datos->modulo->id }}'>
                             <td class="text-justify p-1">{{ $datos->modulo->nombre }}</td>
                             <td class="text-center p-1">{{ $datos->status }}</td>
                             <td class="text-center p-1">

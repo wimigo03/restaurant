@@ -25,18 +25,11 @@ class LoginController extends Controller
         $credentials['password'] = $request->password;
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $dominio = $this->dominio($user);
-            ($dominio);
-            if($dominio){
-                if ($user->estado == 1) {
-                    return redirect()->intended('/dashboard');
-                } else {
-                    Auth::logout();
-                    return redirect()->route('login')->with(['danger_message' => 'Usuario No Autorizado']);
-                }
-            }else{
+            if ($user->estado == 1) {
+                return redirect()->intended('/dashboard');
+            } else {
                 Auth::logout();
-                return redirect()->route('login')->with(['danger_message' => 'Dominio No Autorizado']);
+                return redirect()->route('login')->with(['danger_message' => 'Usuario No Autorizado']);
             }
         }
 

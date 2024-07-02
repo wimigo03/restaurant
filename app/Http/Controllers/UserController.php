@@ -18,41 +18,44 @@ class UserController extends Controller
 
     public function indexAfter()
     {
-        $empresas = Empresa::query()
-                            ->byCliente()
-                            ->pluck('nombre_comercial','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         if(count($empresas) == 1 && Auth::user()->id != 1){
             return redirect()->route('user.index',Auth::user()->empresa_id);
         }
         return view('users.indexAfter', compact('empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($empresa_id);
-        $cargos = Cargo::where('empresa_id',$empresa_id)->pluck('nombre','id');
-        $roles = Role::where('empresa_id',$empresa_id)->pluck('name','id');
+        $empresas = Empresa::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->pluck('nombre_comercial','id');
+        $cargos = Cargo::select('nombre')->groupBy('nombre')->pluck('nombre','nombre');
+        $roles = Role::select('name')->where('id','!=','1')->groupBy('name')->pluck('name','name');
         $estados = User::ESTADOS;
         $users = User::query()
                         ->where('id','!=',1)
-                        ->byEmpresa($empresa_id)
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
                         ->orderBy('id','desc')
                         ->paginate(10);
-        return view('users.index', compact('icono','header','empresa','cargos','roles','users','estados'));
+        return view('users.index', compact('icono','header','empresas','cargos','roles','users','estados'));
     }
 
     public function search(Request $request)
-    {
+    {//dd($request->all());
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($request->empresa_id);
-        $cargos = Cargo::where('empresa_id',$request->empresa_id)->pluck('nombre','id');
-        $roles = Role::where('empresa_id',$request->empresa_id)->pluck('name','id');
+        $empresas = Empresa::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->pluck('nombre_comercial','id');
+        $cargos = Cargo::select('nombre')->groupBy('nombre')->pluck('nombre','nombre');
+        $roles = Role::select('name')->where('id','!=','1')->groupBy('name')->pluck('name','name');
         $estados = User::ESTADOS;
         $users = User::query()
                         ->where('id','!=',1)
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
                         ->byEmpresa($request->empresa_id)
                         ->byCargo($request->cargo_id)
                         ->byRole($request->role_id)
@@ -61,7 +64,7 @@ class UserController extends Controller
                         ->byEmail($request->email)
                         ->byEstado($request->estado)
                         ->paginate(10);
-        return view('users.index', compact('icono','header','empresa','cargos','roles','users','estados'));
+        return view('users.index', compact('icono','header','empresas','cargos','roles','users','estados'));
     }
 
     public function editar($user_id)
@@ -80,7 +83,7 @@ class UserController extends Controller
                 $user->update([
                     'cargo_id' => $request->cargo_id,
                     'empresa_id' => $request->empresa_id,
-                    'cliente_id' => $request->cliente_id,
+                    'pi_cliente_id' => $request->pi_cliente_id,
                     'name' => $request->nombre,
                     'email' => $request->email,
                     'password' => bcrypt($request->password)
@@ -89,7 +92,7 @@ class UserController extends Controller
                 $user->update([
                     'cargo_id' => $request->cargo_id,
                     'empresa_id' => $request->empresa_id,
-                    'cliente_id' => $request->cliente_id,
+                    'pi_cliente_id' => $request->pi_cliente_id,
                     'name' => $request->nombre,
                     'email' => $request->email
                 ]);
@@ -149,7 +152,7 @@ class UserController extends Controller
             foreach ($request->roles as $roleId) {
                 $user->roles()->updateExistingPivot($roleId, [
                     'empresa_id' => $user->empresa_id,
-                    'cliente_id' => $user->cliente_id,
+                    'pi_cliente_id' => $user->pi_cliente_id,
                     'cargo_id' => $user->cargo_id
                 ]);
             }

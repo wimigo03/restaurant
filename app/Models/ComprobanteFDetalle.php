@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Comprobante;
 use App\Models\ComprobanteF;
 use App\Models\Empresa;
-use App\Models\Cliente;
+use App\Models\PiCliente;
 use App\Models\TipoCambio;
 use App\Models\Sucursal;
+use App\Models\Centro;
+use App\Models\SubCentro;
 use App\Models\User;
 use App\Models\Cargo;
 use App\Models\PlanCuenta;
@@ -26,15 +28,16 @@ class ComprobanteFDetalle extends Model
         'comprobantef_id',
         'comprobante_id',
         'empresa_id',
-        'cliente_id',
+        'pi_cliente_id',
         'tipo_cambio_id',
         'user_id',
         'cargo_id',
         'moneda_id',
         'pais_id',
-        'sucursal_id',
         'user_autorizado_id',
         'plan_cuenta_id',
+        'centro_id',
+        'sub_centro_id',
         'plan_cuenta_auxiliar_id',
         'glosa',
         'debe',
@@ -69,7 +72,7 @@ class ComprobanteFDetalle extends Model
     }
 
     public function cliente(){
-        return $this->belongsTo(Cliente::class,'cliente_id','id');
+        return $this->belongsTo(PiCliente::class,'pi_cliente_id','id');
     }
 
     public function plan_cuenta(){
@@ -80,7 +83,11 @@ class ComprobanteFDetalle extends Model
         return $this->belongsTo(PlanCuentaAuxiliar::class,'plan_cuenta_auxiliar_id','id');
     }
 
-    public function sucursal(){
-        return $this->belongsTo(Sucursal::class,'sucursal_id','id');
+    public function centro(){
+        return $this->belongsTo(Centro::class,'centro_id','id');
+    }
+
+    public function subcentro(){
+        return $this->belongsTo(SubCentro::class,'sub_centro_id','id');
     }
 }

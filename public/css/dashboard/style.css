@@ -41,7 +41,7 @@ body {
     visibility: visible; }
 
 .site-section {
-  padding: 0rem 0; }
+  padding: 3rem 0; }
 
 aside, main {
   height: 100vh;
@@ -234,4 +234,15 @@ main {
   /*for IE*/ }
 
 .burger:focus {
-  outline: none; }
+  outline: none;
+}
+
+.custom-hr {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: -10px;
+    width: calc(100% + 20px);
+}
