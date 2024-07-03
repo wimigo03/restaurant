@@ -1,20 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
-<style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 12px;
-    }
-    .select2-results__option {
-        font-size: 12px;
-    }
-</style>
 @section('content')
     @include('precio_productos.partials.menu')
     @include('precio_productos.partials.search')
     @if (isset($precio_productos))
         <form action="#" method="post" id="form-precios">
             @csrf
-            <input type="hidden" name="empresa_id" value="{{ $empresa->id }}">
             <div class="form-group row font-roboto-12">
                 <div class="col-md-2 px-0 pl-1">
                     <label for="tipo_cambio" class="d-inline">T. Cambio</label>
@@ -56,36 +47,15 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            var tabla = document.getElementById("table-precios");
-            var celdasPrecioActual = tabla.getElementsByClassName("input-porcentaje-detalle");
-            for (var i = 0; i < celdasPrecioActual.length; i++) {
-                document.getElementsByClassName("input-precio-final")[i].value = '';
-                document.getElementsByClassName("input-precio-final-sus")[i].value = '';
-                document.getElementsByClassName("input-porcentaje-detalle")[i].value = '';
-            }
-            
-            new Cleave('#porcentaje', {
-                numeral: true,
-                numeralThousandsGroupStyle: 'thousand'
-            });
-
-            $('.input-precio-final').each(function() {
-                new Cleave(this, {
-                    numeral: true,
-                    numeralThousandsGroupStyle: 'thousand'
-                });
-            });
-
-            $('.input-porcentaje-detalle').each(function() {
-                new Cleave(this, {
-                    numeral: true,
-                    numeralThousandsGroupStyle: 'thousand'
-                });
-            });
-
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
+                width: '100%'
+            });
+
+            $('#empresa_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
                 width: '100%'
             });
 
@@ -118,6 +88,33 @@
                 var empresa_id = $("#empresa_id").val();
                 getCategorias(id,empresa_id);
             }
+
+            var tabla = document.getElementById("table-precios");
+            var celdasPrecioActual = tabla.getElementsByClassName("input-porcentaje-detalle");
+            for (var i = 0; i < celdasPrecioActual.length; i++) {
+                document.getElementsByClassName("input-precio-final")[i].value = '';
+                document.getElementsByClassName("input-precio-final-sus")[i].value = '';
+                document.getElementsByClassName("input-porcentaje-detalle")[i].value = '';
+            }
+
+            new Cleave('#porcentaje', {
+                numeral: true,
+                numeralThousandsGroupStyle: 'thousand'
+            });
+
+            $('.input-precio-final').each(function() {
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
+            });
+
+            $('.input-porcentaje-detalle').each(function() {
+                new Cleave(this, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand'
+                });
+            });
 
             if($("#porcentaje").val() != ''){
                 actualizarTablaPrecios();
@@ -163,7 +160,7 @@
                 }
             });
         }
-        
+
         function valideNumberConDecimal(evt) {
             var code = (evt.which) ? evt.which : evt.keyCode;
             if ((code >= 48 && code <= 57) || code === 46 || code === 8) {
@@ -216,7 +213,7 @@
                         document.getElementsByClassName("input-porcentaje-detalle")[i].value = -porcentaje;
                     }
                 }
-                
+
                 var celdasId = tabla.getElementsByClassName("input-precio-producto-id");
                 for (var i = 0; i < celdasId.length; i++) {
                     var id = celdasId[i].value;
@@ -241,7 +238,7 @@
             precio_actual = (isNaN(parseFloat(precio_actual)))? 0 : parseFloat(precio_actual);
             porcentaje_detalle = porcentaje_detalle.replace(/,/g, '');
             porcentaje_detalle = (isNaN(parseFloat(porcentaje_detalle)))? 0 : parseFloat(porcentaje_detalle);
-            try{    
+            try{
                 var precio_final = precio_actual + (porcentaje_detalle * precio_actual / 100);
                 var precio_final_sus = precio_final / tipo_cambio;
                 $('.detalle-'+id+' .input-precio-final').each(function() {
@@ -300,7 +297,7 @@
             tipo_cambio = parseFloat(tipo_cambio);
             precio_base = (isNaN(parseFloat(precio_base)))? 0 : parseFloat(precio_base);
             porcentaje = (isNaN(parseFloat(porcentaje)))? 0 : parseFloat(porcentaje);
-            try{   
+            try{
                 precio_base = parseFloat(precio_base.toFixed(2));
                 var precio_final = precio_base + (porcentaje * precio_base / 100);
                 var precio_final_sus = precio_final / tipo_cambio;
@@ -348,27 +345,18 @@
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
             var tipo_precio_id = $("#tipo_precio_id option:selected").val();
             if(tipo_precio_id === '1'){
-                var url = "{{ route('precio.productos.search.tipo.base',':id') }}";
+                var url = "{{ route('precio.productos.search.tipo.base') }}";
             }else{
-                var url = "{{ route('precio.productos.search.tipo',':id') }}";
+                var url = "{{ route('precio.productos.search.tipo') }}";
             }
             $("#form").attr('action', url);
-            url = url.replace(':id',id);
-            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('precio.productos.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('precio.productos.index') }}";
             window.location.href = url;
         }
     </script>

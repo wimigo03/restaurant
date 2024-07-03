@@ -38,6 +38,11 @@
     <script>
         $(document).ready(function() {
             $("#subMenuPrecioVentas").hide();
+            $('.select2').select2({
+                theme: "bootstrap4",
+                placeholder: "--Seleccionar--",
+                width: '100%'
+            });
         });
 
         $("#toggleSubMenu").click(function(){

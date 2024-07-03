@@ -2,7 +2,7 @@
 @extends('layouts.dashboard')
 @section('content')
     @include('tipo_precios.partials.menu')
-    {{--@include('tipo_precios.partials.search')--}}
+    @include('tipo_precios.partials.search')
     <div class="form-group row">
         <div class="col-md-12 px-1">
             @can('tipo.precios.create')
@@ -50,11 +50,7 @@
         });
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var empresa_id = $("#empresa_id").val();
-            var url = "{{ route('tipo.precios.create',[':empresa_id']) }}";
-            url = url.replace(':empresa_id',empresa_id);
+            var url = "{{ route('tipo.precios.create') }}";
             window.location.href = url;
         }
 

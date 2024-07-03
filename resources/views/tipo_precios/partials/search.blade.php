@@ -1,5 +1,4 @@
 <form action="#" method="get" id="form">
-    <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_id">
     {{--<div class="form-group row">
         <div class="col-md-4 pr-1">
             <select name="sucursal_id" id="sucursal_id" class="form-control select2">

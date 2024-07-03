@@ -138,32 +138,38 @@ class PrecioProducto extends Model
         return $this->belongsTo(Cargo::class,'cargo_id','id');
     }
 
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
+
     public function scopeByEmpresa($query, $empresa_id){
-        if($empresa_id){
+        if($empresa_id != null){
             return $query->where('precio_productos.empresa_id', $empresa_id);
         }
     }
 
     public function scopeByTipoPrecio($query, $tipo_precio_id){
-        if($tipo_precio_id){
+        if($tipo_precio_id != null){
             return $query->where('tipo_precio_id', $tipo_precio_id);
         }
     }
 
     public function scopeByCategoriaMaster($query, $categoria_master_id){
-        if($categoria_master_id){
+        if($categoria_master_id != null){
             return $query->where('categoria_master_id', $categoria_master_id);
         }
     }
 
     public function scopeByCategoria($query, $categoria_id){
-        if($categoria_id){
+        if($categoria_id != null){
             return $query->where('categoria_id', $categoria_id);
         }
     }
 
     public function scopeByCodigo($query, $codigo){
-        if ($codigo) {
+        if ($codigo != null) {
                 return $query
                     ->whereIn('producto_id', function ($subquery) use($codigo) {
                         $subquery->select('id')
@@ -175,7 +181,7 @@ class PrecioProducto extends Model
     }
 
     public function scopeByProducto($query, $producto){
-        if ($producto) {
+        if ($producto != null) {
                 return $query
                     ->whereIn('producto_id', function ($subquery) use($producto) {
                         $subquery->select('id')
@@ -187,7 +193,7 @@ class PrecioProducto extends Model
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado){
+        if($estado != null){
             return $query->where('estado', $estado);
         }
     }

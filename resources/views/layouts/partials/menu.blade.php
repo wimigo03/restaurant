@@ -196,7 +196,7 @@
                 <ul class="sub-menu collapse" id="dashboard_restaurant">
                     @can('caja.venta.index')
                         <li>
-                            <a href="{{ route('caja.venta.indexAfter') }}">
+                            <a href="{{ route('caja.venta.index') }}">
                                 &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Cajas Ventas
                             </a>
                         </li>

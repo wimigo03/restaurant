@@ -25,28 +25,29 @@ class UnidadController extends Controller
         return view('unidades.indexAfter', compact('empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($empresa_id);
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $estados = Unidad::ESTADOS;
         $tipos = Unidad::TIPOS;
         $unidades = Unidad::query()
-                                ->byEmpresa($empresa_id)
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('unidades.index', compact('icono','header','empresa','estados','tipos','unidades'));
+        return view('unidades.index', compact('icono','header','empresas','estados','tipos','unidades'));
     }
 
     public function search(Request $request)
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($request->empresa_id);
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $estados = Unidad::ESTADOS;
         $tipos = Unidad::TIPOS;
         $unidades = Unidad::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
                                 ->byEmpresa($request->empresa_id)
                                 ->byNombre($request->nombre)
                                 ->byCodigo($request->codigo)
@@ -54,29 +55,29 @@ class UnidadController extends Controller
                                 ->byEstado($request->estado)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('unidades.index', compact('icono','header','empresa','estados','tipos','unidades'));
+        return view('unidades.index', compact('icono','header','empresas','estados','tipos','unidades'));
     }
 
-    public function create($id)
+    public function create()
     {
         $icono = self::ICONO;
         $header = self::CREATE;
-        $empresa = Empresa::find($id);
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $tipos = Unidad::TIPOS;
-        return view('unidades.create', compact('icono','header','empresa','tipos'));
+        return view('unidades.create', compact('icono','header','empresas','tipos'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|unique:unidades,nombre,null,id,empresa_id,' . $request->empresa_id,
-            'codigo' => 'required|max:4|unique:unidades,codigo,null,id,empresa_id,' . $request->empresa_id,
+            'nombre' => 'required|unique:unidades,nombre,null,id,empresa_id,' . $request->u_empresa_id,
+            'codigo' => 'required|max:4|unique:unidades,codigo,null,id,empresa_id,' . $request->u_empresa_id,
             'tipo' => 'required'
         ]);
         try{
             $empresa = Empresa::find($request->u_empresa_id);
             $unidad = Unidad::create([
-                'empresa_id' => $request->empresa_id,
+                'empresa_id' => $request->u_empresa_id,
                 'pi_cliente_id' => $empresa->pi_cliente_id,
                 'nombre' => $request->nombre,
                 'codigo' => $request->codigo,

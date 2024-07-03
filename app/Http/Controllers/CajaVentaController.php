@@ -29,36 +29,39 @@ class CajaVentaController extends Controller
         return view('caja_venta.indexAfter', compact('empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($empresa_id);
-        $sucursales = Sucursal::where('empresa_id',$empresa_id)->pluck('nombre','id');
-        $users = User::select(DB::raw('concat(username," - ",name) as usuario'),'id')
-                                        ->where('estado','1')
-                                        ->where('empresa_id',$empresa_id)
-                                        ->pluck('usuario','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $sucursales = Sucursal::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre','id');
+        $users = User::query()
+                        ->select(DB::raw('concat(username," - ",name) as usuario'),'id')
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->where('estado','1')
+                        ->pluck('usuario','id');
         $estados = CajaVenta::ESTADOS;
         $cajas_ventas = CajaVenta::query()
-                                ->byEmpresa($empresa_id)
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('caja_venta.index', compact('icono','header','empresa','sucursales','users','estados','cajas_ventas'));
+        return view('caja_venta.index', compact('icono','header','empresas','sucursales','users','estados','cajas_ventas'));
     }
 
     public function search(Request $request)
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($request->empresa_id);
-        $sucursales = Sucursal::where('empresa_id',$request->empresa_id)->pluck('nombre','id');
-        $users = User::select(DB::raw('concat(username," - ",name) as usuario'),'id')
-                                        ->where('estado','1')
-                                        ->where('empresa_id',$request->empresa_id)
-                                        ->pluck('usuario','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $sucursales = Sucursal::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre','id');
+        $users = User::query()
+                        ->select(DB::raw('concat(username," - ",name) as usuario'),'id')
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->where('estado','1')
+                        ->pluck('usuario','id');
         $estados = CajaVenta::ESTADOS;
         $cajas_ventas = CajaVenta::query()
+                                    ->byPiCliente(Auth::user()->pi_cliente_id)
                                     ->byEmpresa($request->empresa_id)
                                     ->bySucursal($request->sucursal_id)
                                     ->byFecha($request->fecha)
@@ -69,20 +72,39 @@ class CajaVentaController extends Controller
                                     ->byEstado($request->estado)
                                     ->orderBy('id','desc')
                                     ->paginate(10);
-        return view('caja_venta.index', compact('icono','header','empresa','sucursales','users','estados','cajas_ventas'));
+        return view('caja_venta.index', compact('icono','header','empresas','sucursales','users','estados','cajas_ventas'));
     }
 
-    public function create($empresa_id)
+    public function create()
     {
         $icono = self::ICONO;
         $header = self::CREATE;
-        $empresa = Empresa::find($empresa_id);
-        $sucursales = Sucursal::where('empresa_id',$empresa_id)->pluck('nombre','id');
-        $users = User::select(DB::raw('concat(username," - ",name) as usuario'),'id')
-                                        ->where('estado','1')
-                                        ->where('empresa_id',$empresa_id)
-                                        ->pluck('usuario','id');
-        return view('caja_venta.create', compact('icono','header','empresa','sucursales','users'));
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $users = User::query()
+                        ->select(DB::raw('concat(username," - ",name) as usuario'),'id')
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->where('estado','1')
+                        ->pluck('usuario','id');
+        return view('caja_venta.create', compact('icono','header','empresas','users'));
+    }
+
+    public function getSucursales(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $sucursales = Sucursal::query()
+                                    ->byEmpresa($id)
+                                    ->where('estado','1')
+                                    ->get()
+                                    ->toJson();
+            if($sucursales){
+                return response()->json([
+                    'sucursales' => $sucursales
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request)
@@ -120,7 +142,7 @@ class CajaVentaController extends Controller
                 "Mensaje: Caja creada con éxito" . "\n" .
                 "Usuario: " . Auth::user()->id . "\n"
             );
-            return redirect()->route('caja.venta.index',['empresa_id' => $request->empresa_id])->with('success_message', 'Se creo un registro con exito.');
+            return redirect()->route('caja.venta.index')->with('success_message', 'Se creo un registro con exito.');
         } catch (\Exception $e) {
             Log::channel('cajas_ventas')->info(
                 "\n" .

@@ -30,29 +30,30 @@ class TipoPrecioController extends Controller
         return view('precio_productos.indexAfter', compact('empresas'));
     }*/
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $estados = TipoPrecio::ESTADOS;
-        $empresa = Empresa::find($empresa_id);
         $tipos_precio = TipoPrecio::query()
-                            ->byEmpresa($empresa_id)
+                            ->byPiCliente(Auth::user()->pi_cliente_id)
                             ->orderBy('id','desc')
                             ->paginate(10);
-        return view('tipo_precios.index', compact('icono','header','estados','empresa','tipos_precio'));
+        return view('tipo_precios.index', compact('icono','header','empresas','estados','tipos_precio'));
     }
 
     public function search(Request $request)
     {
+        dd($request->all());
     }
 
-    public function create($empresa_id)
+    public function create()
     {
         $icono = self::ICONO;
         $header = self::CREATE;
-        $empresa = Empresa::find($empresa_id);
-        return view('tipo_precios.create', compact('icono','header','empresa'));
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        return view('tipo_precios.create', compact('icono','header','empresas'));
     }
 
     public function store(Request $request)
@@ -110,7 +111,7 @@ class TipoPrecioController extends Controller
                 $precio_producto = PrecioProducto::create($datosPrecioProducto);
             }
 
-            return redirect()->route('tipo.precios.index', ['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó un [TIPO DE PRECIO] a los productos existentes.');
+            return redirect()->route('tipo.precios.index')->with('success_message', 'Se agregó un [TIPO DE PRECIO] a los productos existentes.');
         } catch (ValidationException $e) {
             return redirect()->route('tipo.precios.create', $request->empresa_id)
                 ->withErrors($e->validator->errors())
@@ -134,9 +135,9 @@ class TipoPrecioController extends Controller
                 'estado' => '1'
             ]);
 
-            return redirect()->route('tipo.precios.index',$tipo_precio->empresa_id)->with('info_message', 'Se Habilito el [TIPO DE PRECIO] seleccionado...');
+            return redirect()->route('tipo.precios.index')->with('info_message', 'Se Habilito el [TIPO DE PRECIO] seleccionado...');
         } catch (ValidationException $e) {
-            return redirect()->route('tipo.precios.index',$tipo_precio->empresa_id)
+            return redirect()->route('tipo.precios.index')
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }
@@ -150,9 +151,9 @@ class TipoPrecioController extends Controller
                 'estado' => '2'
             ]);
 
-            return redirect()->route('tipo.precios.index',$tipo_precio->empresa_id)->with('info_message', 'Se Deshabilito el [TIPO DE PRECIO] seleccionado...');
+            return redirect()->route('tipo.precios.index')->with('info_message', 'Se Deshabilito el [TIPO DE PRECIO] seleccionado...');
         } catch (ValidationException $e) {
-            return redirect()->route('tipo.precios.index',$tipo_precio->empresa_id)
+            return redirect()->route('tipo.precios.index')
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }

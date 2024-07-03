@@ -19,7 +19,7 @@
 </style>
 @section('content')
     @include('unidades.partials.menu')
-    <input type="hidden" value="{{ $empresa->id }}" id="empresa_input_id">
+    {{--<input type="hidden" value="{{ $empresa->id }}" id="empresa_input_id">--}}
     <form action="#" method="post" id="form">
         @csrf
         @include('unidades.partials.form-create')
@@ -52,7 +52,7 @@
         $("#toggleSubMenu").click(function(){
             $("#subMenuUnidades").slideToggle(250);
         });
-        
+
         function alertaModal(mensaje){
             $("#modal-alert .modal-body").html(mensaje);
             $('#modal-alert').modal({keyboard: false});
@@ -80,25 +80,42 @@
         }
 
         function procesar() {
+            if(!validar()){
+                return false;
+            }
             $('#modal_confirmacion').modal({
                 keyboard: false
             })
         }
 
+        function validar(){
+            if($("#empresa_id >option:selected").val() == ""){
+                alertaModal("<center>La <b>[EMPRESA]</b> es un dato obligatorio...</center>");
+                return false;
+            }
+            if($("#nombre").val() == ""){
+                alertaModal("<center>El <b>[NOMBRE]</b> es un dato obligatorio...</center>");
+                return false;
+            }
+            if($("#codigo").val() == ""){
+                alertaModal("<center>El <b>[CODIGO]</b> es un dato obligatorio...</center>");
+                return false;
+            }
+            if($("#tipo").val() == ""){
+                alertaModal("<center>El <b>[TIPO]</b> es un dato obligatorio...</center>");
+                return false;
+            }
+            return true;
+        }
+
         function confirmar(){
             var url = "{{ route('unidades.store') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 
         function cancelar(){
-            $(".btn").hide();            
-            $(".spinner-btn").show();
-            var id = $("#empresa_input_id").val();
-            var url = "{{ route('unidades.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('unidades.index') }}";
             window.location.href = url;
         }
     </script>

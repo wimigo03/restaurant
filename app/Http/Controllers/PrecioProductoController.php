@@ -31,7 +31,7 @@ class PrecioProductoController extends Controller
         return view('precio_productos.indexAfter', compact('empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $fecha = date('Y-m-d');
         $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
@@ -40,12 +40,12 @@ class PrecioProductoController extends Controller
         }
         $icono = self::ICONO;
         $header = self::INDEX;
-        $tipo_precios = TipoPrecio::where('empresa_id',$empresa_id)->pluck('nombre','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $tipo_precios = TipoPrecio::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre','id');
         $categorias_master = Categoria::where('estado','1')->where('tipo','1')->pluck('nombre','id');
         $tipo_movimientos = PrecioProducto::TIPO_MOVIMIENTOS;
         $estados = PrecioProducto::ESTADOS;
-        $empresa = Empresa::find($empresa_id);
-        return view('precio_productos.index', compact('tipo_cambio','icono','header','estados','tipo_precios','categorias_master','tipo_movimientos','empresa'));
+        return view('precio_productos.index', compact('tipo_cambio','icono','header','empresas','estados','tipo_precios','categorias_master','tipo_movimientos'));
     }
 
     public function searchTipoBase(Request $request)
@@ -57,13 +57,14 @@ class PrecioProductoController extends Controller
         }
         $icono = self::ICONO;
         $header = self::INDEX;
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $tipo_precios = TipoPrecio::pluck('nombre','id');
         $categorias_master = Categoria::where('estado','1')->where('tipo','1')->pluck('nombre','id');
         $tipo_movimientos = PrecioProducto::TIPO_MOVIMIENTOS;
         $estados = PrecioProducto::ESTADOS;
-        $empresa = Empresa::find($request->empresa_id);
         $precio_productos = PrecioProducto::query()
-                        ->byEmpresa($empresa->id)
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->byEmpresa($request->empresa_id)
                         ->byTipoPrecio($request->tipo_precio_id)
                         ->byCategoriaMaster($request->categoria_master_id)
                         ->byCategoria($request->categoria_id)
@@ -72,7 +73,7 @@ class PrecioProductoController extends Controller
                         ->byEstado(1)
                         ->orderBy('producto_id','desc')
                         ->get();
-        return view('precio_productos.searchTipoBase', compact('tipo_cambio','icono','header','estados','tipo_precios','categorias_master','tipo_movimientos','empresa','precio_productos'));
+        return view('precio_productos.searchTipoBase', compact('tipo_cambio','icono','header','empresas','estados','tipo_precios','categorias_master','tipo_movimientos','precio_productos'));
     }
 
     public function searchTipo(Request $request)
@@ -84,13 +85,15 @@ class PrecioProductoController extends Controller
         }
         $icono = self::ICONO;
         $header = self::INDEX;
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $tipo_precios = TipoPrecio::pluck('nombre','id');
         $categorias_master = Categoria::where('estado','1')->where('tipo','1')->pluck('nombre','id');
         $tipo_movimientos = PrecioProducto::TIPO_MOVIMIENTOS;
         $estados = PrecioProducto::ESTADOS;
         $empresa = Empresa::find($request->empresa_id);
         $precio_productos = PrecioProducto::query()
-                        ->byEmpresa($empresa->id)
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->byEmpresa($request->empresa_id)
                         ->byTipoPrecio($request->tipo_precio_id)
                         ->byCategoriaMaster($request->categoria_master_id)
                         ->byCategoria($request->categoria_id)
@@ -99,7 +102,7 @@ class PrecioProductoController extends Controller
                         ->byEstado(1)
                         ->orderBy('producto_id','desc')
                         ->get();
-        return view('precio_productos.searchTipo', compact('tipo_cambio','icono','header','estados','tipo_precios','categorias_master','tipo_movimientos','empresa','precio_productos'));
+        return view('precio_productos.searchTipo', compact('tipo_cambio','icono','header','empresas','estados','tipo_precios','categorias_master','tipo_movimientos','precio_productos'));
     }
 
     public function search(Request $request)

@@ -1,7 +1,14 @@
 <form action="#" method="get" id="form">
-    <input type="hidden" name="empresa_id" value="{{ $empresa->id }}">
     <div class="form-group row font-roboto-12">
-        <div class="col-md-4 px-1 pr-1">
+        <div class="col-md-3 px-1 pr-1">
+            <select name="empresa_id" id="empresa_id" class="form-control">
+                <option value="">-</option>
+                @foreach ($empresas as $index => $value)
+                    <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3 pr-1 pl-1">
             <select name="sucursal_id" id="sucursal_id" class="form-control">
                 <option value="">-</option>
                 @foreach ($sucursales as $index => $value)
@@ -15,7 +22,7 @@
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="codigo" value="{{ request('codigo') }}" id="codigo" placeholder="--Codigo--" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-4 px-1 pl-1">
+        <div class="col-md-2 px-1 pl-1">
             <select name="user_id" id="user_id" class="form-control">
                 <option value="">-</option>
                 @foreach ($users as $index => $value)
@@ -25,7 +32,7 @@
         </div>
     </div>
     <div class="form-group row font-roboto-12">
-        <div class="col-md-4 px-1 pr-1">
+        <div class="col-md-2 px-1 pr-1">
             <select name="user_asignado_id" id="user_asignado_id" class="form-control">
                 <option value="">-</option>
                 @foreach ($users as $index => $value)

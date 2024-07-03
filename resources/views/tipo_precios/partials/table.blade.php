@@ -25,7 +25,7 @@
                             @if ($datos->id != 1)
                                 @can('tipo.precios.habilitar')
                                     @if($datos->status == "HABILITADO")
-                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Deshabilitar" style="cursor: pointer;">
+                                        <span class="tts:left tts-slideIn tts-custom" aria-label="Inhabilitar" style="cursor: pointer;">
                                             <a href="{{ route('tipo.precios.deshabilitar',$datos->id) }}" class="badge-with-padding badge badge-danger">
                                                 <i class="fas fa-lg fa-arrow-alt-circle-down"></i>
                                             </a>

@@ -32,6 +32,12 @@ class TipoPrecio extends Model
         }
     }
 
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
+
     public function scopeByEmpresa($query, $empresa_id){
         if($empresa_id){
             return $query->where('tipo_precios.empresa_id', $empresa_id);

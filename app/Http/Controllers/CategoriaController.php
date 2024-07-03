@@ -21,11 +21,13 @@ class CategoriaController extends Controller
 
     public function indexAfter()
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         if(count($empresas) == 1 && Auth::user()->id != 1){
             return redirect()->route('categorias.index',['empresa_id' => Auth::user()->empresa_id, 'status_platos' => '[]', 'status_insumos' => '[]']);
         }
-        return view('categorias.indexAfter', compact('empresas'));
+        return view('categorias.indexAfter', compact('icono','header','empresas'));
     }
 
     public function index($empresa_id, $status_platos, $status_insumos)

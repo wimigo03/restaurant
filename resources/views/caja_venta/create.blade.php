@@ -19,6 +19,18 @@
                 numeralDecimalScale: 2,
                 rawValueTrimPrefix: true
             });
+
+            if($("#empresa_id >option:selected").val() != ''){
+                var id = $("#empresa_id >option:selected").val();
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                getSucursales(id,CSRF_TOKEN);
+            }
+
+            $('#sucursal_id').on('select2:open', function(e) {
+                if($("#empresa_id >option:selected").val() == ""){
+                    Modal("Para continuar se debe seleccionar una <b>[EMPRESA]</b>.");
+                }
+            });
         });
 
         function Modal(mensaje){
@@ -32,6 +44,38 @@
                 event.preventDefault();
             }
         });
+
+        $('#empresa_id').change(function() {
+            var id = $(this).val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            getSucursales(id,CSRF_TOKEN);
+        });
+
+        function getSucursales(id,CSRF_TOKEN){
+            $.ajax({
+                type: 'GET',
+                url: '/caja-venta/get_sucursales',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function(data){
+                    if(data.sucursales){
+                        var arr = Object.values($.parseJSON(data.sucursales));
+                        $("#sucursal_id").empty();
+                        var select = $("#sucursal_id");
+                        select.append($("<option></option>").attr("value", '').text('--Sucursal--'));
+                        $.each(arr, function(index, json) {
+                            var opcion = $("<option></option>").attr("value", json.id).text(json.nombre);
+                            select.append(opcion);
+                        });
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        }
 
         function procesar() {
             if(!validar()){

@@ -15,6 +15,11 @@
                 placeholder: "--Estado--",
                 width: '100%'
             });
+            $('#empresa_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
+                width: '100%'
+            });
             $('#tipo').select2({
                 theme: "bootstrap4",
                 placeholder: "--Tipo--",
@@ -27,31 +32,18 @@
         });
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val()
-            var url = "{{ route('unidades.create',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('unidades.create') }}";
             window.location.href = url;
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('unidades.search',':id') }}";
+            var url = "{{ route('unidades.search') }}";
             $("#form").attr('action', url);
-            url = url.replace(':id',id);
-            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('unidades.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('unidades.index') }}";
             window.location.href = url;
         }
     </script>

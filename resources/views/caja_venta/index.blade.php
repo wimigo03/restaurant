@@ -9,6 +9,12 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
+            $('#empresa_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
+                width: '100%'
+            });
+
             $('#sucursal_id').select2({
                 theme: "bootstrap4",
                 placeholder: "--Sucursales--",
@@ -59,25 +65,18 @@
         });
 
         function create(){
-            var id = $("#empresa_id").val()
-            var url = "{{ route('caja.venta.create',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('caja.venta.create') }}";
             window.location.href = url;
         }
 
         function search(){
-            var id = $("#empresa_id").val();
-            var url = "{{ route('caja.venta.search',':id') }}";
+            var url = "{{ route('caja.venta.search') }}";
             $("#form").attr('action', url);
-            url = url.replace(':id',id);
-            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
-            var id = $("#empresa_id").val();
-            var url = "{{ route('caja.venta.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('caja.venta.index') }}";
             window.location.href = url;
         }
     </script>

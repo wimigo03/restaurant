@@ -1,20 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
-<style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 12px;
-    }
-    .select2-results__option {
-        font-size: 12px;
-    }
-</style>
 @section('content')
     @include('precio_productos.partials.menu')
     @include('precio_productos.partials.search')
     @if (isset($precio_productos))
         <form action="#" method="post" id="form-precios">
             @csrf
-            <input type="hidden" name="empresa_id" value="{{ $empresa->id }}">
             <div class="form-group row font-roboto-12">
                 <div class="col-md-2 px-1 pl-1">
                     <label for="tipo_cambio" class="d-inline">T. Cambio</label>
@@ -55,6 +46,12 @@
                 width: '100%'
             });
 
+            $('#empresa_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
+                width: '100%'
+            });
+
             $('#tipo_precio_id').select2({
                 theme: "bootstrap4",
                 placeholder: "--Tipo Precio--",
@@ -81,7 +78,7 @@
 
             if($("#categoria_master_id >option:selected").val() != ''){
                 var id = $("#categoria_master_id >option:selected").val();
-                var empresa_id = $("#empresa_id").val();
+                var empresa_id = $("#empresa_id >option:selected").val();
                 getCategorias(id,empresa_id);
             }
         });
@@ -89,7 +86,7 @@
         $('#categoria_master_id').change(function() {
             localStorage.clear();
             var id = $(this).val();
-            var empresa_id = $("#empresa_id").val();
+            var empresa_id = $("#empresa_id >option:selected").val();
             getCategorias(id,empresa_id);
         });
 
@@ -273,33 +270,22 @@
         function confirmar(){
             var url = "{{ route('precio.productos.store') }}";
             $("#form-precios").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form-precios").submit();
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
             var tipo_precio_id = $("#tipo_precio_id option:selected").val();
             if(tipo_precio_id === '1'){
-                var url = "{{ route('precio.productos.search.tipo.base',':id') }}";
+                var url = "{{ route('precio.productos.search.tipo.base') }}";
             }else{
-                var url = "{{ route('precio.productos.search.tipo',':id') }}";
+                var url = "{{ route('precio.productos.search.tipo') }}";
             }
             $("#form").attr('action', url);
-            url = url.replace(':id',id);
-            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('precio.productos.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('precio.productos.index') }}";
             window.location.href = url;
         }
     </script>

@@ -1,7 +1,14 @@
-{{--<form action="#" method="get" id="form">
-    <input type="hidden" name="empresa_id" value="{{ $empresa->id }}">
+<form action="#" method="get" id="form">
     <div class="form-group row font-roboto-12">
         <div class="col-md-3 px-1 pr-1">
+            <select name="empresa_id" id="empresa_id" class="form-control">
+                <option value="">-</option>
+                @foreach ($empresas as $index => $value)
+                    <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
             <select name="tipo_precio_id" id="tipo_precio_id" class="form-control">
                 <option value="">-</option>
                 @foreach ($tipo_precios as $index => $value)
@@ -17,16 +24,16 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1">
             <select id="categoria_id" name="categoria_id" class="form-control font-roboto-12">
                 <option value="">--Seleccionar--</option>
             </select>
         </div>
-        <div class="col-md-3 px-1 pl-1">
+        <div class="col-md-2 px-1 pl-1">
             <input type="text" name="codigo" placeholder="--Codigo--" value="{{ request('codigo') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
     </div>
-</form>--}}
+</form>
 <div class="form-group row">
     <div class="col-md-12 px-1 pl-1">
         @can('configuracion.create')
