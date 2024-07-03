@@ -1,20 +1,24 @@
 <form action="#" method="get" id="form">
-    <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_id">
-    <div class="form-group row">
-        <div class="col-md-2 px-1 pr-1">
-            <input type="text" name="sucursal_id" placeholder="--Sucursal_id--" value="{{ request('sucursal_id') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberSinDecimal(event);">
+    <div class="form-group row font-roboto-12">
+        <div class="col-md-3 px-1 pr-1">
+            <select name="empresa_id" id="empresa_id" class="form-control">
+                <option value="">-</option>
+                @foreach ($empresas as $index => $value)
+                    <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
         </div>
-        <div class="col-md-4 pr-1 pl-1">
+        <div class="col-md-3 pr-1 pl-1">
             <input type="text" name="sucursal" placeholder="--Sucursal--" value="{{ request('sucursal') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-6 px-1 pl-1">
-            <input type="text" name="direccion" placeholder="--Direccion--" value="{{ request('direcccion') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
+        <div class="col-md-4 px-1 pl-1">
+            <input type="text" name="direccion" placeholder="--Direccion--" value="{{ request('direccion') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-    </div>
-    <div class="form-group row">
         <div class="col-md-2 px-1 pr-1">
             <input type="text" name="telefono" placeholder="--Telefono--" value="{{ request('telefono') }}" class="form-control font-roboto-12 intro" onkeypress="return valideNumberSinDecimal(event);">
         </div>
+    </div>
+    <div class="form-group row font-roboto-12">
         <div class="col-md-2 pr-1 pl-1">
             <select name="estado" id="estado" class="form-control">
                 <option value="">-</option>
@@ -30,7 +34,7 @@
         @can('sucursal.create')
             <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
                 <span class="btn btn-outline-success font-roboto-12" onclick="create();">
-                    <i class="fas fa-plus fa-fw"></i>&nbsp;
+                    <i class="fas fa-plus fa-fw"></i>
                 </span>
             </span>
         @endcan

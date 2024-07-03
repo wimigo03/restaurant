@@ -91,44 +91,50 @@ class Mesa extends Model
         return $this->belongsTo(Zona::class,'zona_id','id');
     }
 
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
+
     public function scopeByEmpresa($query, $empresa_id){
-        if($empresa_id){
+        if($empresa_id != null){
             return $query->where('mesas.empresa_id', $empresa_id);
         }
     }
 
     public function scopeBySucursal($query, $sucursal_id){
-        if($sucursal_id){
+        if($sucursal_id != null){
             return $query->where('mesas.sucursal_id', $sucursal_id);
         }
     }
 
     public function scopeByZona($query, $zona_id){
-        if($zona_id){
+        if($zona_id != null){
             return $query->where('mesas.zona_id', $zona_id);
         }
     }
 
     public function scopeByNumero($query, $numero){
-        if($numero){
+        if($numero != null){
             return $query->where('mesas.numero', $numero);
         }
     }
 
     public function scopeBySillas($query, $sillas){
-        if($sillas){
+        if($sillas != null){
             return $query->where('mesas.sillas', $sillas);
         }
     }
 
     public function scopeByDetalle($query, $detalle){
-        if($detalle){
+        if($detalle != null){
             return $query->where('mesas.detalle', 'like', '%' . $detalle . '%');
         }
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado){
+        if($estado != null){
             return $query->where('mesas.estado', $estado);
         }
     }

@@ -33,8 +33,6 @@
         });
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#sucursal_id").val()
             var url = "{{ route('zonas.create',':id') }}";
             url = url.replace(':id',id);
@@ -42,8 +40,6 @@
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
             var id = $("#sucursal_id").val();
             var url = "{{ route('zonas.search',':id') }}";
             $("#form").attr('action', url);
@@ -53,11 +49,14 @@
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
+            var id = $("#sucursal_id").val();
             var url = "{{ route('zonas.index',':id') }}";
             url = url.replace(':id',id);
+            window.location.href = url;
+        }
+
+        function retroceder(){
+            var url = "{{ route('sucursal.index') }}";
             window.location.href = url;
         }
     </script>

@@ -18,7 +18,7 @@
     }
 </style>
 @section('content')
-    @include('productos.partials.menu')
+    {{--@include('productos.partials.menu')--}}
     @include('productos.partials.form-create')
     @include('productos.partials.modal-create-unidad')
 @endsection
@@ -45,7 +45,6 @@
             });
 
             $("#subMenuProductos").hide();
-            verificarObligatorio();
         });
 
         $("#toggleSubMenu").click(function(){
@@ -123,50 +122,6 @@
             getCodigo(id);
         });
 
-        function verificarObligatorio(){
-            if($("#categoria_master_id").val() !== ""){
-                $("#categoria_master").removeClass('obligatorio');
-            }else{
-                $("#categoria_master").addClass('obligatorio');
-            }
-
-            if($("#categoria_id >option:selected").val() !== ""){
-                $("#obligatorio_categoria_id").removeClass('select2-container--obligatorio');
-            }else{
-                $("#obligatorio_categoria_id").addClass('select2-container--obligatorio');
-            }
-
-            if($("#nombre").val() !== ""){
-                $("#nombre").removeClass('obligatorio');
-            }else{
-                $("#nombre").addClass('obligatorio');
-            }
-
-            if($("#nombre_factura").val() !== ""){
-                $("#nombre_factura").removeClass('obligatorio');
-            }else{
-                $("#nombre_factura").addClass('obligatorio');
-            }
-
-            if($("#codigo").val() !== ""){
-                $("#codigo").removeClass('obligatorio');
-            }else{
-                $("#codigo").addClass('obligatorio');
-            }
-
-            if($("#unidad_id >option:selected").val() !== ""){
-                $("#obligatorio_unidad_id").removeClass('select2-container--obligatorio');
-            }else{
-                $("#obligatorio_unidad_id").addClass('select2-container--obligatorio');
-            }
-
-            if($("#detalle").val() !== ""){
-                $("#detalle").removeClass('obligatorio');
-            }else{
-                $("#detalle").addClass('obligatorio');
-            }
-        }
-
         function getCodigo(id){
             $.ajax({
                 type: 'GET',
@@ -236,10 +191,10 @@
         }
 
         function validarDatos(){
-            /*if($("#categoria_id >option:selected").val() == ""){
-                alertaModal("<center>La <b>[CATEGORIA]</b> es un dato obligatorio...</center>");
+            if($("#empresa_id >option:selected").val() == ""){
+                alertaModal("<center>La <b>[EMPRESA]</b> es un dato obligatorio...</center>");
                 return false;
-            }*/
+            }
             if($("#categoria_master_id").val() == ""){
                 alertaModal("<center>La <b>[CATEGORIA MASTER]</b> es un dato obligatorio...</center>");
                 return false;
@@ -266,25 +221,17 @@
         function confirmar(){
             var url = "{{ route('productos.store') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('productos.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('productos.index') }}";
             window.location.href = url;
         }
 
         function storeUnidadMedida(){
             var url = "{{ route('unidades.store') }}";
             $("#form-unidad-medida").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form-unidad-medida").submit();
         }
     </script>

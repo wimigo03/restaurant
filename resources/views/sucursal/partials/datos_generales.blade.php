@@ -1,9 +1,13 @@
 <br>
 <div class="form-group row">
-    <div class="col-md-4 pr-1 font-roboto-12">
+    <div class="col-md-3 pr-1 font-roboto-12">
         <label for="empresa" class="d-inline">Empresa</label>
-        <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_id">
-        <input type="text" value="{{ $empresa->nombre_comercial }}" id="empresa" class="form-control font-roboto-12" oninput="this.value = this.value.toUpperCase()" disabled>
+        <select name="empresa_id" id="empresa_id" class="form-control select2">
+            <option value="">-</option>
+            @foreach ($empresas as $index => $value)
+                <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="col-md-4 pr-1 font-roboto-12">
         <label for="nombre" class="d-inline">Nombre</label>

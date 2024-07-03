@@ -23,6 +23,11 @@
                 placeholder: "--Estado--",
                 width: '100%'
             });
+            $('#empresa_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
+                width: '100%'
+            });
             $('#categoria_master_id').select2({
                 theme: "bootstrap4",
                 placeholder: "--Categoria Master--",
@@ -44,32 +49,26 @@
             $("#subMenuProductos").slideToggle(250);
         });
 
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
+
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val()
-            var url = "{{ route('productos.create',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('productos.create') }}";
             window.location.href = url;
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('productos.search',':id') }}";
+            var url = "{{ route('productos.search') }}";
             $("#form").attr('action', url);
-            url = url.replace(':id',id);
-            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('productos.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('productos.index') }}";
             window.location.href = url;
         }
     </script>

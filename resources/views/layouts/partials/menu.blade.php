@@ -203,21 +203,21 @@
                     @endcan
                     @can('sucursal.index')
                         <li>
-                            <a href="{{ route('sucursal.indexAfter') }}">
+                            <a href="{{ route('sucursal.index') }}">
                                 &nbsp;&nbsp;<i class="fa-solid fa-house-damage fa-fw mr-2"></i>&nbsp;Sucursales
                             </a>
                         </li>
                     @endcan
                     @can('mesas.index')
                         <li>
-                            <a href="{{ route('mesas.indexAfter') }}">
+                            <a href="{{ route('mesas.index') }}">
                                 &nbsp;&nbsp;<i class="fas fa-utensils fa-fw mr-2"></i></i>&nbsp;Mesas
                             </a>
                         </li>
                     @endcan
                     @can('productos.index')
                         <li>
-                            <a href="{{ route('productos.indexAfter') }}">
+                            <a href="{{ route('productos.index') }}">
                                 &nbsp;&nbsp;<i class="fas fa-wine-glass-alt fa-fw mr-2"></i>&nbsp;Productos
                             </a>
                         </li>

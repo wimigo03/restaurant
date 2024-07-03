@@ -57,6 +57,12 @@ class Unidad extends Model
         return $this->belongsTo(PiCliente::class,'pi_cliente_id','id');
     }
 
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
+
     public function scopeByEmpresa($query, $empresa_id){
         if($empresa_id){
             return $query->where('empresa_id', $empresa_id);

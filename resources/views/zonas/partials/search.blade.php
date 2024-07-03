@@ -26,6 +26,11 @@
 </form>
 <div class="form-group row">
     <div class="col-md-12 px-1">
+        <span class="tts:right tts-slideIn tts-custom" aria-label="Retroceder" style="cursor: pointer;">
+            <span class="btn btn-outline-primary font-roboto-12" onclick="retroceder();">
+                <i class="fa-solid fa-angles-left fa-fw"></i>
+            </span>
+        </span>
         @can('zonas.create')
             <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
                 <span class="btn btn-outline-success font-roboto-12" onclick="create();">

@@ -29,18 +29,22 @@ class MesaController extends Controller
         return view('mesas.indexAfter', compact('empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $sucursales = Sucursal::where('empresa_id',$empresa_id)->pluck('nombre','id');
+        $empresas = Empresa::query()
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->pluck('nombre_comercial','id');
+        $sucursales = Sucursal::query()
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->pluck('nombre','id');
         $estados = Zona::ESTADOS;
-        $empresa = Empresa::find($empresa_id);
         $mesas = Mesa::query()
-                        ->byEmpresa($empresa_id)
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
                         ->orderBy('id','desc')
                         ->paginate(10);
-        return view('mesas.index', compact('icono','header','sucursales','estados','empresa','mesas'));
+        return view('mesas.index', compact('icono','header','empresas','sucursales','estados','mesas'));
     }
 
     public function indexAjax(Request $request){
@@ -66,10 +70,16 @@ class MesaController extends Controller
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $sucursales = Sucursal::where('empresa_id',$request->empresa_id)->pluck('nombre','id');
+        $empresas = Empresa::query()
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->pluck('nombre_comercial','id');
+        $sucursales = Sucursal::query()
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                        ->pluck('nombre','id');
         $estados = Zona::ESTADOS;
         $empresa = Empresa::find($request->empresa_id);
         $mesas = Mesa::query()
+                        ->byPiCliente(Auth::user()->pi_cliente_id)
                         ->byEmpresa($request->empresa_id)
                         ->bySucursal($request->sucursal_id)
                         ->byZona($request->zona_id)
@@ -79,16 +89,37 @@ class MesaController extends Controller
                         ->byEstado($request->estado)
                         ->orderBy('id','desc')
                         ->paginate(10);
-        return view('mesas.index', compact('icono','header','sucursales','estados','empresa','mesas'));
+        return view('mesas.index', compact('icono','header','empresas','sucursales','estados','mesas'));
     }
 
-    public function create($empresa_id)
+    public function create()
     {
         $icono = self::ICONO;
         $header = self::REGISTRAR;
-        $sucursales = Sucursal::where('empresa_id',$empresa_id)->where('estado','1')->pluck('nombre','id');
-        $empresa = Empresa::find($empresa_id);
-        return view('mesas.create', compact('icono','header','sucursales','empresa'));
+        $empresas = Empresa::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->pluck('nombre_comercial','id');
+        $pi_cliente_id = Auth::user()->pi_cliente_id;
+        return view('mesas.create', compact('icono','header','empresas','pi_cliente_id'));
+    }
+
+    public function getDatosByEmpresa(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $sucursales = Sucursal::query()
+                                    ->byEmpresa($id)
+                                    ->where('estado','1')
+                                    ->get()
+                                    ->toJson();
+            if($sucursales){
+                return response()->json([
+                    'sucursales' => $sucursales
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request)
@@ -124,7 +155,7 @@ class MesaController extends Controller
                 'mesas_disponibles' => $zona->mesas_disponibles + 1
             ]);
 
-            return redirect()->route('mesas.index', ['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó una [MESA] en la sucursal seleccionada.');
+            return redirect()->route('mesas.index')->with('success_message', 'Se agregó una [MESA] en la sucursal seleccionada.');
         } catch (ValidationException $e) {
             return redirect()->route('mesas.create', $request->empresa_id)
                 ->withErrors($e->validator->errors())
@@ -169,7 +200,7 @@ class MesaController extends Controller
 
             $mesa->update($datos);
 
-            return redirect()->route('mesas.index', ['empresa_id' => $request->empresa_id])->with('success_message', 'Se Modificó una [MESA] en la sucursal seleccionada.');
+            return redirect()->route('mesas.index')->with('success_message', 'Se Modificó una [MESA] en la sucursal seleccionada.');
         } catch (ValidationException $e) {
             return redirect()->route('mesas.editar', $request->mesa_id)
                 ->withErrors($e->validator->errors())

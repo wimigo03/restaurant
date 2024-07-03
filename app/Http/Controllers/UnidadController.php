@@ -74,7 +74,7 @@ class UnidadController extends Controller
             'tipo' => 'required'
         ]);
         try{
-            $empresa = Empresa::find($request->empresa_id);
+            $empresa = Empresa::find($request->u_empresa_id);
             $unidad = Unidad::create([
                 'empresa_id' => $request->empresa_id,
                 'pi_cliente_id' => $empresa->pi_cliente_id,
@@ -87,7 +87,7 @@ class UnidadController extends Controller
                 if(isset($request->form_prod)){
                     return back()->with('success_message', 'Se agregó un unidad de medida correctamente.');;
                 }
-            return redirect()->route('unidades.index',['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó un unidad de medida correctamente.');
+            return redirect()->route('unidades.index')->with('success_message', 'Se agregó un unidad de medida correctamente.');
         } catch (ValidationException $e) {
             return redirect()->route('unidades.create',$request->empresa_id)
                 ->withErrors($e->validator->errors())

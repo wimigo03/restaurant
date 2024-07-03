@@ -3,6 +3,7 @@
         <table class="table display {{--table-bordered--}} responsive table-striped">
             <thead>
                 <tr class="font-roboto-11">
+                    <td class="text-center p-1"><b>EMP.</b></td>
                     <td class="text-center p-1"><b>NOMBRE</b></td>
                     <td class="text-center p-1"><b>EN FACTURA</b></td>
                     <td class="text-center p-1"><b>CODIGO</b></td>
@@ -19,6 +20,7 @@
             <tbody>
                 @foreach ($productos as $datos)
                     <tr class="font-roboto-11">
+                        <td class="text-center p-1">{{ $datos->empresa->alias }}</td>
                         <td class="text-left p-1">{{ $datos->nombre }}</td>
                         <td class="text-left p-1">{{ $datos->nombre_factura }}</td>
                         <td class="text-center p-1">{{ $datos->codigo }}</td>

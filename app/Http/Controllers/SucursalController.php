@@ -10,7 +10,7 @@ use Auth;
 class SucursalController extends Controller
 {
     const ICONO = 'fa-solid fa-house-damage fa-fw';
-    const INDEX = 'SUCURSAL';
+    const INDEX = 'SUCURSALES';
     const CREATE = 'REGISTRAR SUCURSAL';
     const EDITAR = 'MODIFICAR SUCURSAL';
     const SHOW = 'DETALLE SUCURSAL';
@@ -25,41 +25,49 @@ class SucursalController extends Controller
         return view('sucursal.indexAfter', compact('empresas_info','empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($empresa_id);
+        $empresas = Empresa::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->pluck('nombre_comercial','id');
         $estados = Sucursal::ESTADOS;
         $sucursales = Sucursal::query()
-                                ->byEmpresa($empresa_id)
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('sucursal.index', compact('icono','header','empresa','estados','sucursales'));
+        return view('sucursal.index', compact('icono','header','empresas','estados','sucursales'));
     }
 
     public function search(Request $request)
     {
-        $empresa = Empresa::find($request->empresa_id);
+        $icono = self::ICONO;
+        $header = self::INDEX;
+        $empresas = Empresa::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->pluck('nombre_comercial','id');
         $estados = Sucursal::ESTADOS;
         $sucursales = Sucursal::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
                                 ->byEmpresa($request->empresa_id)
-                                ->bySucursalId($request->sucursal_id)
                                 ->bySucursal($request->sucursal)
                                 ->byDireccion($request->direccion)
                                 ->byTelefono($request->telefono)
                                 ->byEstado($request->estado)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('sucursal.index', compact('empresa','estados','sucursales'));
+        return view('sucursal.index', compact('icono','header','empresas','estados','sucursales'));
     }
 
-    public function create($id)
+    public function create()
     {
         $icono = self::ICONO;
         $header = self::CREATE;
-        $empresa = Empresa::find($id);
-        return view('sucursal.create', compact('icono','header','empresa'));
+        $empresas = Empresa::query()
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->pluck('nombre_comercial','id');
+        return view('sucursal.create', compact('icono','header','empresas'));
     }
 
     public function store(Request $request)
@@ -82,7 +90,7 @@ class SucursalController extends Controller
                 'estado' => '1'
             ]);
 
-            return redirect()->route('sucursal.index',['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó una sucursal en la empresa seleccionada.');
+            return redirect()->route('sucursal.index')->with('success_message', 'Se agregó una sucursal en la empresa seleccionada.');
         } catch (ValidationException $e) {
             return redirect()->route('sucursal.create',$request->empresa_id)
                 ->withErrors($e->validator->errors())

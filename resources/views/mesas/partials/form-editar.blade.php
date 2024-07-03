@@ -4,40 +4,40 @@
     <input type="hidden" name="pi_cliente_id" value="{{ $empresa->pi_cliente_id }}" id="pi_cliente_id">
     <input type="hidden" name="empresa_id" value="{{ $empresa->id }}">
     <div class="form-group row font-roboto-12">
-        <div class="col-md-4 px-1 pr-1">
+        <div class="col-md-3 pr-1 pl-1">
+            <label for="zona" class="d-inline">Empresa</label>
+            <input type="text" value="{{ $empresa->nombre_comercial }}" class="form-control font-roboto-12" disabled>
+        </div>
+        <div class="col-md-3 pr-1 pl-1">
             <label for="sucursal" class="d-inline">Sucursal</label>
-            <div class="select2-container--obligatorio" id="obligatorio_sucursal_id">
-                <select name="sucursal_id" id="sucursal_id" class="form-control select2" onchange="obligatorio();">
-                    @foreach ($sucursales as $sucursal)
-                        <option value="{{ $sucursal->id }}"
-                            @if($sucursal->id == old('sucursal_id') || (isset($mesa) && $mesa->sucursal_id == $sucursal->id))
-                                selected
-                            @endif>
-                            {{ $sucursal->nombre }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+            <select name="sucursal_id" id="sucursal_id" class="form-control select2">
+                @foreach ($sucursales as $sucursal)
+                    <option value="{{ $sucursal->id }}"
+                        @if($sucursal->id == old('sucursal_id') || (isset($mesa) && $mesa->sucursal_id == $sucursal->id))
+                            selected
+                        @endif>
+                        {{ $sucursal->nombre }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <div class="col-md-4 pr-1 pl-1">
+            <input type="hidden" value="{{ $mesa->zona_id }}" id="request_zona_id">
             <label for="zona" class="d-inline">Zona</label>
-            <div class="select2-container--obligatorio" id="obligatorio_zona_id">
-                <select id="zona_id" name="zona_id" class="form-control font-verdana-bg select2" onchange="obligatorio();">
-                    <option value="">--Seleccionar--</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <label for="numero" class="d-inline">N° de Mesa</label>
-            <input type="text" name="numero" value="{{ $mesa->numero }}" id="numero" class="form-control font-roboto-12 obligatorio intro" oninput="this.value = this.value.toUpperCase(); obligatorio();">
+            <select id="zona_id" name="zona_id" class="form-control font-roboto-12 select2">
+            </select>
         </div>
         <div class="col-md-2 px-1 pl-1">
-            <label for="sillas" class="d-inline">Cant. Sillas</label>
-            <input type="text" name="sillas" value="{{ $mesa->sillas }}" id="sillas" class="form-control font-roboto-12 obligatorio intro" oninput="this.value = this.value.toUpperCase(); obligatorio();">
+            <label for="numero" class="d-inline">N° de Mesa</label>
+            <input type="text" name="numero" value="{{ $mesa->numero }}" id="numero" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
     </div>
     <div class="form-group row font-roboto-12">
-        <div class="col-md-11 px-1 pr-1">
+        <div class="col-md-2 px-1 pr-1">
+            <label for="sillas" class="d-inline">Cant. Sillas</label>
+            <input type="text" name="sillas" value="{{ $mesa->sillas }}" id="sillas" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+        </div>
+        <div class="col-md-10 px-1 pl-1">
             <label for="detalle" class="d-inline">Descripcion</label>
             <input type="text" name="detalle" value="{{ $mesa->detalle }}" id="detalle" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
         </div>
@@ -49,7 +49,7 @@
             <i class="fas fa-paper-plane fa-fw"></i>&nbsp;Actualizar
         </span>
         <span class="btn btn-outline-danger font-roboto-12" onclick="cancelar();">
-            &nbsp;<i class="fas fa-times fa-fw"></i>&nbsp;Cancelar
+            <i class="fas fa-times fa-fw"></i>&nbsp;Cancelar
         </span>
         <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
     </div>

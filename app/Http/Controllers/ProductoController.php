@@ -31,34 +31,34 @@ class ProductoController extends Controller
         return view('productos.indexAfter', compact('empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($empresa_id);
-        $categorias_master = Categoria::where('empresa_id',$empresa_id)->where('nivel','0')->pluck('nombre','id');
-        $categorias = Categoria::where('empresa_id',$empresa_id)->where('nivel','1')->pluck('nombre','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $categorias_master = Categoria::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('nivel','0')->pluck('nombre','id');
+        $categorias = Categoria::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('nivel','1')->pluck('nombre','id');
         $tipos = Categoria::TIPOS;
         $estados = Producto::ESTADOS;
         $productos = Producto::query()
-                                ->byEmpresa($empresa_id)
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('productos.index', compact('icono','header','empresa','categorias_master','categorias','tipos','estados','productos'));
+        return view('productos.index', compact('icono','header','empresas','categorias_master','categorias','tipos','estados','productos'));
     }
 
     public function search(Request $request)
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa_id = $request->empresa_id;
-        $empresa = Empresa::find($empresa_id);
-        $categorias_master = Categoria::where('empresa_id',$empresa_id)->where('nivel','0')->pluck('nombre','id');
-        $categorias = Categoria::where('empresa_id',$empresa_id)->where('nivel','1')->pluck('nombre','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $categorias_master = Categoria::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('nivel','0')->pluck('nombre','id');
+        $categorias = Categoria::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('nivel','1')->pluck('nombre','id');
         $tipos = Categoria::TIPOS;
         $estados = Producto::ESTADOS;
         $productos = Producto::query()
-                                ->byEmpresa($empresa_id)
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->byEmpresa($request->empresa_id)
                                 ->byProducto($request->producto_id)
                                 ->byNombre($request->nombre)
                                 ->byNombreFactura($request->nombre_factura)
@@ -70,20 +70,20 @@ class ProductoController extends Controller
                                 ->byEstado($request->estado)
                                 ->orderBy('id','desc')
                                 ->paginate(10);
-        return view('productos.index', compact('icono','header','empresa','categorias_master','categorias','tipos','estados','productos'));
+        return view('productos.index', compact('icono','header','empresas','categorias_master','categorias','tipos','estados','productos'));
 
     }
 
-    public function create($id)
+    public function create()
     {
         $icono = self::ICONO;
         $header = self::CREATE;
-        $empresa = Empresa::find($id);
-        $categorias_master = Categoria::where('empresa_id',$id)->where('tipo','1')->where('nivel',0)->where('estado','1')->pluck('nombre','id');
-        $categorias = Categoria::where('empresa_id',$id)->where('tipo','1')->where('nivel',1)->where('estado','1')->pluck('nombre','id');
-        $unidades = Unidad::where('empresa_id',$id)->where('estado','1')->pluck('nombre','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $categorias_master = Categoria::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('tipo','1')->where('nivel',0)->where('estado','1')->pluck('nombre','id');
+        $categorias = Categoria::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('tipo','1')->where('nivel',1)->where('estado','1')->pluck('nombre','id');
+        $unidades = Unidad::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('estado','1')->pluck('nombre','id');
         $tipos = Unidad::TIPOS;
-        return view('productos.create', compact('icono','header','empresa','categorias_master','categorias','unidades','tipos'));
+        return view('productos.create', compact('icono','header','empresas','categorias_master','categorias','unidades','tipos'));
     }
 
     public function getCodigoMaster($id)
@@ -126,9 +126,7 @@ class ProductoController extends Controller
         $numeracion = $numeracion != null ? str_pad($numeracion, 3, '0', STR_PAD_LEFT) : '001';
         $codigo = $categoria_master->codigo . '-00-' . $numeracion;
         return response()->json([
-            'codigo' => $codigo,
-            //'categoria_master' => $categoria_master->nombre,
-            //'categoria_master_id' => $categoria_master->id
+            'codigo' => $codigo
         ]);
 
         return response()->json(['error'=>'Algo Salio Mal']);
@@ -218,7 +216,7 @@ class ProductoController extends Controller
                 $precio_producto = PrecioProducto::create($datosPrecioProducto);
             }
 
-            return redirect()->route('productos.index',['empresa_id' => $request->empresa_id])->with('success_message', 'Se agregó un producto correctamente.');
+            return redirect()->route('productos.index')->with('success_message', 'Se agregó un producto correctamente.');
         } catch (ValidationException $e) {
             return redirect()->route('productos.create',$request->empresa_id)
                 ->withErrors($e->validator->errors())
@@ -324,9 +322,9 @@ class ProductoController extends Controller
             $producto->update([
                 'estado' => '1'
             ]);
-            return redirect()->route('productos.index',$producto->empresa_id)->with('info_message', 'Se Habilito el Producto seleccionado...');
+            return redirect()->route('productos.index')->with('info_message', 'Se Habilito el Producto seleccionado...');
         } catch (ValidationException $e) {
-            return redirect()->route('productos.index',$producto->empresa_id)
+            return redirect()->route('productos.index')
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }
@@ -343,9 +341,9 @@ class ProductoController extends Controller
             $producto->update([
                 'estado' => '2'
             ]);
-            return redirect()->route('productos.index',$producto->empresa_id)->with('info_message', 'Se Deshabilito el Producto seleccionado...');
+            return redirect()->route('productos.index')->with('info_message', 'Se Deshabilito el Producto seleccionado...');
         } catch (ValidationException $e) {
-            return redirect()->route('productos.index',$producto->empresa_id)
+            return redirect()->route('productos.index')
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }

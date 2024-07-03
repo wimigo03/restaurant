@@ -66,6 +66,12 @@
                 }
             });*/
 
+            $('#empresa_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
+                width: '100%'
+            });
+
             $('#estado').select2({
                 theme: "bootstrap4",
                 placeholder: "--Estado--",
@@ -147,31 +153,18 @@
         });
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val()
-            var url = "{{ route('mesas.create',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('mesas.create') }}";
             window.location.href = url;
         }
 
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('mesas.search',':id') }}";
+            var url = "{{ route('mesas.search') }}";
             $("#form").attr('action', url);
-            url = url.replace(':id',id);
-            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('mesas.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('mesas.index') }}";
             window.location.href = url;
         }
     </script>

@@ -2,9 +2,9 @@
 
 Route::prefix('productos')->name('productos.')->middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     Route::get('/index-after', 'ProductoController@indexAfter')->name('indexAfter')->middleware('can:productos.index');
-    Route::get('/{empresa_id}', 'ProductoController@index')->name('index')->middleware('can:productos.index');
-    Route::get('/search/{empresa_id}', 'ProductoController@search')->name('search')->middleware('can:productos.index');
-    Route::get('/create/{empresa_id}', 'ProductoController@create')->name('create')->middleware('can:productos.create');
+    Route::get('/', 'ProductoController@index')->name('index')->middleware('can:productos.index');
+    Route::get('/search', 'ProductoController@search')->name('search')->middleware('can:productos.index');
+    Route::get('/create', 'ProductoController@create')->name('create')->middleware('can:productos.create');
     Route::post('/store', 'ProductoController@store')->name('store')->middleware('can:productos.create');
     Route::get('/get_codigo_master/{categoria_master_id}', 'ProductoController@getCodigoMaster')->name('get.codigo.master');
     Route::get('/get_codigo/{categoria_id}', 'ProductoController@getCodigo')->name('get.codigo');

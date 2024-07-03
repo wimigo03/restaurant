@@ -57,6 +57,12 @@ class Categoria extends Model
         }
     }
 
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
+
     public function cliente(){
         return $this->belongsTo(PiCliente::class,'pi_cliente_id','id');
     }

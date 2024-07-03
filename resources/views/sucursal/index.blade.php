@@ -32,6 +32,12 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
+            $('#empresa_id').select2({
+                theme: "bootstrap4",
+                placeholder: "--Empresa--",
+                width: '100%'
+            });
+
             $('#estado').select2({
                 theme: "bootstrap4",
                 placeholder: "--Estado--",
@@ -49,31 +55,25 @@
         }
 
         function create(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val()
-            var url = "{{ route('sucursal.create',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('sucursal.create') }}";
             window.location.href = url;
         }
 
+        $('.intro').on('keypress', function(event) {
+            if (event.which === 13) {
+                search();
+                event.preventDefault();
+            }
+        });
+
         function search(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('sucursal.search',':id') }}";
+            var url = "{{ route('sucursal.search') }}";
             $("#form").attr('action', url);
-            url = url.replace(':id',id);
-            window.location.href = url;
             $("#form").submit();
         }
 
         function limpiar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('sucursal.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('sucursal.index') }}";
             window.location.href = url;
         }
     </script>

@@ -129,7 +129,7 @@
         }
 
         function validarDatosGenerales(){
-            if($("#empresa").val() == ""){
+            if($("#empresa_id").val() == ""){
                 alertaModal("<center>El campo en <u>Datos Generales</u><br><b>[Empresa]</b> es un dato obligatorio...</center>");
                 return false;
             }
