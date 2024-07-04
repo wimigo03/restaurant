@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PiCliente;
 use Carbon\Carbon;
+use Auth;
 
 class TipoCambio extends Model
 {
@@ -40,8 +41,10 @@ class TipoCambio extends Model
     }
 
     public function scopeByPiCliente($query, $pi_cliente_id){
-        if($pi_cliente_id){
-            return $query->where('pi_cliente_id', $pi_cliente_id);
+        if($pi_cliente_id != null){
+            if(Auth::user()->id != 1){
+                return $query->where('pi_cliente_id', $pi_cliente_id);
+            }
         }
     }
 

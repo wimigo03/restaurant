@@ -63,7 +63,7 @@ class TipoPrecioController extends Controller
             'nombre' => 'required|unique:tipo_precios,nombre,null,id,empresa_id,' . $request->empresa_id,
         ]);
         $date = date('Y-m-d');
-        $tipo_cambio = TipoCambio::where('fecha',$date)->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
         if($tipo_cambio == null){
             return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }

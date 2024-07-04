@@ -15,4 +15,16 @@
         <br>
         <span class="country">{{ auth()->user()->cargo_header }}</span>
     @endif
+    <div class="row abs-center">
+        <div class="col-md-10">
+            <select name="menu_dashboard" id="menu_dashboard" class="form-control font-roboto-13" onchange="goToDashboardType(this.value);">
+                {{--<option value="HOME" @if(Session::get('menu') == 'HOME') selected @endif>Inicio</option>
+                <option value="ADM" @if(Session::get('menu') == 'ADM') selected @endif>Administracion</option>--}}
+                <option value="CONTABLE" @if(Session::get('menu') == 'CONTABLE') selected @endif>Contable</option>
+                <option value="CONTABLEF" @if(Session::get('menu') == 'CONTABLEF') selected @endif>Contablef</option>
+                <option value="RESTO" @if(Session::get('menu') == 'RESTO') selected @endif>Restaurant</option>
+                <option value="RRHH" @if(Session::get('menu') == 'RRHH') selected @endif>Recursos Humanos</option>
+            </select>
+        </div>
+    </div>
 </div>

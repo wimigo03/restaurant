@@ -75,7 +75,7 @@ class ComprobanteFController extends Controller
         $icono = self::ICONO;
         $header = self::CREATE;
         $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
-        $tipo_cambio = TipoCambio::where('pi_cliente_id',Auth::user()->pi_cliente_id)->where('fecha',date('Y-m-d'))->where('estado','1')->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',date('Y-m-d'))->where('estado','1')->first();
         if($tipo_cambio == null){
             return redirect()->route('tipo.cambio.index')->with('info_message', 'Antes de continuar se debe registrar un Tipo de Cambio para la fecha actual.');
         }
@@ -166,7 +166,7 @@ class ComprobanteFController extends Controller
     public function store(Request $request)
     {
         $fecha = date('Y-m-d', strtotime($request->fecha));
-        $tipo_cambio = TipoCambio::where('pi_cliente_id',Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
         if($tipo_cambio == null){
             return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Pi-Resto | Home</title>
-    <link rel="icon" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('fonts/roboto.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('fonts/poppins.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('fonts/source.css') }}" rel="stylesheet">
@@ -104,11 +104,21 @@
     <script src="{{ asset('js/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/treeview/jstree.min.js') }}"></script>
     <script>
-        /*function goToDashboardType(input){
-            var url = "{{route('change',':tipo')}}"
-            url = url.replace(':tipo', input.value);
-            window.location.href = url;
-        }*/
+        function goToDashboardType(selectedValue) {
+            fetch('/update-dashboard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ menu: selectedValue })
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('dashboard-content').innerHTML = data;
+            })
+            .catch(error => console.error('Error:', error));
+        }
     </script>
   </body>
 </html>

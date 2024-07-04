@@ -147,7 +147,7 @@ class ProductoController extends Controller
             'foto_3' => 'nullable|file|mimes:png|max:2048',
         ]);
         $date = date('Y-m-d');
-        $tipo_cambio = TipoCambio::where('fecha',$date)->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
         if($tipo_cambio == null){
             return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }

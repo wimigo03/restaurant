@@ -34,7 +34,7 @@ class PrecioProductoController extends Controller
     public function index()
     {
         $fecha = date('Y-m-d');
-        $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
         if($tipo_cambio == null){
             return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
@@ -51,7 +51,7 @@ class PrecioProductoController extends Controller
     public function searchTipoBase(Request $request)
     {
         $fecha = date('Y-m-d');
-        $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
         if($tipo_cambio == null){
             return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
@@ -79,7 +79,7 @@ class PrecioProductoController extends Controller
     public function searchTipo(Request $request)
     {
         $fecha = date('Y-m-d');
-        $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
         if($tipo_cambio == null){
             return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }
@@ -108,7 +108,7 @@ class PrecioProductoController extends Controller
     public function search(Request $request)
     {
         $fecha = date('Y-m-d');
-        $tipo_cambio = TipoCambio::where('fecha',$fecha)->first();
+        $tipo_cambio = TipoCambio::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('fecha',$fecha)->first();
         if($tipo_cambio == null){
             return redirect()->back()->with('info_message', 'No existe un tipo de cambio para la [FECHA] seleccionada...')->withInput();
         }

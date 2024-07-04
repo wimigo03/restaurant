@@ -22,9 +22,39 @@ class HomeController extends Controller
         return view('home.index',compact('empresa','header','icono'));
     }
 
-    public function change($module){
+    /*public function change($module){
         Session::put('menu',$module);
         return redirect()->route('home.index');
+    }*/
+
+    public function updateDashboard(Request $request)
+    {
+        $menu = $request->input('menu');
+        Session::put('menu',$menu);
+        $view = '';
+
+        switch ($menu) {
+            /*case 'HOME':
+                $view = view('layouts.partials.menu-home')->render();
+                break;
+            case 'ADM':
+                $view = view('layouts.partials.menu-adm')->render();
+                break;*/
+            case 'CONTABLE':
+                $view = view('layouts.partials.menu-contable')->render();
+                break;
+            case 'CONTABLEF':
+                $view = view('layouts.partials.menu-contable-f')->render();
+                break;
+            case 'RESTO':
+                $view = view('layouts.partials.menu-resto')->render();
+                break;
+            case 'RRHH':
+                $view = view('layouts.partials.menu-rrhh')->render();
+                break;
+        }
+
+        return response($view, 200)->header('Content-Type', 'text/html');
     }
 
     /*public function logout(Request $request)
