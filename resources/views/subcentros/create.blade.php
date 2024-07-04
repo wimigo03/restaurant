@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('centros.index') }}">Centros Contables</a><span>&nbsp;/&nbsp;
+    <span>Registrar Sub Centro</span>
+@endsection
 @section('content')
     @include('subcentros.partials.form-create')
 @endsection

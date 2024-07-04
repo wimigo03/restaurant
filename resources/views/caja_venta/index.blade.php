@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Caja Venta</span>
+@endsection
 @section('content')
     @include('caja_venta.partials.search')
     @include('caja_venta.partials.table')

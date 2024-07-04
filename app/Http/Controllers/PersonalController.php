@@ -25,6 +25,7 @@ class PersonalController extends Controller
     const EDITAR = 'MODIFICAR PERSONAL';
     const SHOW = 'DETALLE DE PERSONAL';
     const RETIRAR = 'RETIRAR PERSONAL';
+    const CONTRATO = 'SUBIR CONTRATO';
 
     public function indexAfter()
     {
@@ -35,64 +36,63 @@ class PersonalController extends Controller
         return view('personal.indexAfter', compact('empresas'));
     }
 
-    public function index($empresa_id)
+    public function index()
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($empresa_id);
-        $cargos = Cargo::where('empresa_id',$empresa_id)->pluck('nombre','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $cargos = Cargo::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre','id');
         $estados = PersonalLaboral::ESTADOS;
         $personal_laborales = PersonalLaboral::query()
-                                                ->byEmpresa($empresa_id)
+                                                ->byPiCliente(Auth::user()->pi_cliente_id)
                                                 ->where('estado','1')
                                                 ->orderBy('id','desc')
                                                 ->paginate(10);
-        return view('personal.index', compact('icono','header','empresa','cargos','estados','personal_laborales'));
+        return view('personal.index', compact('icono','header','empresas','cargos','estados','personal_laborales'));
     }
 
     public function search(Request $request)
     {
         $icono = self::ICONO;
         $header = self::INDEX;
-        $empresa = Empresa::find($request->empresa_id);
-        $cargos = Cargo::where('empresa_id',$empresa->id)->pluck('nombre','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $cargos = Cargo::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre','id');
         $estados = PersonalLaboral::ESTADOS;
         $personal_laborales = PersonalLaboral::query()
-                                                ->byEmpresa($empresa->id)
-                                                ->byCodigoIngreso($request->codigo_ingreso)
-                                                ->byCodigoRetiro($request->codigo_retiro)
-                                                ->byNroCarnet($request->ci_run)
-                                                ->byPrimerNombre($request->primer_nombre)
-                                                ->byApellidoPaterno($request->apellido_paterno)
-                                                ->byApellidoMaterno($request->apellido_materno)
-                                                ->byCargo($request->cargo_id)
-                                                ->byContrato($request->file_contrato)
-                                                ->byEstado($request->estado)
-                                                ->orderBy('id','desc')
-                                                ->paginate(10);
-        return view('personal.index', compact('icono','header','empresa','cargos','estados','personal_laborales'));
+                                        ->byPiCliente(Auth::user()->pi_cliente_id)
+                                        ->byEmpresa($request->empresa_id)
+                                        ->byCodigoIngreso($request->codigo_ingreso)
+                                        ->byCodigoRetiro($request->codigo_retiro)
+                                        ->byNroCarnet($request->ci_run)
+                                        ->byPrimerNombre($request->primer_nombre)
+                                        ->byApellidoPaterno($request->apellido_paterno)
+                                        ->byApellidoMaterno($request->apellido_materno)
+                                        ->byCargo($request->cargo_id)
+                                        ->byContrato($request->file_contrato)
+                                        ->byEstado($request->estado)
+                                        ->orderBy('id','desc')
+                                        ->paginate(10);
+        return view('personal.index', compact('icono','header','empresas','cargos','estados','personal_laborales'));
 
     }
 
-    public function create($id)
+    public function create()
     {
         $icono = self::ICONO;
         $header = self::CREATE;
-        $empresa = Empresa::find($id);
-        $empresas = Empresa::query()->where('id',$id)->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
+        $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         $nacionalidades = Personal::NACIONALIDADES;
         $extensiones = Personal::EXTENSIONES;
         $licencia_categorias = Personal::LICENCIA_CATEGORIAS;
-        $cargos = Cargo::where('empresa_id',$empresa->id)->where('estado','1')->pluck('nombre','id');
+        $cargos = Cargo::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre','id');
         $afps = Afp::pluck('nombre','id');
-        $horarios = Horario::where('empresa_id',$id)->where('nombre','OFICINA')->pluck('nombre','id');
+        $horarios = Horario::query()->byPiCliente(Auth::user()->pi_cliente_id)->where('nombre','OFICINA')->pluck('nombre','id');
         $tipo_familiares = Familiar::TIPO_FAMILIARES;
         $ocupaciones = Familiar::OCUPACIONES;
         $niveles_estudio = Familiar::NIVELES_ESTUDIO;
         return view('personal.create',
                 compact('icono',
                         'header',
-                        'empresa',
                         'empresas',
                         'nacionalidades',
                         'extensiones',
@@ -554,9 +554,11 @@ class PersonalController extends Controller
 
     public function file_contrato($id)
     {
+        $icono = self::ICONO;
+        $header = self::CONTRATO;
         $personal_laboral = PersonalLaboral::find($id);
         $personal = Personal::find($personal_laboral->personal_id);
-        return view('personal.fileContrato', compact('personal_laboral','personal'));
+        return view('personal.fileContrato', compact('icono','header','personal_laboral','personal'));
     }
 
     public function file_contrato_store(Request $request)

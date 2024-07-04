@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Listar Balances de apertura</span>
+@endsection
 @section('content')
     @include('balance_apertura.partials.search')
     @include('balance_apertura.partials.table')

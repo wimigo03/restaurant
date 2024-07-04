@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('personal.index') }}">Personal</a><span>&nbsp;/&nbsp;
+    <span>Subir Contrato</span>
+@endsection
 <style>
     .select2 + .select2-container .select2-selection__rendered {
         font-size: 11px;
@@ -62,7 +68,7 @@
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            
+
         });
 
         function alertaModal(mensaje){
@@ -85,7 +91,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
+            $(".btn").hide();
             $(".spinner-btn").show();
             var id = $("#empresa_id").val();
             var url = "{{ route('personal.index',':id') }}";

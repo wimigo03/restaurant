@@ -126,20 +126,26 @@ class PersonalLaboral extends Model
         return $total_ganado;
     }
 
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
+
     public function scopeByEmpresa($query, $empresa_id){
-        if($empresa_id){
+        if($empresa_id != null){
             return $query->where('empresa_id', $empresa_id);
         }
     }
 
     public function scopeByCodigoIngreso($query, $codigo_ingreso){
-        if($codigo_ingreso){
+        if($codigo_ingreso != null){
             return $query->where('codigo_ingreso', $codigo_ingreso);
         }
     }
 
     public function scopeByCodigoRetiro($query, $codigo_retiro){
-        if ($codigo_retiro) {
+        if ($codigo_retiro != null) {
                 return $query
                     ->whereIn('personal_id', function ($subquery) use($codigo_retiro) {
                         $subquery->select('personal_id')
@@ -150,7 +156,7 @@ class PersonalLaboral extends Model
     }
 
     public function scopeByNroCarnet($query, $nro_carnet){
-        if ($nro_carnet) {
+        if ($nro_carnet != null) {
                 return $query
                     ->whereIn('personal_id', function ($subquery) use($nro_carnet) {
                         $subquery->select('id')
@@ -161,7 +167,7 @@ class PersonalLaboral extends Model
     }
 
     public function scopeByPrimerNombre($query, $primer_nombre){
-        if ($primer_nombre) {
+        if ($primer_nombre != null) {
                 return $query
                     ->whereIn('personal_id', function ($subquery) use($primer_nombre) {
                         $subquery->select('id')
@@ -172,7 +178,7 @@ class PersonalLaboral extends Model
     }
 
     public function scopeByApellidoPaterno($query, $apellido_paterno){
-        if ($apellido_paterno) {
+        if ($apellido_paterno != null) {
                 return $query
                     ->whereIn('personal_id', function ($subquery) use($apellido_paterno) {
                         $subquery->select('id')
@@ -183,7 +189,7 @@ class PersonalLaboral extends Model
     }
 
     public function scopeByApellidoMaterno($query, $apellido_materno){
-        if ($apellido_materno) {
+        if ($apellido_materno != null) {
                 return $query
                     ->whereIn('personal_id', function ($subquery) use($apellido_materno) {
                         $subquery->select('id')
@@ -194,7 +200,7 @@ class PersonalLaboral extends Model
     }
 
     public function scopeByCargo($query, $cargo_id){
-        if($cargo_id){
+        if($cargo_id != null){
             return $query->where('cargo_id', $cargo_id);
         }
     }
@@ -208,7 +214,7 @@ class PersonalLaboral extends Model
     }
 
     public function scopeByEstado($query, $estado){
-        if($estado)
+        if($estado != null)
             return $query->where('estado', $estado);
     }
 }

@@ -10,7 +10,9 @@ use App\Models\User;
 use App\Models\Cargo;
 use App\Models\Moneda;
 use App\Models\Pais;
+use App\Models\InicioMesFiscal;
 use Carbon\Carbon;
+use Auth;
 
 class Comprobante extends Model
 {
@@ -150,6 +152,36 @@ class Comprobante extends Model
     public function scopeByMonto($query, $monto){
         if($monto)
             return $query->where('monto', 'like', '%' . $monto . '%');
+    }
+
+    public function scopeByGestion($query, $gestion){
+        if ($gestion != null) {
+            $inicio_mes_fiscal = InicioMesFiscal::query()->byPiCliente(Auth::user()->pi_cliente_id)->first();
+            if($inicio_mes_fiscal != null){
+                $from = $gestion . '-' . $inicio_mes_fiscal->mes . '-01';
+                $timestamp = strtotime($from);
+                $timestamp_anterior = $timestamp - 86400;
+                $fecha_anterior = date('Y-m-d', $timestamp_anterior);
+                $timestamp_mas_un_ano = strtotime('+1 year', $timestamp_anterior);
+                $to = date('Y-m-d', $timestamp_mas_un_ano);
+
+                return $query->where(
+                    'fecha','>=',Carbon::parse($from)->toDateString()
+                )
+                ->where('fecha', '<=', Carbon::parse($to)->toDateString());
+            }
+        }
+    }
+
+    public function scopeByGlosa($query, $glosa){
+        if ($glosa != null) {
+                return $query
+                    ->whereIn('id', function ($subquery) use($glosa) {
+                        $subquery->select('comprobante_id')
+                            ->from('comprobante_detalles')
+                            ->where('glosa',$glosa);
+                    });
+        }
     }
 
     public function scopeByCreadoPor($query, $user_id){

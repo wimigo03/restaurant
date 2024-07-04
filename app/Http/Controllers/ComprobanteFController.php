@@ -20,6 +20,7 @@ use Auth;
 use PDF;
 use Luecano\NumeroALetras\NumeroALetras;
 use Carbon\Carbon;
+use DataTables;
 use DB;
 
 class ComprobanteFController extends Controller
@@ -30,7 +31,7 @@ class ComprobanteFController extends Controller
     const SHOW = 'DETALLE DEL COMPROBANTE';
     const EDITAR = 'MODIFICAR COMPROBANTE';
 
-    public function index()
+    public function index(Request $request)
     {
         $icono = self::ICONO;
         $header = self::INDEX;
@@ -39,11 +40,96 @@ class ComprobanteFController extends Controller
                                 ->pluck('nombre_comercial','id');
         $estados = ComprobanteF::ESTADOS;
         $tipos = ComprobanteF::TIPOS;
-        $comprobantes = ComprobanteF::query()
-                                    ->byPiCliente(Auth::user()->pi_cliente_id)
-                                    ->orderBy('id','desc')
-                                    ->paginate(10);
-        return view('comprobantesf.index', compact('icono','header','empresas','estados','tipos','comprobantes'));
+        $anho = date('Y') - 10;
+        for($i = $anho; $i <= $anho + 10; $i++){
+            $gestiones[$i] = $i;
+        }
+
+        if ($request->ajax()) {
+            $data = DB::table('comprobantesf as a')
+                    ->join('empresas as b','b.id','a.empresa_id')
+                    ->join('users as c','c.id','a.user_id')
+                    ->select(
+                        'a.id as comprobantef_id',
+                        'b.alias as empresa',
+                        DB::raw("CASE
+                            WHEN a.tipo = 1 THEN 'INGRESO'
+                            WHEN a.tipo = 2 THEN 'EGRESO'
+                            WHEN a.tipo = 3 THEN 'TRASPASO'
+                            ELSE '#'
+                        END AS tipos"),
+                        'a.fecha as fecha',
+                        'a.nro_comprobante',
+                        'a.creado as creado',
+                        'a.concepto',
+                        'a.monto',
+                        'a.estado',
+                        DB::raw("CASE
+                            WHEN a.estado = 1 THEN 'PENDIENTE'
+                            WHEN a.estado = 2 THEN 'APROBADO'
+                            WHEN a.estado = 3 THEN 'ANULADO'
+                            WHEN a.estado = 4 THEN 'ELIMINADO'
+                            ELSE '#'
+                        END AS status"),
+                        DB::raw("UPPER(c.username) as username")
+                    );
+
+            return Datatables::of($data)
+                ->filterColumn('tipos', function($query, $keyword) {
+                    $sql = "CASE
+                        WHEN a.tipo = 1 THEN 'INGRESO'
+                        WHEN a.tipo = 2 THEN 'EGRESO'
+                        WHEN a.tipo = 3 THEN 'TRASPASO'
+                        ELSE '#'
+                    END like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('fecha', function($query, $keyword) {
+                    $sql = "DATE_FORMAT(fecha, '%d-%m-%y') like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('creado', function($query, $keyword) {
+                    $sql = "DATE_FORMAT(creado, '%d-%m-%y') like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->editColumn('monto', function($row) {
+                    return number_format($row->monto, 2, '.', ',');
+                })
+                ->filterColumn('status', function($query, $keyword) {
+                    $sql = "CASE
+                        WHEN a.estado = 1 THEN 'PENDIENTE'
+                        WHEN a.estado = 2 THEN 'APROBADO'
+                        WHEN a.estado = 3 THEN 'ANULADO'
+                        WHEN a.estado = 4 THEN 'ELIMINADO'
+                        ELSE '#'
+                    END like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->addColumn('bars', 'comprobantesf.partials.bars')
+                ->rawColumns(['bars'])
+                ->make(true);
+        }
+
+        return view('comprobantesf.index', compact('icono','header','empresas','estados','tipos','gestiones'));
+    }
+
+    public function getUsuarios(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $usuarios = User::select('name','id')
+                            ->where('empresa_id',$id)
+                            ->orderBy('id','desc')
+                            ->get()
+                            ->toJson();
+            if($usuarios){
+                return response()->json([
+                    'usuarios' => $usuarios
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function search(Request $request)
@@ -55,18 +141,24 @@ class ComprobanteFController extends Controller
                                 ->pluck('nombre_comercial','id');
         $estados = ComprobanteF::ESTADOS;
         $tipos = ComprobanteF::TIPOS;
+        $anho = date('Y') - 10;
+        for($i = $anho; $i <= $anho + 10; $i++){
+            $gestiones[$i] = $i;
+        }
         $comprobantes = ComprobanteF::query()
-                                    ->byPiCliente(Auth::user()->pi_cliente_id)
-                                    ->byEmpresa($request->empresa_id)
-                                    ->byEntreFechas($request->fecha_i, $request->fecha_f)
-                                    ->byNroComprobante($request->nro_comprobante)
-                                    ->byConcepto($request->concepto)
-                                    ->byTipo($request->tipo)
-                                    ->byEstado($request->estado)
-                                    ->byMonto($request->monto)
-                                    ->orderBy('id','desc')
-                                    ->paginate(10);
-        return view('comprobantesf.index', compact('icono','header','empresas','estados','tipos','comprobantes'));
+                                ->byPiCliente(Auth::user()->pi_cliente_id)
+                                ->byEmpresa($request->empresa_id)
+                                ->byTipo($request->tipo)
+                                ->byGestion($request->gestion)
+                                ->byEntreFechas($request->fecha_i, $request->fecha_f)
+                                ->byNroComprobante($request->nro_comprobante)
+                                ->byConcepto($request->concepto)
+                                ->byGlosa($request->glosa_detalle)
+                                ->byEstado($request->estado)
+                                ->byCreadoPor($request->user_id)
+                                ->orderBy('id','desc')
+                                ->paginate(10);
+        return view('comprobantesf.index', compact('icono','header','empresas','estados','tipos','gestiones','comprobantes'));
 
     }
 

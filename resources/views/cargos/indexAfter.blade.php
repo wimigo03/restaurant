@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Cargos</span>
+@endsection
 <style>
     #empresa_id + .select2-container .select2-selection__rendered {
         font-size: 12px;
     }
 </style>
 @section('content')
-    <div class="row">
-        <div class="col-md-8 px-1 pr-1" style="display: flex; align-items: flex-end;">
-            <span class="font-roboto-17" id="toggleSubMenu" style="cursor: pointer;">
-                <i class="fa-solid fa-diagram-project fa-fw fa-beat"></i> <b>CARGOS</b>
-            </span>
-        </div>
-        <div class="col-md-4 px-1 pl-1 font-roboto-12">
+    <div class="form-group row font-roboto-12 abs-center">
+        <div class="col-md-4 px-1">
             <form action="#" method="get" id="form_estructura">
                 <select name="empresa_id" id="empresa_id" class="form-control">
                     <option value="">-</option>
@@ -21,12 +21,6 @@
                     @endforeach
                 </select>
             </form>
-        </div>
-    </div>
-    <hr class="custom-hr">
-    <div class="form-group row">
-        <div class="col-md-12 text-center">
-            <img src="/images/pi-agropec.jpg" alt="pi-agropec" class="imagen-pi-resto">
         </div>
     </div>
 @endsection

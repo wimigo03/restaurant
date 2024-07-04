@@ -1,8 +1,8 @@
 <?php
 
 Route::prefix('comprobantesf')->name('comprobantef.')->middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
-    //Route::get('/index-after', 'ComprobanteController@indexAfter')->name('indexAfter')->middleware('can:comprobante.index');
     Route::get('/', 'ComprobanteFController@index')->name('index')->middleware('can:comprobantef.index');
+    Route::get('/get_usuarios', 'ComprobanteFController@getUsuarios')->name('get.usuarios')->middleware('can:comprobantef.index');
     Route::get('/search', 'ComprobanteFController@search')->name('search')->middleware('can:comprobantef.index');
     Route::get('/create', 'ComprobanteFController@create')->name('create')->middleware('can:comprobantef.create');
     Route::get('/get_centros', 'ComprobanteFController@getCentros')->name('get.centros')->middleware('can:comprobantef.create');

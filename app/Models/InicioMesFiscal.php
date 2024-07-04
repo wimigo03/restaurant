@@ -94,6 +94,12 @@ class InicioMesFiscal extends Model
         }
     }
 
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
+    
     public function empresa(){
         return $this->belongsTo(Empresa::class,'empresa_id','id');
     }

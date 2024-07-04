@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('plan_cuentas.indexAfter') }}">Plan de cuentas</a><span>&nbsp;/&nbsp;
+    <span>Modificar</span>
+@endsection
 <style>
     .select2 + .select2-container .select2-selection__rendered {
         font-size: 11px;

@@ -1,16 +1,14 @@
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><i class="fa fa-home fa-fw"></i> Inicio<span>
+@endsection
 @section('content')
 <div class="form-group row">
-    @if (isset($empresa))
-        <div class="col-md-12 text-center">
-            <br>
-            <img src="{{ url($empresa->url_cover) }}" alt="{{ $empresa->url_cover }}" class="imagen-callejxn">
-        </div>
-    @else
-        <div class="col-md-12 text-center">
-            <br>
-            <img src="/images/pi-resto.jpeg" alt="pi-agropec" class="imagen-pi-resto">
-        </div>
-    @endif
+    <div class="col-md-12 text-center">
+        <br>
+        {{--<img src="/images/pi-resto.jpeg" alt="pi-agropec" class="imagen-pi-resto">--}}
+        <img src="{{ url(Auth()->user()->cliente->url_img) }}" alt="img" class="imagen-pi-resto">
+    </div>
 </div>
 @endsection

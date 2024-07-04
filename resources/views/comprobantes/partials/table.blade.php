@@ -4,46 +4,44 @@
             <table class="table table-striped table-bordered hover-orange" style="width:100%;" id="dataTable">
                 <thead>
                     <tr class="font-roboto-11">
-                        <th>EMP.</th>
-                        <th>TIPO</th>
-                        <th>FECHA</th>
-                        <th>COMPROBANTE</th>
-                        <th width="35%">CONCEPTO</th>
-                        <th>MONTO</th>
-                        <th>ESTADO</th>
-                        <th>CREADOR</th>
-                        <th>CREADO</th>
+                        <td class="text-center p-1"><b>EMP.</b></td>
+                        <td class="text-center p-1"><b>FECHA</b></td>
+                        <td class="text-center p-1"><b>COMPROBANTE</b></td>
+                        <td class="text-center p-1" widtd="35%"><b>CONCEPTO</b></td>
+                        <td class="text-center p-1"><b>MONTO</b></td>
                         @can('comprobantef.index')
-                            <th>COPIA</th>
+                            <td class="text-center p-1"><b>COPIA</b></td>
                         @endcan
+                        <td class="text-center p-1"><b>CREADOR</b></td>
+                        <td class="text-center p-1"><b>CREADO</b></td>
+                        <td class="text-center p-1"><b>ESTADO</b></td>
                         @canany(['comprobante.editar'])
-                            <th>
+                            <td class="text-center p-1">
                                 <i class="fas fa-bars fa-fw"></i>
-                            </th>
+                            </td>
                         @endcanany
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
                 <tfoot>
                     <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                         @can('comprobantef.index')
-                            <th></th>
+                            <td>&nbsp;</td>
                         @endcan
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                         @canany(['comprobante.editar'])
-                            <th></th>
+                            <td></td>
                         @endcanany
                     </tr>
                 </tfoot>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>
@@ -55,17 +53,16 @@
                 <thead>
                     <tr class="font-roboto-11">
                         <td class="text-center p-1"><b>EMP.</b></td>
-                        <td class="text-center p-1"><b>TIPO</b></td>
                         <td class="text-center p-1"><b>FECHA</b></td>
                         <td class="text-center p-1"><b>COMPROBANTE</b></td>
                         <td class="text-justify p-1" width="35%"><b>CONCEPTO</b></td>
                         <td class="text-right p-1"><b>MONTO</b></td>
-                        <td class="text-center p-1"><b>ESTADO</b></td>
-                        <td class="text-center p-1"><b>CREADOR</b></td>
-                        <td class="text-center p-1"><b>CREADO</b></td>
                         @can('comprobantef.index')
                             <td class="text-center p-1"><b>COPIA</b></td>
                         @endcan
+                        <td class="text-center p-1"><b>CREADOR</b></td>
+                        <td class="text-center p-1"><b>CREADO</b></td>
+                        <td class="text-center p-1"><b>ESTADO</b></td>
                         @canany(['comprobante.editar'])
                             <td class="text-center p-1"><b><i class="fas fa-bars"></i></b></td>
                         @endcanany
@@ -75,11 +72,22 @@
                     @foreach ($comprobantes as $datos)
                         <tr class="font-roboto-11">
                             <td class="text-center p-1">{{ $datos->empresa->alias }}</td>
-                            <td class="text-center p-1">{{ $datos->tipos }}</td>
+                            {{--<td class="text-center p-1">{{ $datos->tipos }}</td>--}}
                             <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->fecha)->format('d-m-y') }}</td>
                             <td class="text-center p-1">{{ $datos->nro_comprobante }}</td>
                             <td class="text-justify p-1">{{ $datos->concepto }}</td>
-                            <td class="text-justify p-1">{{ number_format($datos->monto,2,'.',',') }}</td>
+                            <td class="text-right p-1">{{ number_format($datos->monto,2,'.',',') }}</td>
+                            @can('comprobantef.index')
+                                <td class="text-center p-1">
+                                    @if ($datos->copia == '1')
+                                        <i class="fa-solid fa-check fa-fw"></i>
+                                    @else
+                                        <i class="fa-solid fa-xmark fa-fw"></i>
+                                    @endif
+                                </td>
+                            @endcan
+                            <td class="text-center p-1">{{ strtoupper($datos->user->username) }}</td>
+                            <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->creado)->format('d-m-y') }}</td>
                             <td class="text-center p-1">
                                 <span class="badge-with-padding
                                     @if($datos->status == "PENDIENTE")
@@ -94,17 +102,6 @@
                                     {{ $datos->status }}
                                 </span>
                             </td>
-                            <td class="text-center p-1">{{ strtoupper($datos->user->username) }}</td>
-                            <td class="text-center p-1">{{ \Carbon\Carbon::parse($datos->creado)->format('d-m-y') }}</td>
-                            @can('comprobantef.index')
-                                <td class="text-center p-1">
-                                    @if ($datos->copia == '1')
-                                        <i class="fa-solid fa-check fa-fw"></i>
-                                    @else
-                                        <i class="fa-solid fa-xmark fa-fw"></i>
-                                    @endif
-                                </td>
-                            @endcan
                             @canany(['comprobante.editar','comprobante.pdf','comprobante.show'])
                                 <td class="text-center p-1">
                                     <div class="d-flex justify-content-center">

@@ -3,11 +3,12 @@
         <table class="table display responsive table-striped">
             <thead>
                 <tr class="font-roboto-11">
-                    <td class="text-left p-1"><b>COD. ING.</b></td>
-                    <td class="text-left p-1"><b>INGRESO</b></td>
-                    <td class="text-left p-1"><b>COD. RET.</b></td>
-                    <td class="text-left p-1"><b>CI/RUN</b></td>
-                    <td class="text-left p-1"><b>NOMBRES</b></td>
+                    <td class="text-center p-1"><b>EMP</b></td>
+                    <td class="text-center p-1"><b>COD. ING.</b></td>
+                    <td class="text-center p-1"><b>INGRESO</b></td>
+                    <td class="text-center p-1"><b>COD. RET.</b></td>
+                    <td class="text-center p-1"><b>CI/RUN</b></td>
+                    <td class="text-center p-1"><b>NOMBRES</b></td>
                     <td class="text-center p-1"><b>CARGO</b></td>
                     <td class="text-center p-1"><b>CNTTO.</b></td>
                     <td class="text-center p-1"><b>ESTADO</b></td>
@@ -22,7 +23,8 @@
                         @php
                             $contratos = App\Models\PersonalContrato::where('personal_id',$datos->personal_id)->get();
                         @endphp
-                        <td class="text-left p-1" style="vertical-align: middle;">{{ $datos->codigo_ingreso }}</td>
+                        <td class="text-center p-1" style="vertical-align: middle;">{{ $datos->empresa->alias }}</td>
+                        <td class="text-center p-1" style="vertical-align: middle;">{{ $datos->codigo_ingreso }}</td>
                         <td  class="text-left p-1" style="vertical-align: middle;">
                             @foreach ($contratos as $contrato)
                                 {{ $contrato->tipo .': ' . \Carbon\Carbon::parse($contrato->fecha_ingreso)->format('d/m/Y') }}<br>

@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Plan de cuentas</span>
+@endsection
 <style>
     .jstree li > a > .jstree-icon {
         display:none !important;

@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('cargos.index', $cargo->empresa_id) }}">Cargos</a><span>&nbsp;/&nbsp;
+    <span>Modificar</span>
+@endsection
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-12">
         <div class="card card-custom">
-            <div class="card-header font-verdana-bg">
+            {{--<div class="card-header font-verdana-bg">
                 <b>MODIFICAR CARGOS</b>
-            </div>
+            </div>--}}
             <div class="card-body">
                 <form action="#" method="post" id="form">
                     @csrf

@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('personal.index') }}">Personal</a><span>&nbsp;/&nbsp;
+    <span>Detalle</span>
+@endsection
 <style>
     .select2 + .select2-container .select2-selection__rendered {
         font-size: 11px;
@@ -57,7 +63,7 @@
             })
 
             document.getElementById('edad').value = calcularEdad($("#fecha_nac").val());
-            
+
             if($('#checkboxOne').prop('checked')) {
                 $('#collapseOne').collapse('show');
             }else{
@@ -91,11 +97,7 @@
         }
 
         function cancelar(){
-            $(".btn").hide();            
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('personal.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('personal.index') }}";
             window.location.href = url;
         }
     </script>

@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Libro Mayor por Centro y Cuenta</span>
+@endsection
 @section('content')
     @include('libro_mayor_centro_cuenta_f.partials.search')
     @include('libro_mayor_centro_cuenta_f.partials.table')

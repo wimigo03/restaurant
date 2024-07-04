@@ -19,11 +19,13 @@ class CargoController extends Controller
 
     public function indexAfter()
     {
+        $icono = self::ICONO;
+        $header = self::INDEX;
         $empresas = Empresa::query()->byPiCliente(Auth::user()->pi_cliente_id)->pluck('nombre_comercial','id');
         if(count($empresas) == 1 && Auth::user()->id != 1){
             return redirect()->route('cargos.index',['empresa_id' => Auth::user()->empresa_id]);
         }
-        return view('cargos.indexAfter', compact('empresas'));
+        return view('cargos.indexAfter', compact('icono','header','empresas'));
     }
 
     public function index($empresa_id)
@@ -133,9 +135,11 @@ class CargoController extends Controller
 
     public function editar($id)
     {
+        $icono = self::ICONO;
+        $header = self::EDITAR;
         $cargo = Cargo::find($id);
         $tipos = Cargo::TIPOS;
-        return view('cargos.editar', compact('cargo','tipos'));
+        return view('cargos.editar', compact('icono','header','cargo','tipos'));
     }
 
     public function update(Request $request)

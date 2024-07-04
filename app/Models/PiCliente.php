@@ -16,6 +16,7 @@ class PiCliente extends Model
         'razon_social',
         'nombre',
         'telefono',
+        'url_img',
         'nit',
         'estado'
     ];

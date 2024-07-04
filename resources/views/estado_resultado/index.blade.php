@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Estado de Resultados</span>
+@endsection
 @section('content')
     @include('estado_resultado.partials.search')
     @include('estado_resultado.partials.table')

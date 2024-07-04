@@ -1,10 +1,26 @@
 <form action="#" method="get" id="form">
     <div class="form-group row font-roboto-12">
-        <div class="col-md-3 px-1 pr-1">
+        <div class="col-md-2 px-1 pr-1">
             <select name="empresa_id" id="empresa_id" class="form-control">
                 <option value="">-</option>
                 @foreach ($empresas as $index => $value)
                     <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <select name="tipo" id="tipo" class="form-control">
+                <option value="">-</option>
+                @foreach ($tipos as $index => $value)
+                    <option value="{{ $index }}" @if(request('tipo') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
+            <select name="gestion" id="gestion" class="form-control">
+                <option value="">-</option>
+                @foreach ($gestiones as $index => $value)
+                    <option value="{{ $index }}" @if(request('gestion') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
         </div>
@@ -17,17 +33,17 @@
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="nro_comprobante" value="{{ request('nro_comprobante') }}" id="nro_comprobante" placeholder="--Nro. Comprobante--" class="form-control font-roboto-12 intro">
         </div>
+    </div>
+    <div class="form-group row font-roboto-12">
         <div class="col-md-3 px-1 pl-1">
             <input type="text" name="concepto" value="{{ request('concepto') }}" id="concepto" placeholder="--Concepto--" class="form-control font-roboto-12 intro">
         </div>
-    </div>
-    <div class="form-group row font-roboto-12">
-        <div class="col-md-2 px-1 pl-1">
-            <select name="tipo" id="tipo" class="form-control">
+        <div class="col-md-3 pr-1 pl-1">
+            <input type="text" name="glosa_detalle" value="{{ request('glosa_detalle') }}" id="glosa_detalle" placeholder="--Glosa detalle--" class="form-control font-roboto-12 intro">
+        </div>
+        <div class="col-md-3 pr-1 pl-1">
+            <select name="user_id" id="user_id" class="form-control">
                 <option value="">-</option>
-                @foreach ($tipos as $index => $value)
-                    <option value="{{ $index }}" @if(request('tipo') == $index) selected @endif >{{ $value }}</option>
-                @endforeach
             </select>
         </div>
         <div class="col-md-2 pr-1 pl-1">
@@ -37,9 +53,6 @@
                     <option value="{{ $index }}" @if(request('estado') == $index) selected @endif >{{ $value }}</option>
                 @endforeach
             </select>
-        </div>
-        <div class="col-md-2 pr-1 pl-1">
-            <input type="text" name="monto" value="{{ request('monto') }}" id="monto" placeholder="--Monto--" class="form-control font-roboto-12 intro" onkeypress="return valideNumberConDecimal(event);">
         </div>
     </div>
 </form>

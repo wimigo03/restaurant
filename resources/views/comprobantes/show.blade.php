@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('comprobante.index') }}"> Listar comprobantes</a><span>&nbsp;/&nbsp;
+    <span>Detalle del comprobante</span>
+@endsection
 @section('content')
     <div class="form-group row">
         <div class="col-md-2 px-1 pr-1 font-roboto-13">

@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Categorias</span>
+@endsection
 <style>
     .jstree li > a > .jstree-icon {
         display:none !important;
@@ -50,6 +55,7 @@
                     </a>
                 </li>
             </ul>
+            <input type="hidden" value="{{ $empresa->id }}" id="empresa_id">
             <div class="tab-content" id="myTabsContent">
                 <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
                     @if (isset($categorias_platos))
@@ -297,8 +303,6 @@
         });
 
         function crear_platos(){
-            $(".btns").hide();
-            $(".spinner-btn").show();
             var id = $("#categoria_id").val();
             var url = "{{ route('categorias.create_platos',':id') }}";
             url = url.replace(':id',id);
@@ -306,8 +310,6 @@
         }
 
         function crear_platos_master(){
-            $(".btns").hide();
-            $(".spinner-btn").show();
             var id = $("#empresa_id").val()
             var url = "{{ route('categorias.create_platos_master',':id') }}";
             url = url.replace(':id',id);
@@ -315,8 +317,6 @@
         }
 
         function modificar(){
-            $(".btns").hide();
-            $(".spinner-btn").show();
             var id = $("#categoria_id").val();
             var url = "{{ route('categorias.editar',':id') }}";
             url = url.replace(':id',id);
@@ -324,8 +324,6 @@
         }
 
         function habilitar_platos(){
-            $(".btns").hide();
-            $(".spinner-btn").show();
             var id = $("#categoria_id").val();
             var url = "{{ route('categorias.habilitar',':id') }}";
             url = url.replace(':id',id);

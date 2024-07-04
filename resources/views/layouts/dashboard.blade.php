@@ -58,10 +58,35 @@
         <div class="site-section">
             <div class="container">
                 <div class="row justify-content-center">
+                    <div class="col-md-6 px-1 pr-1 font-roboto-12 bg-white">
+                        @section('breadcrumb')
+                        @show
+                    </div>
+                    <div class="col-md-5 px-1 pl-1 font-roboto-12 bg-white" style="display: flex; justify-content: flex-end; align-items: flex-end;">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        <div class="dropdown">
+                            <span class="">
+                                <i class="fa-solid fa-user fa-fw"></i>
+                                {{ Auth::user()->username }} - {{ ucwords(strtolower(Auth::user()->cargo_header)) }}
+                                <i class="fa-solid fa-caret-down fa-fw"></i>
+                            </span>
+                            <div class="dropdown-content right">
+                                <a href="#">
+                                    <i class="fa-solid fa-id-badge fa-fw"></i> Mi Perfil
+                                </a>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fa-solid fa-right-from-bracket fa-fw"></i> Salir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row justify-content-center">
                     <div class="col-md-11">
-                        {{--@if (isset($indexAfter))--}}
-                            @include('layouts.partials.header')
-                        {{--@endif--}}
+                        @include('layouts.partials.header')
                         @yield('content')
                     </div>
                 </div>

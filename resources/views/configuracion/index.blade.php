@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
 @section('content')
-    @include('precio_productos.partials.search')
+    {{--@include('precio_productos.partials.search')--}}
     @include('configuracion.partials.table')
 @endsection
 @section('scripts')

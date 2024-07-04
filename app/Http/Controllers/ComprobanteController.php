@@ -45,6 +45,10 @@ class ComprobanteController extends Controller
                                 ->pluck('nombre_comercial','id');
         $estados = Comprobante::ESTADOS;
         $tipos = Comprobante::TIPOS;
+        $anho = date('Y') - 10;
+        for($i = $anho; $i <= $anho + 10; $i++){
+            $gestiones[$i] = $i;
+        }
 
         if ($request->ajax()) {
             $data = DB::table('comprobantes as a')
@@ -113,7 +117,7 @@ class ComprobanteController extends Controller
                 ->make(true);
         }
 
-        return view('comprobantes.index', compact('icono','header','empresas','estados','tipos'));
+        return view('comprobantes.index', compact('icono','header','empresas','estados','tipos','gestiones'));
     }
 
     public function getUsuarios(Request $request){
@@ -144,20 +148,25 @@ class ComprobanteController extends Controller
                                 ->pluck('nombre_comercial','id');
         $estados = Comprobante::ESTADOS;
         $tipos = Comprobante::TIPOS;
+        $anho = date('Y') - 10;
+        for($i = $anho; $i <= $anho + 10; $i++){
+            $gestiones[$i] = $i;
+        }
         $comprobantes = Comprobante::query()
                         ->byPiCliente(Auth::user()->pi_cliente_id)
                         ->byEmpresa($request->empresa_id)
                         ->byTipo($request->tipo)
+                        ->byGestion($request->gestion)
                         ->byEntreFechas($request->fecha_i, $request->fecha_f)
                         ->byNroComprobante($request->nro_comprobante)
                         ->byConcepto($request->concepto)
-                        ->byMonto($request->monto)
+                        ->byGlosa($request->glosa_detalle)
                         ->byEstado($request->estado)
                         ->byCreadoPor($request->user_id)
                         ->byCopia($request->copia)
                         ->orderBy('fecha','desc')
                         ->paginate(10);
-        return view('comprobantes.index', compact('icono','header','empresas','estados','tipos','comprobantes'));
+        return view('comprobantes.index', compact('icono','header','empresas','estados','tipos','gestiones','comprobantes'));
     }
 
     public function excel(Request $request)

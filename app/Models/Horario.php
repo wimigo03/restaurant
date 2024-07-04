@@ -29,4 +29,10 @@ class Horario extends Model
                 return "NO HABILITADO";
         }
     }
+
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
 }

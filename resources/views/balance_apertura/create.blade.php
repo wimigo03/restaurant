@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('balance.apertura.index') }}"> Balances de apertura</a><span>&nbsp;/&nbsp;
+    <span>Registrar</span>
+@endsection
 @section('content')
     @include('balance_apertura.partials.form-create')
 @endsection

@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('cargos.index', $empresa->id) }}">Cargos</a><span>&nbsp;/&nbsp;
+    <span>Registrar</span>
+@endsection
 @section('content')
-@include('cargos.partials.form-create')
+    @include('cargos.partials.form-create')
 @endsection
 @section('scripts')
     @parent

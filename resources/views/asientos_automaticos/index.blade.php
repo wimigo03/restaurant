@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Asientos Automaticos</span>
+@endsection
 @section('content')
     {{--@include('asientos_automaticos.partials.search')--}}
     <div class="form-group row">

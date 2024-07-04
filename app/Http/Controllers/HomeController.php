@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Empresa;
 use App\Models\User;
+use App\Models\PiCliente;
 use Illuminate\Support\Facades\Session;
 use Auth;
 
@@ -16,10 +17,9 @@ class HomeController extends Controller
     public function index()
     {
         $user = User::where('id',Auth::user()->id)->first();
-        $empresa = Empresa::find($user->empresa_id);
         $header = self::INDEX;
         $icono = self::ICONO;
-        return view('home.index',compact('empresa','header','icono'));
+        return view('home.index',compact('header','icono'));
     }
 
     /*public function change($module){
@@ -34,12 +34,9 @@ class HomeController extends Controller
         $view = '';
 
         switch ($menu) {
-            /*case 'HOME':
-                $view = view('layouts.partials.menu-home')->render();
+            case 'OPERATIVO':
+                $view = view('layouts.partials.menu-operativo')->render();
                 break;
-            case 'ADM':
-                $view = view('layouts.partials.menu-adm')->render();
-                break;*/
             case 'CONTABLE':
                 $view = view('layouts.partials.menu-contable')->render();
                 break;

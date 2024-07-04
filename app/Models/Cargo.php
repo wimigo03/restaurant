@@ -66,4 +66,10 @@ class Cargo extends Model
     public function parent(){
         return $this->belongsTo(Cargo::class,'parent_id','id');
     }
+
+    public function scopeByPiCliente($query, $pi_cliente_id){
+        if($pi_cliente_id != null){
+            return $query->where('pi_cliente_id', $pi_cliente_id);
+        }
+    }
 }

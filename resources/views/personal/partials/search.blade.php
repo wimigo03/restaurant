@@ -1,19 +1,26 @@
 <form action="#" method="get" id="form">
-    <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_id">
     <div class="form-group row font-roboto-12">
         <div class="col-md-2 px-1 pr-1">
+            <select name="empresa_id" id="empresa_id" class="form-control">
+                <option value="">-</option>
+                @foreach ($empresas as $index => $value)
+                    <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="codigo_ingreso" placeholder="--Codigo Ingreso--" value="{{ request('codigo_ingreso') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="codigo_retiro" placeholder="--Codigo Retiro--" value="{{ request('codigo_retiro') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-3 pr-1 pl-1">
+        <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="ci_run" placeholder="--Ci/Run--" value="{{ request('ci_run') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
         <div class="col-md-2 pr-1 pl-1">
             <input type="text" name="primer_nombre" placeholder="--Primer Nombre--" value="{{ request('primer_nombre') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
-        <div class="col-md-3 px-1 pl-1">
+        <div class="col-md-2 px-1 pl-1">
             <input type="text" name="apellido_paterno" placeholder="--Apellido Paterno--" value="{{ request('apellido_paterno') }}" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase()">
         </div>
     </div>

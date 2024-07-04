@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Tipos de cambio</span>
+@endsection
 @section('content')
     @include('tipo_cambios.partials.search')
     @include('tipo_cambios.partials.table')

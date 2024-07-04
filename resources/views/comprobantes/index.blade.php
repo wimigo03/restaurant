@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+<style>
+    tfoot {
+        display: table-row-group;
+    }
+
+    thead {
+        display: table-header-group ;
+    }
+</style>
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Listar comprobantes</span>
+@endsection
 @section('content')
     @include('comprobantes.partials.search')
     @include('comprobantes.partials.table')
@@ -18,6 +32,12 @@
             $('#tipo').select2({
                 theme: "bootstrap4",
                 placeholder: "--Tipo--",
+                width: '100%'
+            });
+
+            $('#gestion').select2({
+                theme: "bootstrap4",
+                placeholder: "--Gestion--",
                 width: '100%'
             });
 
@@ -89,11 +109,6 @@
                         class: 'text-center p-1 font-roboto-11'
                     },
                     {
-                        data: 'tipos',
-                        name: 'tipos',
-                        class: 'text-center p-1 font-roboto-11'
-                    },
-                    {
                         data: 'fecha',
                         name: 'fecha',
                         class: 'text-center p-1 font-roboto-11',
@@ -123,24 +138,15 @@
                         name: 'a.monto',
                         class: 'text-right p-1 font-roboto-11'
                     },
-                    {
-                        data: 'status',
-                        name: 'status',
-                        class: 'text-center p-1 font-roboto-11',
-                        render: function(data, type, row){
-                            if(row.status === 'PENDIENTE'){
-                                return '<span class="badge-with-padding badge badge-secondary">PENDIENTE</span>';
-                            }else if(row.status == 'APROBADO'){
-                                return '<span class="badge-with-padding badge badge-success">APROBADO</span>';
-                            }else if(row.status == 'ANULADO'){
-                                return '<span class="badge-with-padding badge badge-danger">ANULADO</span>';
-                            }else if(row.status == 'ELIMINADO'){
-                                return '<span class="badge-with-padding badge badge-danger">ELIMINADO</span>';
-                            }else{
-                                return '#';
-                            }
-                        }
-                    },
+                    @can('comprobantef.index')
+                        {
+                            data: 'copia',
+                            name: 'copia',
+                            class: 'text-center p-1 font-roboto-11',
+                            orderable: false,
+                            searchable: false
+                        },
+                    @endcan
                     {
                         data: 'username',
                         name: 'c.username',
@@ -161,15 +167,24 @@
                             return data;
                         }
                     },
-                    @can('comprobantef.index')
-                        {
-                            data: 'copia',
-                            name: 'copia',
-                            class: 'text-center p-1 font-roboto-11',
-                            orderable: false,
-                            searchable: false
-                        },
-                    @endcan
+                    {
+                        data: 'status',
+                        name: 'status',
+                        class: 'text-center p-1 font-roboto-11',
+                        render: function(data, type, row){
+                            if(row.status === 'PENDIENTE'){
+                                return '<span class="badge-with-padding badge badge-secondary">PENDIENTE</span>';
+                            }else if(row.status == 'APROBADO'){
+                                return '<span class="badge-with-padding badge badge-success">APROBADO</span>';
+                            }else if(row.status == 'ANULADO'){
+                                return '<span class="badge-with-padding badge badge-danger">ANULADO</span>';
+                            }else if(row.status == 'ELIMINADO'){
+                                return '<span class="badge-with-padding badge badge-danger">ELIMINADO</span>';
+                            }else{
+                                return '#';
+                            }
+                        }
+                    },
                     @canany(['comprobante.editar'])
                     {
                         data: 'bars',
@@ -181,21 +196,27 @@
                     @endcanany
                 ],
                 initComplete: function () {
-                    var api = this.api();
-                    var columnCount = api.columns().nodes().length;
-
-                    api.columns().every(function (index) {
-                        if (index >= columnCount - 1) {
-                            return;
-                        }
-                        var column = this;
-                        var input = document.createElement("input");
-                        input.style.width = "100%";
-                        $(input).addClass('form-control font-roboto-12').appendTo($(column.footer()).empty()).on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            column.search(val ? val : '', true, false).draw();
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            let column = this;
+                            let title = column.footer().textContent;
+                            if(title != ''){
+                                let input = document.createElement('input');
+                                input.placeholder = title;
+                                input.className = 'form-control form-control-sm font-roboto-12';
+                                column.footer().replaceChildren(input);
+                                /*input.addEventListener('keyup', () => {
+                                    if (column.search() !== this.value) {
+                                        column.search(input.value).draw();
+                                    }
+                                });*/
+                                $(input).appendTo($(column.footer()).empty()).on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? val : '', true, false).draw();
+                                });
+                            }
                         });
-                    });
                 },
                 order: [[2, 'desc']],
                 language: datatableLanguageConfig

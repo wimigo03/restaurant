@@ -1,6 +1,6 @@
 <div class="nav-menu font-roboto-15">
     <ul>
-        @can('configuracion.index')
+        {{--@can('configuracion.index')
             <li>
                 <a href="{{ route('configuracion.index') }}">
                     <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Configuracion
@@ -44,14 +44,11 @@
                     @endcan
                 </ul>
             </li>
-        @endcanany
+        @endcanany--}}
         <div id="dashboard-content">
-            {{--@if(Session::get('menu') == 'HOME')
-                @include('layouts.partials.menu-home')
+            @if(Session::get('menu') == 'OPERATIVO')
+                @include('layouts.partials.menu-operativo')
             @endif
-            @if(Session::get('menu') == 'ADM')
-                @include('layouts.partials.menu-adm')
-            @endif--}}
             @if(Session::get('menu') == 'CONTABLE')
                 @include('layouts.partials.menu-contable')
             @endif

@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('sucursal.index') }}"> Sucursales</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('zonas.index',$sucursal->id ) }}"> Zonas</a><span>&nbsp;/&nbsp;
+    <span>Registrar</span>
+@endsection
+<style>
 <style>
     .select2 + .select2-container .select2-selection__rendered {
         font-size: 11px;
@@ -19,10 +27,10 @@
     #tablaContainer {
         display: flex;
         justify-content: center;
-        align-items: center; 
+        align-items: center;
     }
 
-    #table-zona tbody td:hover{ 
+    #table-zona tbody td:hover{
 	    background: #ffd54f !important;
 	}
 

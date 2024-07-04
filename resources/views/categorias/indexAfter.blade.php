@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Categorias</span>
+@endsection
 @section('content')
     <div class="form-group row font-roboto-12 abs-center">
         <div class="col-md-4 px-1">

@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Libro de Sumas y Saldos</span>
+@endsection
 @section('content')
     @include('libro_sumas_y_saldos_f.partials.search')
     @include('libro_sumas_y_saldos_f.partials.table')

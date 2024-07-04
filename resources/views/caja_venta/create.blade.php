@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('caja.venta.index') }}"> Cajas Venta</a><span>&nbsp;/&nbsp;
+    <span>Registrar</span>
+@endsection
 @section('content')
     @include('caja_venta.partials.form-create')
 @endsection

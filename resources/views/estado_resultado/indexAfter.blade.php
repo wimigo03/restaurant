@@ -34,7 +34,7 @@
         </div>
         <div class="form-group row">
             <div class="col-md-12 text-center">
-                <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-pi-resto">
+                <img src="{{ url($cliente->url_img) }}" alt="img" class="imagen-pi-resto">
             </div>
         </div>
     </div>

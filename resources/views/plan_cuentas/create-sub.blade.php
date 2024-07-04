@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span><a href="{{ route('plan_cuentas.indexAfter') }}">Plan de cuentas</a><span>&nbsp;/&nbsp;
+    <span>Registrar</span>
+@endsection
 <style>
     .obligatorio {
         border: 1px solid red !important;

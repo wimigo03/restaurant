@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <title>Pi-Resto | Mesas</title>
 @extends('layouts.dashboard')
+@section('breadcrumb')
+    @parent
+    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
+    <span>Mesas</span>
+@endsection
 @section('content')
     @include('mesas.partials.search')
     @include('mesas.partials.table')

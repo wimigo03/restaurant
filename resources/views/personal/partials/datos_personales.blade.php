@@ -124,8 +124,14 @@
 <div class="form-group row">
     <div class="col-md-3 pr-1 font-roboto-12">
         <label for="empresa_id" class="d-inline">Empresa</label>
-        <input type="text" value="{{ $empresa->nombre_comercial }}" class="form-control font-roboto-12" disabled>
-        <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_input_id">
+        <select name="empresa_id" id="empresa_id" class="form-control select2">
+            <option value="">-</option>
+            @foreach ($empresas as $index => $value)
+                <option value="{{ $index }}" @if(old('empresa_id') == $index) selected @endif >{{ $value }}</option>
+            @endforeach
+        </select>
+        {{--<input type="text" value="{{ $empresa->nombre_comercial }}" class="form-control font-roboto-12" disabled>
+        <input type="hidden" name="empresa_id" value="{{ $empresa->id }}" id="empresa_input_id">--}}
     </div>
     <div class="col-md-3 pr-1 pl-1 font-roboto-12">
         <label for="cargo" class="d-inline">Cargo</label>
