@@ -6,105 +6,56 @@
     <span><a href="{{ route('sucursal.index') }}"> Sucursales</a><span>&nbsp;/&nbsp;
     <span>Configuracion de mesas</span>
 @endsection
-<style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 11px;
-    }
-
-    .select2-results__option {
-        font-size: 13px;
-    }
-
-    .obligatorio {
-        border: 1px solid red !important;
-    }
-
-    .font-weight-bold {
-        font-weight: bold;
-    }
-
-    .select2-container--obligatorio .select2-selection {
-        border-color: red !important;
-    }
-
-    #tablaContainer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #table-zona tbody td:hover{
-	    background: #ffd54f !important;
-	}
-
-    table {
-        border-collapse: collapse;
-    }
-
-    td {
-        padding: 10px;
-        width: 60px;
-        height: 60px;
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    tr:nth-child(even) td:nth-child(even),
-    tr:nth-child(odd) td:nth-child(odd) {
-        background-color: #f2f2f2;
-    }
-
-
-    .imagen-con-texto {
-        position: relative;
-        top: 20%;
-        display: inline-block;
-    }
-
-    .texto-sobre-imagen {
-        position: absolute;
-        top: -10%;
-        left: 49%;
-        transform: translate(-50%, -50%);
-        padding: 5px;
-    }
-
-    .circulo-texto {
-        position: absolute;
-        top: -10%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        overflow: hidden;
-	    opacity: 0.8;
-        border: 1px solid #ffffff;
-        background-color: #ffc107;
-    }
-
-    .hiddenContent {
-        opacity: 0;
-        transition: opacity .3s ease;
-    }
-</style>
+    <style>
+        .table-container {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid #ccc;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            max-width: 40px;
+            display: block;
+            margin: 0 auto;
+            cursor: move;
+        }
+    </style>
 @section('content')
-    @include('mesas.partials.form-setting')
-    {{--<div class="form-group row">
-        <div class="col-md-12 text-right">
-            <button class="btn btn-outline-primary font-verdana" type="button" onclick="procesar();">
-                <i class="fas fa-paper-plane"></i>&nbsp;Procesar
-            </button>
-            <button class="btn btn-outline-danger font-verdana" type="button" onclick="cancelar();">
-                &nbsp;<i class="fas fa-times"></i>&nbsp;Cancelar
-            </button>
-            <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-        </div>
-    </div>--}}
+    {{--@include('mesas.partials.form-setting')--}}
+
+    <div class="table-container">
+        <table id="sortable-table">
+            <tbody>
+                @for ($i = 0; $i < 4; $i++)
+                    <tr>
+                        @for ($j = 0; $j < 4; $j++)
+                            <td></td>
+                        @endfor
+                    </tr>
+                @endfor
+            </tbody>
+        </table>
+    </div>
+
+    <div class="image-container">
+        <img src="{{ url(Auth()->user()->cliente->url_img) }}" alt="Draggable Image" id="draggable-image">
+    </div>
+
     @include('mesas.partials.modal-asignar-mesa')
 @endsection
 @section('scripts')
     @parent
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
@@ -114,10 +65,56 @@
                 width: '100%'
             });
 
-            var primerZonaId = $('#myTabs .nav-link:first').data('zona-id');
-            document.getElementById("zona_id").value = primerZonaId;
+            /*var primerZonaId = $('#myTabs .nav-link:first').data('zona-id');
+            document.getElementById("zona_id").value = primerZonaId;*/
 
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var table = document.getElementById('sortable-table');
+            var draggableImage = document.getElementById('draggable-image');
+            var originalPosition = null;
+
+            // Guardar la posición original de la imagen
+            draggableImage.addEventListener('dragstart', function (ev) {
+                originalPosition = ev.target.closest('td');
+                ev.dataTransfer.setData('text', ev.target.id);
+            });
+
+            // Permitir soltar la imagen dentro de la celda
+            table.addEventListener('dragover', function (ev) {
+                ev.preventDefault();
+            });
+
+            // Manejar el evento de soltar la imagen
+            table.addEventListener('drop', function (ev) {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData('text');
+                var draggedImage = document.getElementById(data);
+                var cell = ev.target.closest('td');
+
+                if (cell) {
+                    // Mover la imagen a la nueva celda solo si es una celda de la tabla
+                    cell.appendChild(draggedImage); // Mueve la imagen a la nueva celda
+                } else {
+                    // Si la imagen se suelta fuera de la tabla, vuelve a su posición original
+                    if (originalPosition) {
+                        originalPosition.appendChild(draggedImage);
+                    }
+                }
+            });
+        });
+
+
+        /*new Sortable(example2Left, {
+            group: 'shared',
+            animation: 150
+        });
+
+        new Sortable(example2Right, {
+            group: 'shared',
+            animation: 150
+        });*/
 
         function alternarDatos() {
             var datosMesa = document.getElementById("datos-mesa");

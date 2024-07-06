@@ -98,31 +98,14 @@
     <script src="{{ asset('dataTable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dataTable/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('dataTable/js/datatable-language.js') }}"></script>
-    {{--<script src="{{ asset('js/dashboard/jquery-3.3.1.min.js') }}"></script>--}}
     <script src="{{ asset('js/dashboard/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/dashboard/popper.min.js') }}"></script>
     <script src="{{ asset('js/dashboard/main.js') }}"></script>
     <script src="{{ asset('js/lobibox/lobibox.js') }}"></script>
-    {{--<script src="{{ asset('js/datepicker/datepicker.min.js') }}"></script>
-    <script src="{{ asset('js/datepicker/datepicker.es.js') }}"></script>---}}
     <script src="{{ asset('js/datepicker/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('js/datepicker/datepicker-es.js') }}"></script>
     <script src="{{ asset('js/cleave/cleave.min.js') }}"></script>
     <script src="{{ asset('js/cleave/addons/cleave-phone.us.js') }}"></script>
-    {{--<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"
-        integrity="sha512-KaIyHb30iXTXfGyI9cyKFUIRSSuekJt6/vqXtyQKhQP6ozZEGY8nOtRS6fExqE4+RbYHus2yGyYg1BrqxzV6YA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    ></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/addons/cleave-phone.us.js"
-        integrity="sha512-sYKXH+IAMtg7mVursFAH+Xu1mIvmSqTd8LTEhKdRmvJhtX2IKUFpkZBZ9pigORvIR6Nt5klEF/P+psiJRa6crQ=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    ></script>--}}
-    {{--<script src="http://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>--}}
-
 
     @yield('scripts')
 
