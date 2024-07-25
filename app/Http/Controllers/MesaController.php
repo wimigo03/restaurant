@@ -92,15 +92,146 @@ class MesaController extends Controller
         return view('mesas.index', compact('icono','header','empresas','sucursales','estados','mesas'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $icono = self::ICONO;
         $header = self::REGISTRAR;
         $empresas = Empresa::query()
                                 ->byPiCliente(Auth::user()->pi_cliente_id)
                                 ->pluck('nombre_comercial','id');
-        $pi_cliente_id = Auth::user()->pi_cliente_id;
-        return view('mesas.create', compact('icono','header','empresas','pi_cliente_id'));
+
+        $zona = null;
+        $mesa_ocupada_array = null;
+        $mesa_id_array = null;
+        $cantidad_sillas_array = null;
+        $titulo_array = null;
+        if(isset($request->zona_id)){
+            $zona = Zona::find($request->zona_id);
+            $mesas_ocupadas = Mesa::where('zona_id',$zona->id)->where('estado','1')->get();
+            if($mesas_ocupadas != null){
+                foreach($mesas_ocupadas as $mesa_ocupada){
+                    $mesa_id_array[] = $mesa_ocupada->id;
+                    $mesa_ocupada_array[] = $mesa_ocupada->posicion;
+                    $cantidad_sillas_array[] = $mesa_ocupada->cantidad_sillas;
+                    $titulo_array[] = $mesa_ocupada->nombre;
+                }
+            }
+        }
+//dd($zona, $mesa_ocupada_array);
+        return view('mesas.create', compact('icono','header','empresas','zona','mesa_id_array','mesa_ocupada_array','cantidad_sillas_array','titulo_array'));
+    }
+
+    public function getEliminar(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $mesa = Mesa::find($id);
+            if($mesa != null){
+                $mesa->update([
+                    'estado' => '5'
+                ]);
+                return response()->json([
+                    'message' => 'Mesa eliminada'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getMesas(Request $request){
+        try{
+            $input = $request->all();
+            $id = $input['id'];
+            $mesas = Mesa::where('zona_id',$id)->where('estado','!=','5')->get();
+            if(count($mesas) > 0){
+                foreach($mesas as $mesa){
+                    $mesa_id_array[] = $mesa->id;
+                    $mesa_ocupada_array[] = $mesa->posicion;
+                    $cantidad_sillas_array[] = $mesa->cantidad_sillas;
+                    $titulo_array[] = $mesa->nombre;
+                    $estado_array[] = $mesa->estado;
+                }
+
+                return response()->json([
+                    'mesa_id_array' => $mesa_id_array,
+                    'mesa_ocupada_array' => $mesa_ocupada_array,
+                    'cantidad_sillas_array' => $cantidad_sillas_array,
+                    'titulo_array' => $titulo_array,
+                    'estado_array' => $estado_array
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getAdd(Request $request){
+        try{
+            $input = $request->all();
+            $datos = ([
+                'zona_id' => $input['zona_id'],
+                'sucursal_id' => $input['sucursal_id'],
+                'empresa_id' => $input['empresa_id'],
+                'pi_cliente_id' => Auth::user()->pi_cliente_id,
+                'nombre' => $input['titulo'],
+                'cantidad_sillas' => $input['cantidad_sillas'],
+                'posicion' => $input['ubicacion'],
+                'estado' => '1'
+            ]);
+
+            $mesa = Mesa::create($datos);
+            return response()->json([
+                'message' => 'Mesa agregada',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getPosicion(Request $request){
+        try{
+            $input = $request->all();
+            $mesa_id = $input['mesa_id'];
+            $posicion = $input['posicion'];
+
+            $cont = 0;
+            while($cont < count($mesa_id)){
+                $mesa = Mesa::find($mesa_id[$cont]);
+                $mesa->update([
+                    'posicion' => $posicion[$cont]
+                ]);
+
+                $cont++;
+            }
+
+            return response()->json([
+                'message' => 'Posiciones actualizadas',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getUpdateFc(Request $request){
+        try{
+            $input = $request->all();
+            $zona = Zona::find($input['zona_id']);
+            $zona->update([
+                'filas' => $input['filas'],
+                'columnas' => $input['columnas']
+            ]);
+
+            return response()->json([
+                'message' => 'Filas y columnas actualizadas',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function getDatosByEmpresa(Request $request){
@@ -122,37 +253,63 @@ class MesaController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'sucursal_id' => 'required',
-            'zona_id' => 'required',
-            'numero' => [
-                'required',
-                Rule::unique('mesas')->where(function ($query) use ($request) {
-                    return $query->where('sucursal_id', $request->sucursal_id)
-                                 ->where('zona_id', $request->zona_id);
-                }),
-            ],
-            'sillas' => 'required'
-        ]);
+    public function getDatosBySucursal(Request $request){
         try{
-            $datos = [
-                'zona_id' => $request->zona_id,
-                'sucursal_id' => $request->sucursal_id,
-                'empresa_id' => $request->empresa_id,
-                'pi_cliente_id' => $request->pi_cliente_id,
-                'numero' => $request->numero,
-                'sillas' => $request->sillas,
-                'detalle' => $request->detalle,
-                'estado' => '1'
-            ];
+            $input = $request->all();
+            $id = $input['id'];
+            $zonas = Zona::where('sucursal_id', $id)->where('estado','1')->get();
+            if(count($zonas) > 0){
+                $zonasArray = $zonas->map(function ($zona) {
+                    return [
+                        'id' => $zona->id,
+                        'nombre' => $zona->nombre
+                    ];
+                });
 
-            $zona = Mesa::create($datos);
+                return response()->json(['zonas' => $zonasArray]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function store(Request $request)
+    {dd($request->all());
+        try{
+            if(isset($request->old_ubicacion)){
+                $cont = 0;
+                while($cont < count($request->old_ubicacion)){
+                    $mesa = Mesa::find($request->old_mesa_id[$cont]);
+                    $mesa->update([
+                        'posicion' => $request->old_ubicacion[$cont]
+                    ]);
+                    $cont++;
+                }
+            }
+
+            /*if(isset($request->ubicacion)){
+                $cont = 0;
+                while($cont < count($request->ubicacion)){
+                    $datos = [
+                        'zona_id' => $request->zona_id,
+                        'sucursal_id' => $request->sucursal_id,
+                        'empresa_id' => $request->empresa_id,
+                        'pi_cliente_id' => Auth::user()->pi_cliente_id,
+                        'nombre' => $request->nombre[$cont],
+                        'cantidad_sillas' => $request->cantidad_sillas[$cont],
+                        'posicion' => $request->ubicacion[$cont],
+                        'estado' => '1'
+                    ];
+
+                    $mesa = Mesa::create($datos);
+                    $cont++;
+                }
+            }*/
 
             $zona = Zona::find($request->zona_id);
             $zona->update([
-                'mesas_disponibles' => $zona->mesas_disponibles + 1
+                'filas' => $request->_filas,
+                'columnas' => $request->_columnas
             ]);
 
             return redirect()->route('mesas.index')->with('success_message', 'Se agregó una [MESA] en la sucursal seleccionada.');
@@ -161,6 +318,11 @@ class MesaController extends Controller
                 ->withErrors($e->validator->errors())
                 ->withInput();
         }
+    }
+
+    public function storeConf(Request $request)
+    {
+        dd($request->all());
     }
 
     public function editar($id)
@@ -233,7 +395,7 @@ class MesaController extends Controller
         try{
             $mesa = Mesa::find($id);
             $mesa->update([
-                'estado' => '2'
+                'estado' => '5'
             ]);
 
             $zona = Zona::find($mesa->zona_id);

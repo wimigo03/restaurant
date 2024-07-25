@@ -1,50 +1,133 @@
 <form action="#" method="post" id="form">
     @csrf
-    <input type="hidden" name="pi_cliente_id" value="{{ $pi_cliente_id }}" id="pi_cliente_id">
-    <div class="form-group row font-roboto-12">
-        <div class="col-md-3 px-1 pr-1 font-roboto-12">
-            <label for="empresa" class="d-inline">Empresa</label>
-            <select name="empresa_id" id="empresa_id" class="form-control select2">
-                <option value="">-</option>
-                @foreach ($empresas as $index => $value)
-                    <option value="{{ $index }}" @if(old('empresa_id') == $index) selected @endif >{{ $value }}</option>
-                @endforeach
-            </select>
+    <input type="hidden" value="{{ request('sucursal_id') }}" id="sucursal_old_id">
+    <input type="hidden" name="zona_id" value="{{ request('zona_id') }}" id="zona_id">
+    <input type="hidden" name="_filas" value="{{ $zona != null ? $zona->filas : '#'}}" id="filas">
+    <input type="hidden" name="_columnas" value="{{ $zona != null ? $zona->columnas : '#' }}" id="columnas">
+    {{--<div class="card card-body">--}}
+        <div class="form-group row">
+            <div class="col-md-12 text-center">
+                <b class="font-roboto-20">CONFIGURACION DE MESAS</b>
+            </div>
         </div>
-        <div class="col-md-3 pr-1 pl-1">
-            <label for="sucursal" class="d-inline">Sucursal</label>
-            <select name="sucursal_id" id="sucursal_id" class="form-control select2">
-            </select>
+        <div class="form-group row font-roboto-12 abs-center">
+            <div class="col-md-3 font-roboto-12">
+                <label for="empresa" class="d-inline">Empresa</label>
+                <select name="empresa_id" id="empresa_id" class="form-control select2">
+                    <option value="">-</option>
+                    @foreach ($empresas as $index => $value)
+                        <option value="{{ $index }}" @if(request('empresa_id') == $index) selected @endif >{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="sucursal" class="d-inline">Sucursal</label>
+                <select name="sucursal_id" id="sucursal_id" class="form-control select2">
+                </select>
+            </div>
         </div>
-        <div class="col-md-4 pr-1 pl-1">
-            <label for="zona" class="d-inline">Zona</label>
-            <select id="zona_id" name="zona_id" class="form-control select2">
-            </select>
+        <div id="zonas-container" class="form-group row font-roboto-12 abs-center">
+            {{-- jquery --}}
         </div>
-        <div class="col-md-2 px-1 pl-1">
-            <label for="numero" class="d-inline">N° de Mesa</label>
-            <input type="text" name="numero" value="{{ old('numero') }}" id="numero" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+        <div class="form-group row">
+            <div class="col-md-11">
+                <span class="btn btn-sm btn-primary font-roboto-12" onclick="decrementar_filas_columnas()">
+                    <i class="fas fa-search-minus fa-lg"></i>
+                </span>
+                <span class="btn btn-sm btn-primary font-roboto-12" onclick="incrementar_filas_columnas()">
+                    <i class="fas fa-search-plus fa-lg"></i>
+                </span>
+            </div>
         </div>
-    </div>
-    <div class="form-group row font-roboto-12">
-        <div class="col-md-2 px-1 pr-1">
-            <label for="sillas" class="d-inline">Cant. Sillas</label>
-            <input type="text" name="sillas" value="{{ old('sillas') }}" id="sillas" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
+        <div class="form-group row" id="configuracion-mesas">
+            <div class="col-md-9 text-center">
+                <div id="grid-container">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="grid-sillas">
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/una_silla.jpg') }}"
+                            id="1"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/dos_sillas.jpg') }}"
+                            id="2"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/tres_sillas.jpg') }}"
+                            id="3"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/cuatro_sillas.jpg') }}"
+                            id="4"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/cinco_sillas.jpg') }}"
+                            id="5"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/seis_sillas.jpg') }}"
+                            id="6"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/siete_sillas.jpg') }}"
+                            id="7"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                    <div class="grid-item-sillas">
+                        <img
+                            src="{{ asset('images/blanca_con_numero/ocho_sillas.jpg') }}"
+                            id="8"
+                            class="draggable-cursor"
+                            draggable="true"
+                            ondragstart="drag(event)"
+                            ondrag="dragging(event)"
+                            ondragend="endDrag(event)"/>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-10 px-1 pl-1">
-            <label for="detalle" class="d-inline">Descripcion</label>
-            <input type="text" name="detalle" value="{{ old('detalle') }}" id="detalle" class="form-control font-roboto-12 intro" oninput="this.value = this.value.toUpperCase();">
-        </div>
-    </div>
+    {{--</div>--}}
 </form>
-<div class="form-group row">
-    <div class="col-md-12 px-1 text-right">
-        <span class="btn btn-outline-primary font-roboto-12" onclick="procesar();">
-            <i class="fas fa-paper-plane fa-fw"></i>&nbsp;Procesar
-        </span>
-        <span class="btn btn-outline-danger font-roboto-12" onclick="cancelar();">
-            <i class="fas fa-times fa-fw"></i>&nbsp;Cancelar
-        </span>
-        <i class="fa fa-spinner custom-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
-    </div>
-</div>

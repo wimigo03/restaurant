@@ -11,10 +11,26 @@
 </style>
 @section('breadcrumb')
     @parent
-    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
-    <span>Listar comprobantes</span>
+    <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
+    <li class="breadcrumb-item active">Listar comprobantes</li>
 @endsection
 @section('content')
+    <div class="card-custom">
+        <div class="card-header bg-gradient-secondary text-white">
+            <div class="row">
+                <div class="col-md-6">
+                    <b>COMPROBANTES CONTABLES</b>
+                </div>
+                <div class="col-md-6 text-right">
+                    @can('comprobante.create')
+                        <span class="btn btn-sm btn-success font-roboto-12" onclick="create();">
+                            <i class="fas fa-plus fa-fw"></i>&nbsp;Crear
+                        </span>
+                    @endcan
+                </div>
+            </div>
+        </div>
+    </div>
     @include('comprobantes.partials.search')
     @include('comprobantes.partials.table')
 @endsection
@@ -206,11 +222,6 @@
                                 input.placeholder = title;
                                 input.className = 'form-control form-control-sm font-roboto-12';
                                 column.footer().replaceChildren(input);
-                                /*input.addEventListener('keyup', () => {
-                                    if (column.search() !== this.value) {
-                                        column.search(input.value).draw();
-                                    }
-                                });*/
                                 $(input).appendTo($(column.footer()).empty()).on('change', function () {
                                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                     column.search(val ? val : '', true, false).draw();

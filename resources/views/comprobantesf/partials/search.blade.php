@@ -1,4 +1,6 @@
-<form action="#" method="get" id="form">
+
+<div class="card card-body">
+    <form action="#" method="get" id="form">
     <div class="form-group row font-roboto-12">
         <div class="col-md-2 px-1 pr-1">
             <select name="empresa_id" id="empresa_id" class="form-control">
@@ -55,16 +57,9 @@
             </select>
         </div>
     </div>
-</form>
-<div class="form-group row">
+    </form>
+    <div class="row">
     <div class="col-md-12 px-1">
-        @can('comprobante.index')
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Comprobantes" style="cursor: pointer;">
-                <span class="btn btn-outline-warning font-roboto-12" onclick="comprobantes();">
-                    <i class="fa-solid fa-file-invoice-dollar fa-fw"></i>
-                </span>
-            </span>
-        @endcan
         @can('comprobantef.create')
             <span class="tts:right tts-slideIn tts-custom" aria-label="Crear Comprobante" style="cursor: pointer;">
                 <span class="btn btn-outline-success font-roboto-12" onclick="create();">
@@ -79,5 +74,6 @@
             <i class="fas fa-search"></i>&nbsp;Buscar
         </span>
         <i class="fa fa-spinner fa-spin fa-lg fa-fw spinner-btn" style="display: none;"></i>
+    </div>
     </div>
 </div>

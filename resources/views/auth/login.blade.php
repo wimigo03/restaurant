@@ -38,7 +38,7 @@
     <div class="container text-center">
         <div class="row abs-center">
             <div class="col-md-4">
-                <img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-pi-resto">
+                {{--<img src="/images/pi-resto.jpeg" alt="pi-resto" class="imagen-pi-resto">--}}
                 <form action="{{ route('login') }}" method="post">
                     @csrf
                     <div class="card card-custom bg-light">

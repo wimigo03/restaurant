@@ -2,10 +2,15 @@
 @extends('layouts.dashboard')
 @section('breadcrumb')
     @parent
-    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
-    <span>Listar Balances de apertura</span>
+    <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
+    <li class="breadcrumb-item active">Listar Balances de apertura</li>
 @endsection
 @section('content')
+    <div class="card-custom">
+        <div class="card-header bg-gradient-secondary text-white">
+            <b>BALANCE DE APERTURA</b>
+        </div>
+    </div>
     @include('balance_apertura.partials.search')
     @include('balance_apertura.partials.table')
 @endsection

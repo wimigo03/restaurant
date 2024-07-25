@@ -2,9 +2,9 @@
 @extends('layouts.dashboard')
 @section('breadcrumb')
     @parent
-    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
-    <span><a href="{{ route('tipo.cambio.index') }}"> Tipos de cambio</a><span>&nbsp;/&nbsp;
-    <span>Modificar</span>
+    <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tipo.cambio.index') }}"> Tipos de cambio</a></li>
+    <li class="breadcrumb-item active">Modificar</li>
 @endsection
 <style>
     .select2 + .select2-container .select2-selection__rendered {
@@ -24,6 +24,11 @@
     }
 </style>
 @section('content')
+    <div class="card-custom">
+        <div class="card-header bg-gradient-secondary">
+            <b>MODIFICAR COTIZACION</b>
+        </div>
+    </div>
     @include('tipo_cambios.partials.form-editar')
 @endsection
 @section('scripts')

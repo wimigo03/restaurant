@@ -19,40 +19,33 @@ class Mesa extends Model
         'sucursal_id',
         'empresa_id',
         'pi_cliente_id',
-        'numero',
-        'sillas',
+        'nombre',
+        'cantidad_sillas',
         'detalle',
-        'fila',
-        'columna',
+        'posicion',
         'estado'
     ];
 
     const ESTADOS = [
-        '1' => 'HABILITADO',
-        '2' => 'NO HABILITADO',
-        '3' => 'CONFIGURADO',
-        /*'3' => 'LIBRE',
-        '4' => 'RESERVADA',
-        '5' => 'OCUPADA',
-        '6' => 'SUCIA',*/
+        '1' => 'LIBRE',
+        '2' => 'RESERVADA',
+        '3' => 'OCUPADA',
+        '4' => 'SUCIA',
+        '5' => 'NO HABILITADO'
     ];
 
     public function getStatusAttribute(){
         switch ($this->estado) {
             case '1':
-                return "HABILITADO";
-            case '2':
-                return "NO HABILITADO";
-            case '3':
-                return "CONFIGURADO";
-            /*case '3':
                 return "LIBRE";
-            case '4':
+            case '2':
                 return "RESERVADA";
-            case '5':
+            case '3':
                 return "OCUPADA";
-            case '6':
-                return "SUCIA";*/
+            case '4':
+                return "SUCIA";
+            case '5':
+                return "NO HABILITADO";
         }
     }
 

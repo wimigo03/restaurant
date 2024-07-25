@@ -2,9 +2,9 @@
 @extends('layouts.dashboard')
 @section('breadcrumb')
     @parent
-    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
-    <span><a href="{{ route('comprobante.index') }}"> Listar comprobantes</a><span>&nbsp;/&nbsp;
-    <span>Registrar</span>
+    <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('comprobante.index') }}"> Listar comprobantes</a></li>
+    <li class="breadcrumb-item active">Registrar</li>
 @endsection
 <style>
     .select2 + .select2-container .select2-selection__rendered {
@@ -24,6 +24,11 @@
     }
 </style>
 @section('content')
+    <div class="card-custom">
+        <div class="card-header bg-gradient-secondary">
+            <b>CREAR COMPROBANTE</b>
+        </div>
+    </div>
     @include('comprobantes.partials.form-create')
 @endsection
 @section('scripts')
@@ -674,17 +679,11 @@
             $('#empresa_id').prop('disabled', false);
             var url = "{{ route('comprobante.store') }}";
             $("#form").attr('action', url);
-            $(".btn").hide();
-            $(".spinner-btn").show();
             $("#form").submit();
         }
 
         function cancelar(){
-            $(".btn").hide();
-            $(".spinner-btn").show();
-            var id = $("#empresa_id").val();
-            var url = "{{ route('comprobante.index',':id') }}";
-            url = url.replace(':id',id);
+            var url = "{{ route('comprobante.index') }}";
             window.location.href = url;
         }
     </script>

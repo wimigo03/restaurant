@@ -1,36 +1,31 @@
 <!DOCTYPE html>
 @extends('layouts.dashboard')
+    <link rel="stylesheet" href="{{ asset('css/styles/dashboard-mesas-pedidos.css') }}" rel="stylesheet">
 @section('breadcrumb')
     @parent
     <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
     <span><a href="{{ route('mesas.index') }}"> Mesas</a><span>&nbsp;/&nbsp;
     <span>Registrar</span>
 @endsection
-<style>
-    .select2 + .select2-container .select2-selection__rendered {
-        font-size: 11px;
-    }
-    .select2-results__option {
-        font-size: 13px;
-    }
-    .obligatorio {
-        border: 1px solid red !important;
-    }
-    .font-weight-bold {
-        font-weight: bold;
-    }
-    .select2-container--obligatorio .select2-selection {
-        border-color: red !important;
-    }
-</style>
+@include('mesas.partials.modal-datos')
 @section('content')
+    {{--<div class="card-custom">
+        <div class="card-header bg-white">
+            <b>CONFIGURACION DE MESAS</b>
+        </div>
+    </div>--}}
     @include('mesas.partials.form-create')
 @endsection
 @section('scripts')
     @parent
     @include('layouts.notificaciones')
+    <script src="{{ asset('js/dashboard-mesas.js') }}"></script>
     <script>
         $(document).ready(function() {
+            $("#configuracion-mesas").hide();
+            
+            recuperar_mesas(cont, filas, columnas);
+
             $('.select2').select2({
                 theme: "bootstrap4",
                 placeholder: "--Seleccionar--",
@@ -49,23 +44,23 @@
                 }
             });
 
-            if($("#sucursal_id >option:selected").val() != undefined){
-                if($("#sucursal_id >option:selected").val() !== ""){
-                    var id = $("#sucursal_id >option:selected").val();
+            if($("#sucursal_old_id").val() != undefined){
+                if($("#sucursal_old_id").val() !== ""){
+                    $("#configuracion-mesas").show();
+                    var id = $("#sucursal_old_id").val();
                     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                     getZonas(id,CSRF_TOKEN);
                 }
             }
 
-            $('#zona_id').on('select2:open', function(e) {
+            /*$('#zona_id').on('select2:open', function(e) {
                 if($("#empresa_id >option:selected").val() == ""){
                     alerta("Para continuar se debe seleccionar una <b>[EMPRESA]</b>.");
                 }
                 if($("#sucursal_id >option:selected").val() == ""){
                     alerta("Para continuar se debe seleccionar una <b>[SUCURSAL]</b>.");
                 }
-            });
-            obligatorio();
+            });*/
         });
 
         $('#empresa_id').change(function() {
@@ -88,8 +83,12 @@
                         $("#sucursal_id").empty();
                         var select = $("#sucursal_id");
                         select.append($("<option></option>").attr("value", '').text('--Sucursal--'));
+                        var sucursalIdSeleccionado = $("#sucursal_old_id").val();
                         $.each(arr, function(index, json) {
                             var opcion = $("<option></option>").attr("value", json.id).text(json.nombre);
+                            if (json.id == sucursalIdSeleccionado) {
+                                opcion.attr('selected', 'selected');
+                            }
                             select.append(opcion);
                         });
                     }
@@ -102,6 +101,7 @@
 
         $('#sucursal_id').change(function() {
             var id = $(this).val();
+            $("#configuracion-mesas").hide();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             getZonas(id,CSRF_TOKEN);
         });
@@ -109,20 +109,36 @@
         function getZonas(id,CSRF_TOKEN){
             $.ajax({
                 type: 'GET',
-                url: '/zonas/get_datos_by_sucursal',
+                url: '/mesas/get_datos_by_sucursal',
                 data: {
                     _token: CSRF_TOKEN,
                     id: id
                 },
                 success: function(data){
                     if(data.zonas){
-                        var arr = Object.values($.parseJSON(data.zonas));
-                        $("#zona_id").empty();
-                        var select = $("#zona_id");
-                        select.append($("<option></option>").attr("value", '').text('--Zona--'));
+                        var arr = Object.values(data.zonas);
+                        var container = $("#zonas-container");
+                        container.empty();
                         $.each(arr, function(index, json) {
-                            var opcion = $("<option></option>").attr("value", json.id).text(json.nombre);
-                            select.append(opcion);
+                            var zonaDiv = $("<div class='col-md-2'></div>");
+                            var zonaLink = $("<a></a>")
+                                .addClass("btn btn-block font-roboto-12")
+                                .addClass(function() {
+                                    if ($("#zona_id").val() == json.id) {
+                                        return "btn-dark";
+                                    } else {
+                                        return "btn-outline-dark";
+                                    }
+                                })
+                                .attr("href", "#")
+                                .html("<i class='fas fa-table'></i><br>" + json.nombre)
+                                .click(function() {
+                                    $("#zona_id").val(json.id);
+                                    update();
+                                });
+
+                            zonaDiv.append(zonaLink);
+                            container.append(zonaDiv);
                         });
                     }
                 },
@@ -144,6 +160,13 @@
             }
         });
 
+        function update() {
+            var url = "{{ route('mesas.create') }}";
+            $("#form").attr('action', url);
+            $("#form").attr('method', 'GET');
+            $("#form").submit();
+        }
+
         function procesar() {
             if(!validar()){
                 return false;
@@ -162,7 +185,7 @@
                 alerta("[El campo <b>SUCURSAL</b> es obligatorio]");
                 return false;
             }
-            if($("#zona_id >option:selected").val() == ""){
+            if($("#zona_id").val() == ""){
                 alerta("[El campo <b>ZONA</b> es obligatorio]");
                 return false;
             }

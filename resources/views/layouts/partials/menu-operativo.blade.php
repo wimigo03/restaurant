@@ -1,42 +1,46 @@
 @can('configuracion.index')
-    <li>
-        <a href="{{ route('configuracion.index') }}">
-            <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Configuracion
+    <li class="nav-item has-treeview">
+        <a href="{{ route('configuracion.index') }}" class="nav-link">
+            <i class="nav-icon fa-solid fa-gear fa-fw"></i>&nbsp;<p>Configuracion</p>
         </a>
     </li>
 @endcan
 @canany(['pi.clientes.index','users.index','roles.index','permissions.index'])
-    <li>
-        <a href="" data-toggle="collapse" data-target="#dashboard_setting" class="active collapsed" aria-expanded="false">
-            <i class="fa-solid fa-gear fa-fw mr-1"></i>&nbsp;Administracion
-            <span class="fa fa-arrow-circle-left float-right"></span>
+    <li class="nav-item has-treeview">
+        <a href="#" class="nav-link">
+            <i class="nav-icon fa-solid fa-gear fa-fw"></i>
+            <p>Administracion<i class="right fa fa-angle-left"></i></p>
         </a>
-        <ul class="sub-menu collapse" id="dashboard_setting">
+        <ul class="nav nav-treeview">
             @can('pi.clientes.index')
-                <li>
-                    <a href="{{ route('pi.clientes.index') }}">
-                        &nbsp;&nbsp;<i class="fas fa-address-card fa-fw mr-1"></i>&nbsp;Clientes
+                <li class="nav-item">
+                    <a href="{{ route('pi.clientes.index') }}" class="nav-link pl-4">&nbsp;
+                        <i class="fas fa-address-card fa-fw"></i>
+                        <p>Clientes</p>
                     </a>
                 </li>
             @endcan
             @can('users.index')
-                <li>
-                    <a href="{{ route('users.index') }}">
-                        &nbsp;&nbsp;<i class="fas fa-users fa-fw mr-1"></i>&nbsp;Usuarios
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link pl-4">&nbsp;
+                        <i class="fas fa-users fa-fw"></i>
+                        <p>Usuarios</p>
                     </a>
                 </li>
             @endcan
             @can('roles.index')
-                <li>
-                    <a href="{{ route('roles.indexAfter') }}">
-                        &nbsp;&nbsp;<i class="fas fa-user-shield fa-fw mr-1"></i>&nbsp;Roles
+                <li class="nav-item">
+                    <a href="{{ route('roles.indexAfter') }}" class="nav-link pl-4">&nbsp;
+                        <i class="fas fa-user-shield fa-fw"></i>
+                        <p>Roles</p>
                     </a>
                 </li>
             @endcan
             @can('permissions.index')
-                <li>
-                    <a href="{{ route('permissions.indexAfter') }}">
-                        &nbsp;&nbsp;<i class="fas fa-user-cog fa-fw mr-1"></i>&nbsp;Permisos
+                <li class="nav-item">
+                    <a href="{{ route('permissions.indexAfter') }}" class="nav-link pl-4">&nbsp;
+                        <i class="fas fa-user-cog fa-fw"></i>
+                        <p>Permisos</p>
                     </a>
                 </li>
             @endcan

@@ -45,10 +45,8 @@
 <div class="form-group row">
     <div class="col-md-12 px-1">
         @can('mesas.create')
-            <span class="tts:right tts-slideIn tts-custom" aria-label="Crear" style="cursor: pointer;">
-                <span class="btn btn-outline-success font-roboto-12" onclick="create();">
-                    <i class="fas fa-plus fa-fw"></i>
-                </span>
+            <span class="btn btn-outline-primary font-roboto-12" onclick="create();">
+                <i class="fas fa-gear fa-fw"></i> Configuracion
             </span>
         @endcan
         <span class="btn btn-outline-danger font-roboto-12 float-right" onclick="limpiar();">

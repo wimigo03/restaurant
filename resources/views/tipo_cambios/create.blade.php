@@ -2,9 +2,9 @@
 @extends('layouts.dashboard')
 @section('breadcrumb')
     @parent
-    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
-    <span><a href="{{ route('tipo.cambio.index') }}"> Tipos de cambio</a><span>&nbsp;/&nbsp;
-    <span>Registrar</span>
+    <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('tipo.cambio.index') }}"> Tipos de cambio</a></li>
+    <li class="breadcrumb-item active">Registrar</li>
 @endsection
 <style>
     .obligatorio {
@@ -18,6 +18,11 @@
     }
 </style>
 @section('content')
+    <div class="card-custom">
+        <div class="card-header bg-gradient-secondary">
+            <b>REGISTRAR COTIZACION</b>
+        </div>
+    </div>
     @include('tipo_cambios.partials.form-create')
 @endsection
 @section('scripts')

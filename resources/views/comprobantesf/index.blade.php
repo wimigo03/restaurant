@@ -11,10 +11,15 @@
 </style>
 @section('breadcrumb')
     @parent
-    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
-    <span>Listar comprobantes</span>
+    <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
+    <li class="breadcrumb-item active">Listar comprobantes</li>
 @endsection
 @section('content')
+    <div class="card-custom">
+        <div class="card-header bg-gradient-warning text-white">
+            <b>COMPROBANTES CONTABLES</b>
+        </div>
+    </div>
     @include('comprobantesf.partials.search')
     @include('comprobantesf.partials.table')
 @endsection

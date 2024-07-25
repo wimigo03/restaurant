@@ -1,76 +1,31 @@
 <!DOCTYPE html>
-<title>Pi-Resto | Mesas</title>
 @extends('layouts.dashboard')
 @section('breadcrumb')
     @parent
-    <span><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a><span>&nbsp;/&nbsp;
-    <span>Mesas</span>
+    <li class="breadcrumb-item"><a href="{{ route('home.index') }}"><i class="fa fa-home fa-fw"></i> Inicio</a></li>
+    <li class="breadcrumb-item active">Mesas</li>
 @endsection
 @section('content')
-    @include('mesas.partials.search')
-    @include('mesas.partials.table')
-    {{--@include('mesas.partials.tableAjax')--}}
+    {{--<div class="card-custom">
+        <div class="card-header bg-gradient-secondary text-white">
+            MESAS
+        </div>
+    </div>--}}
+    {{--<div class="card card-body">--}}
+        <div class="form-group row">
+            <div class="col-md-12 text-center">
+                <b class="font-roboto-20">MESAS</b>
+            </div>
+        </div>
+        @include('mesas.partials.search')
+        @include('mesas.partials.table')
+    {{--</div>--}}
 @endsection
 @section('scripts')
     @parent
     @include('layouts.notificaciones')
     <script>
         $(document).ready(function() {
-            /*$('#dataTable').DataTable({
-                "processing":true,
-                "serverSide":true,
-                "ajax": {
-                    "url": "{{ route('mesas.indexAjax') }}",
-                    "type": "GET",
-                    "data": function (datos) {
-                        datos.empresa_id = $("#empresa_id").val();
-                    },
-                },
-                "columns": [
-                    {"data": 'id', "name":'id', "class":'text-left p-1 font-roboto', "searchable": true, "orderable": true,},
-                    {"data": "nombre_sucursal", "name": "sucursal.nombre", "class": "text-left p-1 font-roboto", "searchable": true, "orderable": true,},
-                    {"data": 'nombre_zona', "name":'zona.nombre', "class":'text-left p-1 font-roboto', "searchable": true, "orderable": true,},
-                    {"data": 'numero', "name":'numero', "class":'text-left p-1 font-roboto', "searchable": true, "orderable": true,},
-                    {"data": 'sillas', "name":'sillas', "class":'text-left p-1 font-roboto', "searchable": true, "orderable": true,},
-                    {"data": 'detalle', "name":'detalle', "class":'text-left p-1 font-roboto', "searchable": true, "orderable": true,},
-                    {"data": 'estado_mesa', "name":'estado_mesa', "class":'text-center p-1 font-roboto', "searchable": true, "orderable": true,
-                        render: function(data, type, row)
-                        {
-                            if(row.estado_mesa === 'HABILITADO'){
-                                return '<span class="badge-with-padding badge badge-success">HABILITADO</span>';
-                            }else{
-                                return '<span class="badge-with-padding badge badge-danger">DESHABILITADO</span>';
-                            }
-                        }
-                    },
-                    {
-                        "targets": -1,
-                        "data": null,
-                        "defaultContent": '<span class="badge-with-padding badge badge-warning text-white">' +
-                                                '<i class="fas fa-edit fa-fw"></i>' +
-                                            '</span>' +
-                                            '<span class="badge-with-padding badge badge-danger">' +
-                                                '<i class="fas fa-lg fa-arrow-alt-circle-down"></i>' +
-                                            '</span>'
-                    }
-                ],
-                "columnDefs": [
-                    {
-                        "targets": -1,
-                        "visible": true,
-                    }
-                ],
-                    "createdRow": function (row, data, dataIndex) {
-                    $(row).addClass('table-row text-center p-1');
-                },
-                "iDisplayLength": 10,
-                "ordering": true,
-                "order": [[ 0, "desc" ]],
-                "language":{
-                    "url": '{{ asset("json/datatable-es.json") }}'
-                }
-            });*/
-
             $('#empresa_id').select2({
                 theme: "bootstrap4",
                 placeholder: "--Empresa--",
@@ -171,6 +126,11 @@
         function limpiar(){
             var url = "{{ route('mesas.index') }}";
             window.location.href = url;
+        }
+
+        function Modal(mensaje){
+            $("#modal-alert .modal-body").html(mensaje);
+            $('#modal-alert').modal({keyboard: false});
         }
     </script>
 @stop

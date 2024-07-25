@@ -1,36 +1,29 @@
 @canany(['estado.resultado.index','balance.apertura.index','plan.cuentas.index','plan.cuentas.auxiliar.index','tipo.cambio.index','comprobante.index'])
-    @can('comprobante.index')
-        <li>
-            <a href="{{ route('comprobante.index') }}">
-                <i class="fa-solid fa-file-invoice-dollar fa-fw mr-1"></i>&nbsp;Comprobantes
-            </a>
-        </li>
-    @endcan
     @can('balance.apertura.index')
-        <li>
-            <a href="{{ route('balance.apertura.index') }}">
-                <i class="fa-solid fa-layer-group fa-fw mr-1"></i>&nbsp;Balance Apertura
+        <li class="nav-item has-treeview">
+            <a href="{{ route('balance.apertura.index') }}" class="nav-link">
+                <i class="nav-icon fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Balance Apertura</p>
             </a>
         </li>
     @endcan
     @canany(['estado.resultado.index'])
-        <li>
-            <a href="" data-toggle="collapse" data-target="#dashboard_reportes_contabilidad" class="active collapsed" aria-expanded="false">
-                <i class="fa-solid fa-list fa-fw mr-1"></i>&nbsp;Reportes
-                <span class="fa fa-arrow-circle-left float-right"></span>
+        <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa-solid fa-list fa-fw"></i>
+                <p>Reportes<i class="right fa fa-angle-left"></i></p>
             </a>
-            <ul class="sub-menu collapse" id="dashboard_reportes_contabilidad">
+            <ul class="nav nav-treeview">
                 @can('estado.resultado.index')
-                    <li>
-                        <a href="{{ route('estado.resultado.index') }}">
-                           &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Estado de Resultado
+                    <li class="nav-item">
+                        <a href="{{ route('estado.resultado.index') }}" class="nav-link pl-4">&nbsp;
+                        <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Estado de Resultado</p>
                         </a>
                     </li>
                 @endcan
                 @can('balance.general.index')
-                    <li>
-                        <a href="{{ route('balance.general.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Balance General
+                    <li class="nav-item">
+                        <a href="{{ route('balance.general.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Balance General</p>
                         </a>
                     </li>
                 @endcan
@@ -38,58 +31,58 @@
         </li>
     @endcanany
     @canany(['libro.mayor.cuenta.general.index','libro.mayor.auxiliar.general.index'])
-        <li>
-            <a href="" data-toggle="collapse" data-target="#dashboard_libros_contabilidad" class="active collapsed" aria-expanded="false">
-                <i class="fa-solid fa-list fa-fw mr-1"></i>&nbsp;Libros
-                <span class="fa fa-arrow-circle-left float-right"></span>
+        <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa-solid fa-list fa-fw"></i>
+                <p>Libros<i class="right fa fa-angle-left"></i></p>
             </a>
-            <ul class="sub-menu collapse" id="dashboard_libros_contabilidad">
+            <ul class="nav nav-treeview">
                 @can('libro.mayor.cuenta.general.index')
-                    <li>
-                        <a href="{{ route('libro.mayor.cuenta.general.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor por Cuenta-General
+                    <li class="nav-item">
+                        <a href="{{ route('libro.mayor.cuenta.general.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Mayor por Cuenta-General</p>
                         </a>
                     </li>
                 @endcan
                 @can('libro.mayor.auxiliar.general.index')
-                    <li>
-                        <a href="{{ route('libro.mayor.auxiliar.general.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor por Auxiliar-General
+                    <li class="nav-item">
+                        <a href="{{ route('libro.mayor.auxiliar.general.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Mayor por Auxiliar-General</p>
                         </a>
                     </li>
                 @endcan
                 @can('libro.mayor.cuenta.y.auxiliar.index')
-                    <li>
-                        <a href="{{ route('libro.mayor.cuenta.y.auxiliar.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor por Cuenta y Auxiliar
+                    <li class="nav-item">
+                        <a href="{{ route('libro.mayor.cuenta.y.auxiliar.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Mayor por Cuenta y Auxiliar</p>
                         </a>
                     </li>
                 @endcan
                 @can('libro.mayor.cuenta.1.99.index')
-                    <li>
-                        <a href="{{ route('libro.mayor.cuenta.1.99.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor por Cuenta 1-99
+                    <li class="nav-item">
+                        <a href="{{ route('libro.mayor.cuenta.1.99.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Mayor por Cuenta 1-99</p>
                         </a>
                     </li>
                 @endcan
                 @can('libro.sumas.y.saldos.index')
-                    <li>
-                        <a href="{{ route('libro.sumas.y.saldos.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Sumas y Saldos
+                    <li class="nav-item">
+                        <a href="{{ route('libro.sumas.y.saldos.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Sumas y Saldos</p>
                         </a>
                     </li>
                 @endcan
                 @can('libro.mayor.centro.index')
-                    <li>
-                        <a href="{{ route('libro.mayor.centro.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor por Centro
+                    <li class="nav-item">
+                        <a href="{{ route('libro.mayor.centro.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Mayor por Centro</p>
                         </a>
                     </li>
                 @endcan
                 @can('libro.mayor.centro.cuenta.index')
-                    <li>
-                        <a href="{{ route('libro.mayor.centro.cuenta.index') }}">
-                            &nbsp;&nbsp;<i class="fa-solid fa-layer-group fa-fw mr-2"></i>&nbsp;Mayor por Centro y Cuenta
+                    <li class="nav-item">
+                        <a href="{{ route('libro.mayor.centro.cuenta.index') }}" class="nav-link pl-4">&nbsp;
+                            <i class="fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Mayor por Centro y Cuenta</p>
                         </a>
                     </li>
                 @endcan
@@ -97,47 +90,45 @@
         </li>
     @endcanany
     @can('tipo.cambio.index')
-        <li>
-            <a href="{{ route('tipo.cambio.index') }}">
-                <i class="fa-solid fa-circle-dollar-to-slot fa-fw mr-1"></i>&nbsp;Tipo de Cambio
-            </a>
-        </li>
-    @endcan
-    @can('centros.index')
-        <li>
-            <a href="{{ route('centros.index') }}">
-                <i class="fas fa-donate fa-fw mr-1"></i>&nbsp;Centros
+        <li class="nav-item has-treeview">
+            <a href="{{ route('tipo.cambio.index') }}" class="nav-link">
+                <i class="nav-icon fa-solid fa-circle-dollar-to-slot fa-fw"></i>&nbsp;<p>Cotizaciones</p>
             </a>
         </li>
     @endcan
     @can('plan.cuentas.index')
-        <li>
-            <a href="{{ route('plan_cuentas.indexAfter') }}">
-            <i class="fa-regular fa-chart-bar fa-fw mr-1"></i>&nbsp;Plan de Cuentas
+        <li class="nav-item has-treeview">
+            <a href="{{ route('plan_cuentas.indexAfter') }}" class="nav-link">
+            <i class="nav-icon fa-regular fa-chart-bar fa-fw"></i>&nbsp;<p>Plan de Cuentas</p>
             </a>
         </li>
     @endcan
     @can('plan.cuentas.auxiliar.index')
-        <li>
-            <a href="{{ route('plan_cuentas.auxiliar.index') }}">
-                <i class="fas fa-user-friends fa-fw mr-1"></i>&nbsp;Auxiliares
+        <li class="nav-item has-treeview">
+            <a href="{{ route('plan_cuentas.auxiliar.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-user-friends fa-fw"></i>&nbsp;<p>Plan de Cuentas Auxiliares</p>
+            </a>
+        </li>
+    @endcan
+    @can('comprobante.index')
+        <li class="nav-item has-treeview">
+            <a href="{{ route('comprobante.index') }}" class="nav-link">
+                <i class="nav-icon fa-solid fa-file-invoice-dollar fa-fw"></i>&nbsp;<p>Comprobantes</p>
+            </a>
+        </li>
+    @endcan
+    @can('centros.index')
+        <li class="nav-item has-treeview">
+            <a href="{{ route('centros.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-donate fa-fw"></i>&nbsp;<p>Centros</p>
             </a>
         </li>
     @endcan
     @can('asiento.automatico.index')
-        <li>
-            <a href="{{ route('asiento.automatico.index') }}">
-                <i class="fa-solid fa-layer-group fa-fw mr-1"></i>&nbsp;Asientos Automaticos
+        <li class="nav-item has-treeview">
+            <a href="{{ route('asiento.automatico.index') }}" class="nav-link">
+                <i class="nav-icon fa-solid fa-layer-group fa-fw"></i>&nbsp;<p>Asientos Automaticos</p>
             </a>
         </li>
     @endcan
-    {{--<li>
-        <a href="" data-toggle="collapse" data-target="#dashboard_contabilidad" class="active collapsed" aria-expanded="false">
-            <i class="fa-solid fa-layer-group fa-fw mr-1"></i>&nbsp;Contabilidad
-            <span class="fa fa-arrow-circle-left float-right"></span>
-        </a>
-        <ul class="sub-menu collapse" id="dashboard_contabilidad">
-
-        </ul>
-    </li>--}}
 @endcanany
